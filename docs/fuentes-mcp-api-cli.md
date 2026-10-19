@@ -168,3 +168,16 @@ Consultado el 19-oct-2026 con Parallel y Context7 (documentación de FastMCP).
 | Chrome DevTools | [ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) | De Google; traces de rendimiento, red, consola y automatización con Puppeteer |
 | Mercado Pago | [Mercado Pago MCP Server](https://www.mercadopago.com.mx/developers/es/docs/mcp-server/overview) | Remoto oficial (`mcp.mercadopago.com`): `search-documentation`, generación de código de checkout, aplicaciones y credenciales (OAuth), webhooks, usuarios de prueba, `quality_evaluation` |
 | Mercado Libre | [mercadolibre/mercadolibre-mcp-server](https://github.com/mercadolibre/mercadolibre-mcp-server) | Remoto oficial (`mcp.mercadolibre.com/mcp`) con token de la aplicación |
+
+## Buenas prácticas para tools (lámina 29, 19-oct-2026)
+
+Consultado con Parallel (búsqueda y lectura) y DeepWiki (`modelcontextprotocol/modelcontextprotocol`).
+
+| Fuente | Qué aporta |
+| --- | --- |
+| [Anthropic · Writing effective tools for agents](https://www.anthropic.com/engineering/writing-tools-for-agents) | Elegir qué tools construir, namespacing, devolver contexto útil, eficiencia de tokens, prompt-engineering de descripciones. Evaluar con tareas reales; medir acierto, tiempo, llamadas, tokens y errores; leer transcripciones; dejar que Claude refactorice las tools; validar con un set aparte |
+| [Anthropic · Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) (9-ene-2026) | Calificadores por código (incluye verificar tools y parámetros llamados) y por modelo (rúbricas) |
+| [Phil Schmid · MCP best practices](https://www.philschmid.de/mcp-best-practices) (21-ene-2026) | «MCP is a User Interface for Agents»: resultados, no operaciones; argumentos planos; instrucciones y errores son contexto; 5-15 tools por servidor; nombres `{servicio}_{acción}_{recurso}`; paginar |
+| [OpenAI · Optimize metadata](https://developers.openai.com/apps-sdk/guides/optimize-metadata) | Golden prompt set (directos, indirectos, negativos) con el comportamiento esperado; descripción que empiece con «Use this when…» y diga los casos excluidos; documentar parámetros con ejemplos |
+| [MCP spec 2026-07-28 · Tools](https://modelcontextprotocol.io/specification/2026-07-28/server/tools) | Nombres de 1 a 128 caracteres, `A-Z a-z 0-9 _ - .`, únicos en el servidor (la página de SEP-986 conserva la propuesta original de 64); anotaciones no confiables; errores de ejecución con `isError` para que el modelo se corrija |
+| [Glama · TDQS](https://github.com/glama-ai/tool-definition-quality-score) | Seis criterios con peso; nota de 1 a 5 y nivel A-F (ver «Diagrama oficial y TDQS») |

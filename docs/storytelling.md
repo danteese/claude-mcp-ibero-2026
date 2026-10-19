@@ -141,3 +141,9 @@ pobres. Aquí van los principios, sus fuentes y cómo se aplicaron en la versió
 
 - La última lámina deja de ser una frase y se vuelve una galería que inspira durante las preguntas: ocho casos
   que se pueden conectar hoy, cada uno con un pedido concreto y cómo se conecta. Termina en «Gracias».
+
+## Versión 10: meme de apertura y apéndice de buenas prácticas
+
+- El meme de Dante (lámina 2) abre con humor antes de la pregunta de Pantitlán.
+- El apéndice (lámina 29) usa una secuencia con flechas y un regreso, no una lista: diseña → ¿se entiende? →
+  mide, y si falla, de vuelta a la descripción. Los criterios de TDQS van como barras con su peso.

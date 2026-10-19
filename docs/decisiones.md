@@ -257,3 +257,15 @@ pide tmux porque no viene instalado en todas las máquinas.
 - **Sin la frase de cierre:** Dante la borró en Slides; se respeta.
 - **Precisión:** el servidor de Mercado Pago es para integrar pagos (documentación, código, credenciales,
   webhooks, usuarios de prueba, calidad), no para consultar ventas; el ejemplo de la tarjeta es de ese tipo.
+
+## D24. Apéndice de buenas prácticas: cómo saber si una tool se entiende
+
+- **Por qué:** Dante pidió una última lámina, investigada con Parallel o DeepWiki, sobre buenas prácticas
+  para un MCP: cómo evaluar si las tools son suficientemente descriptivas y con qué criterios.
+- **Qué:** lámina 29, apéndice sin tiempo: «¿Tu tool se entiende? Diseña, describe y mide». Tres columnas con
+  flechas: diseña para el agente (Schmid, Anthropic, spec), los seis criterios de TDQS con su peso en barras y
+  mide y corrige (golden set de OpenAI; métricas y transcripciones de Anthropic), con una flecha de regreso:
+  «si falla: corrige la descripción, no el prompt». Fuentes en `fuentes-mcp-api-cli.md`.
+- **Es apéndice** porque el paso 2 y el paso 4 ya presentan la versión corta; si se quiere presentar, hay que
+  quitarle un minuto a otra lámina.
+- **Meme (lámina 2):** Dante lo agregó en Slides; se incorporó al generador sin tiempo asignado.
