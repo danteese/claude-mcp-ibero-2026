@@ -30,33 +30,59 @@ Generada a partir de las notas del orador del `.pptx`.
 | # | Minuto | Lámina | Definiciones |
 | --- | --- | --- | --- |
 | 1 | 0–0.5 | Datos abiertos over MCP · Claude que consulta fuentes reales (portada con el mapa de julio de 2026) | — |
-| 2 | 0.5–1 | ¿Cuánta gente entró a la estación Pantitlán en julio de 2026? | — |
-| 3 | 1–2 | Sin herramientas, Claude estima. Con tu servidor MCP, responde con el dato. | — |
-| 4 | 2–3 | **Al terminar tendrás un servidor MCP tuyo, conectado** (qué te llevas) | — |
-| 5 | 3–3.5 | Quién soy: foto, rol y trayectoria | — |
-| 6 | 3.5–4.5 | En Spot2, cada capacidad nace con su API y su MCP | — (callback del diagrama M×N; API/MCP first) |
-| 7 | 4.5–5.5 | Un modelo convierte texto en texto: saber y actuar hay que dárselo | LLM |
-| 8 | 5.5–7 | Una tool es una función que el modelo pide y tu código ejecuta | Tool, function calling, agente |
-| 9 | 7–8.5 | MCP es el estándar para conectar la IA con tus sistemas | MCP (y el diagrama M×N contra M+N) |
-| 10 | 8.5–10 | La IA puede usar API, CLI o MCP: elige según la situación | — |
-| 11 | 10–12 | MCP te da control y alcance; lo pagas en contexto y riesgo | — |
-| 12 | 12–13 | En MCP participan tres actores: host, client y server | Host, client, server, transporte |
-| 13 | 13–15 | MCP tiene tres capas obligatorias; el resto es opcional | Componentes de la spec 2026-07-28 |
-| 14 | 15–16 | Tres piezas, una pregunta: ¿quién decide cuándo ocurre? | Tool, resource, prompt (y sus campos) |
-| 15 | 16–17 | **Construimos un servidor MCP por HTTP con FastMCP** | Transportes (stdio, HTTP local, HTTP remoto), FastMCP, FastAPI |
-| 16 | 17–19 | Construyamos (instalación) | Datos abiertos, uv |
-| 17 | 19–23 | Paso 1 · Una función con docstring ya es una tool | FastMCP, docstring, schema |
-| 18 | 23–27 | Paso 2 · Diseña para quien lee el contrato: el modelo | Contexto |
-| 19 | 27–31.5 | Paso 3 · Si la tool escribe, los controles van en el código | Idempotente |
-| 20 | 31.5–34.5 | Paso 4 · Mide si Claude elige bien | Evaluación (eval) |
-| 21 | 34.5–35.5 | El mismo dato, ahora en un mapa para personas | — |
-| 22 | 35.5–37 | Claude extiende el mapa; tú lees lo que añade | — |
-| 23 | 37–38.5 | **Recap: tienes un servidor MCP y sabes cuándo usarlo** | — |
-| 24 | 38.5–39.5 | Ahora te toca | — |
+| 2 | 0.5–1.5 | ¿Cuánta gente entró a Pantitlán en julio de 2026? (al centro de una lluvia de 16 preguntas con dato público) | — |
+| 3 | 1.5–2.5 | Sin herramientas, Claude estima. Con tu servidor MCP, responde con el dato. | — |
+| 4 | 2.5–3.5 | **Al terminar tendrás un servidor MCP tuyo, conectado** (qué te llevas) | — |
+| 5 | 3.5–4 | Quién soy: foto, rol y trayectoria | — |
+| 6 | 4–5 | En Spot2, cada capacidad nace con su API y su MCP | — (callback del diagrama M×N; API/MCP first) |
+| 7 | 5–6 | Un modelo convierte texto en texto: saber y actuar hay que dárselo | LLM |
+| 8 | 6–7.5 | Una tool es una función que el modelo pide y tu código ejecuta | Tool, function calling, agente |
+| 9 | 7.5–9 | MCP es el estándar para conectar la IA con tus sistemas | MCP (y el diagrama M×N contra M+N) |
+| 10 | 9–10.5 | La IA puede usar API, CLI o MCP: elige según la situación | — |
+| 11 | 10.5–12.5 | MCP te da control y alcance; lo pagas en contexto y riesgo | — |
+| 12 | 12.5–13.5 | En MCP participan tres actores: host, client y server | Host, client, server, transporte |
+| 13 | 13.5–15.5 | MCP tiene tres capas obligatorias; el resto es opcional | Componentes de la spec 2026-07-28 |
+| 14 | 15.5–16.5 | Tres piezas, una pregunta: ¿quién decide cuándo ocurre? | Tool, resource, prompt (y sus campos) |
+| 15 | 16.5–17.5 | **Construimos un servidor MCP por HTTP con FastMCP** | Transportes (stdio, HTTP local, HTTP remoto), FastMCP, FastAPI |
+| 16 | 17.5–19.5 | Construyamos (instalación) | Datos abiertos, uv |
+| 17 | 19.5–23.5 | Paso 1 · Una función con docstring ya es una tool | FastMCP, docstring, schema |
+| 18 | 23.5–27.5 | Paso 2 · Diseña para quien lee el contrato: el modelo | Contexto |
+| 19 | 27.5–32 | Paso 3 · Si la tool escribe, los controles van en el código | Idempotente |
+| 20 | 32–35 | Paso 4 · Mide si Claude elige bien | Evaluación (eval) |
+| 21 | 35–36 | El mismo dato, ahora en un mapa para personas | — |
+| 22 | 36–37.5 | Claude extiende el mapa; tú lees lo que añade | — |
+| 23 | 37.5–39 | **Recap: tienes un servidor MCP y sabes cuándo usarlo** | — |
+| 24 | 39–39.5 | Ahora te toca | — |
 | 25 | 39.5–40 | Si el agente falla, arregla la descripción, no el modelo. | — |
 | 26 | — | Glosario del taller (apéndice, no se presenta) | 24 términos |
 
 Las notas del orador de cada lámina tienen el guion, el tiempo y las marcas [EN VIVO]. Las de la lámina 13 explican elicitation (qué es, ejemplo, modos, qué no es y por qué no la usamos hoy), por si sale en preguntas.
+
+## Lluvia de preguntas (lámina 2)
+
+Cada pregunta tiene detrás un conjunto de datos.cdmx.gob.mx, revisado el 19-oct-2026 con la API de CKAN
+(`package_search` y `package_show`). Sirve para responder «¿de dónde sale esa?» y como lista de ideas para
+la lámina 24.
+
+| Pregunta | Conjunto (slug en datos.cdmx.gob.mx) |
+| --- | --- |
+| ¿Cuánta gente entró a Pantitlán en julio de 2026? | `afluencia-diaria-del-metro-cdmx` (la del taller) |
+| ¿Cuántos meses estuvo cerrada la Línea 12? | `afluencia-diaria-del-metro-cdmx` (la contesta el servidor del taller) |
+| ¿Qué estación del Metro perdió más gente desde 2019? | `afluencia-diaria-del-metro-cdmx` (la contesta el servidor del taller) |
+| ¿Hay Ecobici libre cerca de mi Metro ahorita? | Feed GBFS de Ecobici (la contesta el paso 4); en el catálogo: `cicloestaciones-ecobici-nuevo-sistema` |
+| ¿Las mujeres usan más Ecobici que antes? | `afluencia-diaria-del-sistema-ecobici` (viajes por género) |
+| ¿Cuánta gente sube al Cablebús un domingo? | `afluencia-diaria-servicio-de-transportes-electricos` |
+| ¿Qué alcaldía reporta más falta de agua? | `reportes-de-agua` (Sacmex) |
+| ¿A qué hora se llama más al 911? | `llamadas-numero-de-atencion-a-emergencias-911` (C5) |
+| ¿Dónde hay más choques los viernes? | `incidentes-viales-c5` |
+| ¿En qué colonia hay más robos a transeúnte? | `victimas-en-carpetas-de-investigacion-fgj` |
+| ¿Cuántas denuncias por ruido hay en mi colonia? | `denuncias-realizadas-ante-la-paot` |
+| ¿Qué mes tiene el peor aire? | `indice-de-calidad-del-aire` (Sedema) |
+| ¿Cuánto presupuesto tiene mi alcaldía? | `presupuesto-de-egresos` (2024) |
+| ¿Dónde hay WiFi gratis cerca de mí? | `puntos-de-acceso-wifi-en-la-cdmx` |
+| ¿Qué es lo que más le piden al gobierno por *0311? | `0311` |
+| ¿Qué nombre se registra más en Coyoacán? | `nombres-registrados-en-actas-del-registro-civil` |
+| ¿Cuántas bodas hay cada 14 de febrero? | `matrimonios-registrados-en-la-ciudad-de-mexico` |
 
 ## Qué te llevas (láminas 4 y 23)
 

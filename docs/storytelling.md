@@ -100,3 +100,11 @@ pobres. Aquí van los principios, sus fuentes y cómo se aplicaron en la versió
   el diagrama abstracto ya existe en una empresa mexicana.
 - Abre el puente al taller: «hoy construyes una versión chiquita de esto, con datos públicos».
 - Falta el número de personas (`PERSONAS_MCP`).
+
+## Lámina 2: lluvia de preguntas (pedido de Dante)
+
+- La pregunta de Pantitlán queda al centro, en serif y tinta; alrededor, 16 preguntas reales en dos tonos de
+  gris y tamaños distintos. Todas tienen un conjunto público detrás (tabla en `presentacion.md`).
+- El mensaje: los datos públicos ya contestan muchas preguntas; hoy contestamos una y al final cada quien elige
+  otra. Por eso la lámina 24 («Ahora te toca») baja a medio minuto: la lluvia ya sembró las ideas.
+- Tiempo: la lámina 2 pasa de 0.5 a 1 minuto; el total sigue en 40.

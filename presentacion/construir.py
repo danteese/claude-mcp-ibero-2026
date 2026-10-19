@@ -248,26 +248,58 @@ def construir_deck() -> Deck:
     d.imagen(s, RECURSOS / "mapa-portada.png", 380, 30, h=332)
     d.texto(s, 380, 372, 300, 12, "Afluencia del Metro, julio de 2026 · datos.cdmx.gob.mx", 8, GRIS, MONO)
 
-    # 2 · La pregunta
+    # 2 · La pregunta, dentro de una lluvia de preguntas con dato público
     s = d.lamina(
-        "Pregunta a la sala, sin decir nada más: ¿cuánta gente entró a Pantitlán en julio de 2026? Pide manos: "
-        "¿más o menos de 3 millones? Deja que adivinen. Es la estación más concurrida de la red; casi nadie sabe "
-        "el número, y Claude tampoco.",
-        0.5,
+        "Antes de la pregunta, deja que la sala lea la lluvia unos segundos. Son preguntas que cualquiera le haría a "
+        "su ciudad, y todas tienen detrás un conjunto de datos público en datos.cdmx.gob.mx: reportes de agua "
+        "(Sacmex), llamadas al 911 e incidentes viales (C5), afluencia del Cablebús (Transportes Eléctricos), "
+        "víctimas en carpetas de investigación (FGJ), denuncias por ruido (PAOT), presupuesto de egresos 2024, WiFi "
+        "gratuito, solicitudes al *0311, nombres y matrimonios del Registro Civil, índice de calidad del aire "
+        "(Sedema) y viajes de Ecobici. Lee dos o tres en voz alta. Luego la de en medio: ¿cuánta gente entró a "
+        "Pantitlán en julio de 2026? Pide manos: ¿más o menos de 3 millones? Deja que adivinen. Es la estación más "
+        "concurrida de la red; casi nadie sabe el número, y Claude tampoco. Hoy contestamos esa; al final cada quien "
+        "elige otra.",
+        1,
+    )
+    CLARO = "8E9792"
+    lluvia = [
+        (40, 30, 250, "¿Qué alcaldía reporta más falta de agua?", 12.5, GRIS),
+        (318, 34, 190, "¿A qué hora se llama más al 911?", 10.5, CLARO),
+        (530, 28, 150, "¿Cuánta gente sube al Cablebús un domingo?", 11, GRIS),
+        (70, 80, 220, "¿Dónde hay más choques los viernes?", 10.5, CLARO),
+        (300, 76, 284, "¿Cuántos meses estuvo cerrada la Línea 12?", 13, GRIS),
+        (596, 74, 104, "¿Qué nombre se registra más en Coyoacán?", 10, CLARO),
+        (34, 140, 100, "¿Dónde hay WiFi gratis cerca de mí?", 11, GRIS),
+        (34, 200, 100, "¿Qué mes tiene el peor aire?", 10, CLARO),
+        (592, 136, 108, "¿Las mujeres usan más Ecobici que antes?", 11, GRIS),
+        (592, 196, 108, "¿Cuántas denuncias por ruido hay en mi colonia?", 10, CLARO),
+        (40, 254, 350, "¿Qué estación del Metro perdió más gente desde 2019?", 12.5, GRIS),
+        (404, 258, 276, "¿Qué es lo que más le piden al gobierno por *0311?", 11, CLARO),
+        (90, 294, 240, "¿Cuánto presupuesto tiene mi alcaldía?", 11, CLARO),
+        (360, 290, 320, "¿Hay Ecobici libre cerca de mi Metro ahorita?", 12.5, GRIS),
+        (40, 330, 280, "¿En qué colonia hay más robos a transeúnte?", 11, GRIS),
+        (420, 332, 260, "¿Cuántas bodas hay cada 14 de febrero?", 10.5, CLARO),
+    ]
+    for x, y, w, pregunta, tam, tinta in lluvia:
+        d.texto(s, x, y, w, 50, pregunta, tam, tinta)
+    d.texto(
+        s, 140, 126, 440, 66, "¿Cuánta gente entró a la estación\nPantitlán en julio de 2026?", 27, TINTA, SERIF,
+        alinear="centro", interlineado=1.05,
+    )  # fmt: skip
+    d.texto(
+        s, 140, 200, 440, 20, "Una mano arriba: ¿más o menos de 3 millones?", 14, VERDE, negrita=True, alinear="centro"
     )
     d.texto(
         s,
-        48,
-        92,
-        600,
-        190,
-        "¿Cuánta gente entró a la estación Pantitlán en julio de 2026?",
-        44,
-        TINTA,
-        SERIF,
-        interlineado=1.05,
+        40,
+        382,
+        640,
+        12,
+        "Cada pregunta tiene detrás un conjunto de datos público · datos.cdmx.gob.mx",
+        8.5,
+        GRIS,
+        MONO,
     )
-    d.texto(s, 48, 304, 600, 24, "Una mano arriba: ¿más o menos de 3 millones?", 17, VERDE, negrita=True)
 
     # 3 · El contraste
     s = d.lamina(
@@ -1219,8 +1251,8 @@ def construir_deck() -> Deck:
         "El repo es suyo: cambien el dato, inventen la tool, rompan el mapa. Las ideas son solo puntos de partida. "
         "La última es la que más me importa: lo que hicimos con el Metro es lo mismo que hicimos en Spot2 con "
         "inmuebles, y es lo que pueden hacer mañana con su inventario, su CRM o sus tickets. Pidan que compartan lo "
-        "que construyan.",
-        1,
+        "que construyan. Las preguntas de la lluvia del inicio son buenos puntos de partida.",
+        0.5,
     )
     d.texto(s, 48, 50, 600, 56, "Ahora te toca", 44, TINTA, SERIF)
     d.texto(s, 48, 110, 600, 24, "Clona, cambia el dato, inventa la tool, rompe el mapa.", 17, GRIS)

@@ -90,6 +90,7 @@ promedio. Las dos corridas usaron el modelo por defecto de Claude Code.
 | `fastmcp install claude-desktop servidor.py --project . --config-path <temporal>` | Genera la configuración con `"command": "uv"`; un cliente stdio con esa configuración lista y llama la tool. `uv` no está en el PATH mínimo de macOS (nota en el README) |
 | `mapa/index.html` en el clon (agent-browser) | 199 meses, 195 círculos, julio de 2026 con Pantitlán primero (149,137) |
 | `uv run presentacion/construir.py --local` en el clon | Sin `recursos/`: mensaje claro con las tres imágenes que faltan. Con ellas: 26 láminas, 40 min |
+| Lámina 2: lluvia de preguntas | 16 preguntas, cada una con un conjunto encontrado con `package_search` y leído con `package_show` en datos.cdmx.gob.mx (19-oct-2026). PDF de Google revisado: sin encimados; primera pasada con «2019?» huérfano, corregido. 26 láminas, 40 min |
 | `gws` con `--json` largo | El envoltorio de Node muere (exit 137 / -9) a partir de ~980 bytes; el binario nativo acepta 10 KB |
 
 ## Estilo
