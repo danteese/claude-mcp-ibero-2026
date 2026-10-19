@@ -108,3 +108,14 @@ pobres. Aquí van los principios, sus fuentes y cómo se aplicaron en la versió
 - El mensaje: los datos públicos ya contestan muchas preguntas; hoy contestamos una y al final cada quien elige
   otra. Por eso la lámina 24 («Ahora te toca») baja a medio minuto: la lluvia ya sembró las ideas.
 - Tiempo: la lámina 2 pasa de 0.5 a 1 minuto; el total sigue en 40.
+
+## Versión 8: pregunta y respuesta en dos láminas (pedido de Dante: «sino no me van a seguir»)
+
+- Lámina 2: la lluvia y la pregunta, con «Levanten la mano: ¿más o menos de 3 millones?» (antes decía «Una
+  mano arriba», que no se entendía). La respuesta no aparece.
+- Lámina 3 (nueva): la revelación. 4,623,233 en grande, ≈149,137 al día, «Quienes dijeron «más de 3
+  millones», acertaron», la suma de sus cuatro líneas en una barra y las 5 estaciones con más entradas. Cierra
+  con la pregunta puente: «¿Y Claude lo sabía?», que abre el contraste de la lámina 4.
+- Cifras: salida de `afluencia_metro` y `ranking_estaciones_metro` del paso 4; el generador revisa que las
+  cuatro líneas sumen el total.
+- Tiempo: la respuesta dura medio minuto y el contraste baja de 1 a 0.5, porque el número ya se reveló.

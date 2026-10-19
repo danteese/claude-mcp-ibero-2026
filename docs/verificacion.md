@@ -91,6 +91,7 @@ promedio. Las dos corridas usaron el modelo por defecto de Claude Code.
 | `mapa/index.html` en el clon (agent-browser) | 199 meses, 195 círculos, julio de 2026 con Pantitlán primero (149,137) |
 | `uv run presentacion/construir.py --local` en el clon | Sin `recursos/`: mensaje claro con las tres imágenes que faltan. Con ellas: 26 láminas, 40 min |
 | Lámina 2: lluvia de preguntas | 16 preguntas, cada una con un conjunto encontrado con `package_search` y leído con `package_show` en datos.cdmx.gob.mx (19-oct-2026). PDF de Google revisado: sin encimados; primera pasada con «2019?» huérfano, corregido. 26 láminas, 40 min |
+| Versión 8: pregunta y respuesta separadas; ediciones de Dante en Slides | Exportado el `.pptx` actual de Slides y comparado con la generación anterior (texto, posición y tamaño de letra): cambios en 5 láminas, todos pasados a `construir.py`; el texto de la versión nueva coincide con el de Slides salvo «Levanten la mano». Cifras de la respuesta: 1,062,637 + 1,245,423 + 1,405,456 + 909,717 = 4,623,233. 27 láminas, 40 min |
 | `gws` con `--json` largo | El envoltorio de Node muere (exit 137 / -9) a partir de ~980 bytes; el binario nativo acepta 10 KB |
 
 ## Estilo

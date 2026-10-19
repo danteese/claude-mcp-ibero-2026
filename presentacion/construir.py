@@ -100,15 +100,18 @@ class Deck:
             p.alignment = {"izq": PP_ALIGN.LEFT, "centro": PP_ALIGN.CENTER, "der": PP_ALIGN.RIGHT}[alinear]
             p.line_spacing = interlineado
             p.space_after = Pt(espacio)
-            for trozo in MARCAS.split(linea) or [""]:
-                if trozo == "" and linea:
-                    continue
-                es_negrita, es_acento = trozo.startswith("**"), trozo.startswith("==")
-                r = p.add_run()
-                r.text = trozo[2:-2] if es_negrita or es_acento else trozo
-                r.font.name, r.font.size = fuente, Pt(tam)
-                r.font.bold = negrita or es_negrita or es_acento
-                r.font.color.rgb = color(acento if es_acento else tinta)
+            for k, segmento in enumerate(linea.split("\v")):
+                if k:
+                    p.add_line_break()
+                for trozo in MARCAS.split(segmento) or [""]:
+                    if trozo == "" and segmento:
+                        continue
+                    es_negrita, es_acento = trozo.startswith("**"), trozo.startswith("==")
+                    r = p.add_run()
+                    r.text = trozo[2:-2] if es_negrita or es_acento else trozo
+                    r.font.name, r.font.size = fuente, Pt(tam)
+                    r.font.bold = negrita or es_negrita or es_acento
+                    r.font.color.rgb = color(acento if es_acento else tinta)
 
     def caja(self, s, x, y, w, h, relleno=BLANCO, borde=None, radio=0.08, forma=MSO_SHAPE.ROUNDED_RECTANGLE,
              contenido="", tam=13, tinta=TINTA, alinear="centro", vertical="medio", margen=10, negrita=False):  # fmt: skip
@@ -165,10 +168,10 @@ class Deck:
                 r.font.bold = es_resaltado
                 r.font.color.rgb = color(VERDE if es_resaltado else TINTA)
 
-    def titular(self, s, texto):
+    def titular(self, s, texto, y=40, h=66, tam=25):
         if len(texto) > 80:
             raise ValueError(f"Titular de más de dos líneas: {texto!r}")
-        self.texto(s, 40, 40, 640, 66, texto, 25, TINTA, SERIF, interlineado=1.05)
+        self.texto(s, 40, y, 640, h, texto, tam, TINTA, SERIF, interlineado=1.05)
 
     def progreso(self, s, actual):
         for n in range(1, 5):
@@ -256,9 +259,9 @@ def construir_deck() -> Deck:
         "víctimas en carpetas de investigación (FGJ), denuncias por ruido (PAOT), presupuesto de egresos 2024, WiFi "
         "gratuito, solicitudes al *0311, nombres y matrimonios del Registro Civil, índice de calidad del aire "
         "(Sedema) y viajes de Ecobici. Lee dos o tres en voz alta. Luego la de en medio: ¿cuánta gente entró a "
-        "Pantitlán en julio de 2026? Pide manos: ¿más o menos de 3 millones? Deja que adivinen. Es la estación más "
-        "concurrida de la red; casi nadie sabe el número, y Claude tampoco. Hoy contestamos esa; al final cada quien "
-        "elige otra.",
+        "Pantitlán en julio de 2026? Pide que levanten la mano: primero quién cree que más de 3 millones, luego "
+        "quién cree que menos. Casi nadie sabe el número, y Claude tampoco. No digas la respuesta: está en la "
+        "siguiente lámina.",
         1,
     )
     CLARO = "8E9792"
@@ -268,7 +271,7 @@ def construir_deck() -> Deck:
         (530, 28, 150, "¿Cuánta gente sube al Cablebús un domingo?", 11, GRIS),
         (70, 80, 220, "¿Dónde hay más choques los viernes?", 10.5, CLARO),
         (300, 76, 284, "¿Cuántos meses estuvo cerrada la Línea 12?", 13, GRIS),
-        (596, 74, 104, "¿Qué nombre se registra más en Coyoacán?", 10, CLARO),
+        (596, 74, 104, "¿Qué nombre se registra más en Álvaro Obregón?", 10, CLARO),
         (34, 140, 100, "¿Dónde hay WiFi gratis cerca de mí?", 11, GRIS),
         (34, 200, 100, "¿Qué mes tiene el peor aire?", 10, CLARO),
         (592, 136, 108, "¿Las mujeres usan más Ecobici que antes?", 11, GRIS),
@@ -287,7 +290,7 @@ def construir_deck() -> Deck:
         alinear="centro", interlineado=1.05,
     )  # fmt: skip
     d.texto(
-        s, 140, 200, 440, 20, "Una mano arriba: ¿más o menos de 3 millones?", 14, VERDE, negrita=True, alinear="centro"
+        s, 140, 200, 440, 20, "Levanten la mano: ¿más o menos de 3 millones?", 14, VERDE, negrita=True, alinear="centro"
     )
     d.texto(
         s,
@@ -301,14 +304,64 @@ def construir_deck() -> Deck:
         MONO,
     )
 
-    # 3 · El contraste
+    # 3 · La respuesta (se revela después de que la sala vota)
     s = d.lamina(
-        "Misma pregunta, mismo modelo, dos sesiones de claude -p del 17 de octubre. A la izquierda, sin "
-        "herramientas: dice honestamente que no sabe y da una estimación. Buena, pero sin fuente: no la podemos "
-        "verificar. A la derecha, con el servidor que van a construir hoy: el número exacto (4,623,233), por día y "
-        "con la fuente. Coincide con la base de datos. Esa diferencia es todo el taller: pasar de «estimo» a "
-        "«aquí está el dato y de dónde sale».",
-        1,
+        "Revela. 4,623,233 personas entraron a Pantitlán en julio de 2026: unas 149 mil al día. ¿Quién dijo más de "
+        "3 millones? Acertaron. Dos precisiones: es la suma de sus cuatro líneas (1, 5, 9 y A), y la afluencia cuenta "
+        "entradas, no a la gente dentro de los trenes. Es la estación más concurrida de la red: 1.6 veces la segunda, "
+        "Constitución de 1917. Todo salió de las tools que van a escribir hoy. Pregunta puente: ¿y Claude lo sabía?",
+        0.5,
+        seccion="La respuesta",
+    )
+    # Salida de afluencia_metro y ranking_estaciones_metro (pasos/04_final.py) para julio de 2026.
+    total, por_dia = 4623233, 149137
+    lineas = [("1", 1062637), ("5", 1245423), ("9", 1405456), ("A", 909717)]
+    ranking = [
+        ("Pantitlán", 4623233),
+        ("Constitución de 1917", 2845476),
+        ("Cuatro Caminos", 2679667),
+        ("Indios Verdes", 2417589),
+        ("Tacubaya", 2162892),
+    ]
+    if sum(n for _, n in lineas) != total or ranking[0][1] != total:
+        raise ValueError("Las cifras de Pantitlán no cuadran")
+    d.texto(s, 40, 58, 300, 18, "Pantitlán · julio de 2026", 13, GRIS)
+    d.texto(s, 40, 78, 320, 70, f"{total:,}", 58, VERDE, SERIF)
+    d.texto(s, 40, 150, 300, 44, f"personas entraron en 31 días\n**≈{por_dia:,} al día**", 16, TINTA, interlineado=1.2)
+    d.texto(s, 40, 206, 300, 20, "Quienes dijeron «más de 3 millones», acertaron.", 12.5, VERDE, negrita=True)
+    d.texto(s, 40, 244, 300, 16, "Suma sus cuatro líneas", 11, TINTA, negrita=True)
+    x = 40.0
+    for linea, entradas in lineas:
+        ancho = entradas / total * 290
+        d.caja(
+            s, x, 266, ancho - 2, 26, VERDE, radio=0.12, contenido=f"{linea} · {entradas / 1e6:.2f} M",
+            tam=9, tinta=BLANCO, margen=2, negrita=True,
+        )  # fmt: skip
+        x += ancho
+    d.texto(s, 40, 296, 300, 14, "línea · millones de entradas en el mes", 9, GRIS)
+    d.texto(s, 380, 58, 300, 18, "Las 5 estaciones con más entradas", 12, TINTA, negrita=True)
+    d.texto(s, 380, 76, 300, 14, "julio de 2026 · entradas en el mes", 9.5, GRIS)
+    for n, (estacion, entradas) in enumerate(ranking):
+        y, ancho, primera = 104 + n * 36, entradas / total * 110, n == 0
+        d.texto(s, 380, y + 1, 118, 16, estacion, 10, TINTA, negrita=primera)
+        d.caja(s, 500, y, ancho, 18, VERDE if primera else "C9CFCB", radio=0.12)
+        d.texto(s, 506 + ancho, y + 2, 80, 16, f"{entradas:,}", 10, TINTA if primera else GRIS, negrita=primera)
+    segunda = ranking[0][1] / ranking[1][1]
+    d.texto(s, 380, 290, 300, 30, f"Pantitlán recibe {segunda:.1f} veces lo que la segunda.", 11, GRIS)
+    d.texto(s, 40, 336, 640, 22, "**¿Y Claude lo sabía?** Veamos qué contesta con y sin herramientas.", 14, TINTA)
+    d.texto(
+        s, 40, 384, 640, 12,
+        "Afluencia diaria del Metro CDMX · datos.cdmx.gob.mx · CC-BY-4.0 · afluencia = entradas, no ocupación de trenes",
+        8.5, GRIS, MONO,
+    )  # fmt: skip
+
+    # 4 · El contraste
+    s = d.lamina(
+        "Ya saben el número. ¿Y Claude? Misma pregunta, mismo modelo, dos sesiones de claude -p del 17 de octubre. "
+        "Sin herramientas, dice honestamente que no sabe y estima, sin fuente: no la podemos verificar. Con el "
+        "servidor que van a construir hoy, da el número exacto con su fuente. Esa diferencia es todo el taller: "
+        "pasar de «estimo» a «aquí está el dato y de dónde sale».",
+        0.5,
         seccion="El problema",
     )
     d.titular(s, "Sin herramientas, Claude estima. Con tu servidor MCP, responde con el dato.")
@@ -341,7 +394,7 @@ def construir_deck() -> Deck:
         GRIS,
     )
 
-    # 4 · Qué te llevas (apertura; se refleja en el recap)
+    # 5 · Qué te llevas (apertura; se refleja en el recap)
     s = d.lamina(
         "Antes de entrar, el contrato del taller. A la izquierda, lo que van a tener en su laptop al terminar: un "
         "servidor MCP propio con siete tools, un resource y un prompt sobre el Metro; conectado a Claude Code; con "
@@ -361,7 +414,7 @@ def construir_deck() -> Deck:
             "Un mapa de 16 años del Metro que Claude extiende con tus tools",
         ],
         [
-            "¿Qué es una tool y qué agrega MCP?",
+            "¿Qué es una tool y qué agrega MCP?\n(Solo repaso, ya se vio antes)",
             "¿Cuándo conviene MCP y cuándo una CLI o una API?",
             "¿Cómo diseño tools que el modelo elija bien?",
             "¿Dónde van los controles si una tool escribe?",
@@ -380,7 +433,7 @@ def construir_deck() -> Deck:
         GRIS,
     )
 
-    # 5 · Quién soy (solo lo personal; Spot2 va en la lámina siguiente)
+    # 6 · Quién soy (solo lo personal; Spot2 va en la lámina siguiente)
     s = d.lamina(
         "Me presento en medio minuto: quién soy y de dónde vengo. Lo que hemos hecho en Spot2 va en la siguiente lámina.",
         0.5,
@@ -390,15 +443,15 @@ def construir_deck() -> Deck:
     d.texto(s, 240, 100, 440, 40, "Dante Bazaldua", 32, TINTA, SERIF)
     d.texto(s, 240, 146, 440, 24, "Cofundador y CTO de **Spot2.mx**", 17, TINTA)
     d.texto(
-        s, 240, 190, 440, 120,
+        s, 240, 190, 429, 120,
         "Ingeniería en Tecnologías de Cómputo y Telecomunicaciones y Maestría en Gestión de la Innovación "
-        "Tecnológica · Ibero\nAntes: software para el experimento CMS del CERN y código abierto en UC San Diego\n"
+        "Tecnológica · Ibero\nSoftware para el experimento CMS del CERN\vMicrobioma en UC San Diego\n"
         "Profesor en la Ibero: algoritmos, ciberseguridad y sistemas de comunicaciones",
         13, GRIS, interlineado=1.25, espacio=8,
     )  # fmt: skip
-    d.texto(s, 40, 376, 640, 14, "stdout.mx · linkedin.com/in/dantebh", 9, GRIS, MONO)
+    d.texto(s, 40, 376, 640, 14, "spot2.mx · stdout.mx · linkedin.com/in/dantebh", 9, GRIS, MONO)
 
-    # 6 · Spot2: lo que hemos implementado con MCP
+    # 7 · Spot2: lo que hemos implementado con MCP
     s = d.lamina(
         "En Spot2 esto no es teoría; es como trabajamos. Tenemos cuatro servidores MCP en producción. Djinn es la "
         "puerta del equipo a los datos: 44 tools de solo lectura sobre siete fuentes, Metabase y un glosario de "
@@ -416,9 +469,9 @@ def construir_deck() -> Deck:
     )
     d.titular(s, "En Spot2, cada capacidad nace con su API y su MCP")
     d.texto(s, 40, 102, 180, 16, "Dónde lo usamos", 12, VERDE, negrita=True)
-    d.texto(s, 248, 102, 200, 16, "Nuestros servidores MCP", 12, AZUL, negrita=True)
+    d.texto(s, 248, 102, 200, 16, "Algunos servidores MCP", 12, AZUL, negrita=True)
     centros = [148 + n * 50 for n in range(4)]
-    clientes = [("Claude", True), ("ChatGPT", True), ("Pythia", True), ("Grok · pronto", False)]
+    clientes = [("Claude", True), ("ChatGPT", True), ("Pythia", True), ("Otros Agentes", False)]
     for cy, (nombre, activo) in zip(centros, clientes):
         d.linea(s, 140, cy, 176, 223, VERDE if activo else "C9CFCB", 1.75 if activo else 1)
         d.caja(
@@ -429,7 +482,7 @@ def construir_deck() -> Deck:
     servidores = [
         ("**Djinn** · datos", "44 tools: 7 fuentes y Metabase"),
         ("**Colossu** · operación", "65 tools: contratos, CRM y más"),
-        ("**Spot2.mx** · en ChatGPT", "búsqueda de inmuebles comerciales"),
+        ("**Spot2.mx** · en ChatGPT", "Toda la plataforma disponible para agentes"),
         ("**Argos** · archivos", "archivos, anotaciones y skills"),
     ]
     for cy, (nombre, texto) in zip(centros, servidores):
@@ -439,9 +492,8 @@ def construir_deck() -> Deck:
         d.texto(s, 260, cy + 1, 170, 14, texto, 9.5, TINTA)
     d.texto(s, 40, 326, 400, 12, "Pythia: nuestro agente en Google Chat, también cliente MCP", 8.5, GRIS)
     d.caja(s, 464, 100, 216, 90, BLANCO, BORDE, radio=0.06)
-    d.texto(s, 478, 106, 190, 38, PERSONAS_MCP, 30, VERDE, SERIF)
     d.texto(
-        s, 478, 146, 192, 40,
+        s, 476, 113, 192, 40,
         "personas de Spot2 los usan; cada llamada queda auditada.",
         10.5, TINTA, interlineado=1.2,
     )  # fmt: skip
@@ -463,7 +515,7 @@ def construir_deck() -> Deck:
         12, TINTA, interlineado=1.2,
     )  # fmt: skip
 
-    # 7 · Qué es un LLM y por qué necesita herramientas
+    # 8 · Qué es un LLM y por qué necesita herramientas
     s = d.lamina(
         "Primera definición: un LLM, modelo de lenguaje grande, como Claude, recibe texto y predice el texto que "
         "sigue. Eso es todo. Por sí solo no consulta internet, ni bases de datos, ni ejecuta nada. De ahí salen "
@@ -472,10 +524,10 @@ def construir_deck() -> Deck:
         1,
         seccion="El porqué",
     )
-    d.titular(s, "Un modelo convierte texto en texto: saber y actuar hay que dárselo")
+    d.titular(s, "Un modelo convierte texto en texto: saber y actuar hay que dárselo", y=52, h=40, tam=21)
     d.definicion(
         s, 40, 108, 640, 60, "LLM (modelo de lenguaje grande)",
-        "un modelo que, dado un texto, predice el texto que sigue. Claude es uno. Por sí solo no consulta ni ejecuta nada.",
+        "un modelo que, dado un token, predice el token que sigue. Claude es uno. Por sí solo no consulta ni ejecuta nada.",
     )  # fmt: skip
     d.caja(s, 160, 184, 110, 40, OCRE_FONDO, contenido="texto", tam=14, tinta=OCRE)
     d.caja(s, 300, 178, 120, 52, TINTA, contenido="**LLM**", tam=17, tinta=PAPEL)
@@ -493,9 +545,9 @@ def construir_deck() -> Deck:
         d.caja(s, x, 244, 310, 94, BLANCO, BORDE, radio=0.05)
         d.texto(s, x + 18, 255, 274, 18, etiqueta, 13, ROJO, negrita=True)
         d.texto(s, x + 18, 278, 274, 56, texto, 12, TINTA, interlineado=1.2)
-    d.texto(s, 40, 348, 640, 22, "La forma de dárselo es una herramienta: una ==tool==.", 16, TINTA)
+    d.texto(s, 42, 358, 640, 22, "La forma de dárselo es una herramienta: una ==tool==.", 16, TINTA)
 
-    # 8 · Qué es una tool (function calling)
+    # 9 · Qué es una tool (function calling)
     s = d.lamina(
         "Este es el concepto más importante del taller. Una tool es una función que el modelo puede pedir que se "
         "ejecute. Ojo: el modelo NO la ejecuta; emite una petición estructurada (eso es function calling: el "
@@ -545,7 +597,7 @@ def construir_deck() -> Deck:
         d.texto(s, 384, y + 24, 296, 30, ejemplo, 11, TINTA, fuente)
     d.texto(s, 345, 372, 335, 18, "El modelo nunca ejecuta nada: solo pide.", 12.5, VERDE, negrita=True)
 
-    # 9 · Qué es MCP
+    # 10 · Qué es MCP
     s = d.lamina(
         "Si una tool es una función, ¿quién la define? Antes, cada aplicación definía sus tools en su propio "
         "código. MCP es el estándar que permite que las tools vivan en un servidor aparte y cualquier aplicación "
@@ -585,7 +637,7 @@ def construir_deck() -> Deck:
         d.chip(s, 590, y, nombre, AZUL_FONDO, AZUL, 10.5, ancho=90)
     d.texto(s, 384, 356, 300, 34, "3 + 4 = 7 conexiones; cada una la escribe el dueño del sistema", 12, GRIS)
 
-    # 10 · ¿Cuál conviene? API, CLI o MCP
+    # 11 · ¿Cuál conviene? API, CLI o MCP
     s = d.lamina(
         "Primero la objeción honesta: la IA puede usar las tres. Puede leer la documentación de una API y armar la "
         "llamada, puede escribir comandos de terminal (git, gh o kubectl los conoce de su entrenamiento) y puede usar "
@@ -638,7 +690,7 @@ def construir_deck() -> Deck:
         8, GRIS, MONO,
     )  # fmt: skip
 
-    # 11 · Lo que MCP te da y lo que te cuesta
+    # 12 · Lo que MCP te da y lo que te cuesta
     s = d.lamina(
         "Si las tres funcionan, ¿por qué tener un servidor MCP? Lo que te da: 1) funciona donde no hay una terminal "
         "tuya: Claude.ai, ChatGPT o un agente en la nube no pueden correr tus CLIs, pero sí conectarse a un MCP "
@@ -682,7 +734,7 @@ def construir_deck() -> Deck:
         8, GRIS, MONO,
     )  # fmt: skip
 
-    # 12 · Host, client y server
+    # 13 · Host, client y server
     s = d.lamina(
         "Vocabulario que van a escuchar todo el día. El host es la aplicación donde conversas: hoy, Claude Code. "
         "Dentro, el host crea un client por cada servidor al que se conecta. El server es el programa que van a "
@@ -721,7 +773,7 @@ def construir_deck() -> Deck:
         11.5, GRIS, interlineado=1.25,
     )  # fmt: skip
 
-    # 13 · De qué se compone MCP (spec 2026-07-28)
+    # 14 · De qué se compone MCP (spec 2026-07-28)
     s = d.lamina(
         "Así está armada la especificación vigente, la 2026-07-28. Solo tres capas son obligatorias: los mensajes "
         "(JSON-RPC 2.0), el versionado y los patrones de mensaje (petición y respuesta, multi round-trip y "
@@ -795,7 +847,7 @@ def construir_deck() -> Deck:
         8, GRIS, MONO,
     )  # fmt: skip
 
-    # 14 · Tool, resource y prompt
+    # 15 · Tool, resource y prompt
     s = d.lamina(
         "Las tres cosas que puede ofrecer un servidor. Se declaran parecido, por eso se confunden; lo que las separa "
         "es quién decide cuándo ocurren. Tool: una función que el modelo invoca cuando la necesita. Resource: un dato "
@@ -825,7 +877,7 @@ def construir_deck() -> Deck:
         d.texto(s, x, 304, 200, 16, campos, 10, TINTA, MONO)
     d.texto(s, 40, 344, 640, 20, "Nuestro servidor tiene las tres. La mayoría expone todo como tools.", 12.5, GRIS)
 
-    # 15 · Qué servidor construimos: transporte y FastMCP
+    # 16 · Qué servidor construimos: transporte y FastMCP
     s = d.lamina(
         "Antes de escribir código: qué tipo de servidor vamos a hacer. Un servidor MCP se distingue por su transporte. "
         "Con stdio, Claude Code lanza tu servidor como un proceso y le habla por la entrada y salida estándar: no hay "
@@ -883,7 +935,7 @@ def construir_deck() -> Deck:
         8, GRIS, MONO,
     )  # fmt: skip
 
-    # 16 · Construyamos
+    # 17 · Construyamos
     s = d.lamina(
         "Ahora construimos. Primero, de qué datos hablamos: la afluencia diaria del Metro que publica el gobierno "
         "de la CDMX como datos abiertos (licencia CC-BY-4.0: se pueden usar citando la fuente). Clonen el repo y "
@@ -939,7 +991,7 @@ def construir_deck() -> Deck:
         negrita=True,
     )
 
-    # 17 · Paso 1
+    # 18 · Paso 1
     s = d.lamina(
         "[EN VIVO] Escribe esta tool en servidor.py desde cero, explicando cada línea. FastMCP es la librería que "
         "convierte la función en tool: el decorador @mcp.tool la registra, el docstring se vuelve la descripción y "
@@ -984,7 +1036,7 @@ def construir_deck() -> Deck:
         d.texto(s, 494, y, 186, 14, etiqueta.upper(), 9, GRIS, MONO)
         d.texto(s, 494, y + 16, 186, 40, texto, 12, tinta, SANS if n == 3 else MONO, interlineado=1.15)
 
-    # 18 · Paso 2
+    # 19 · Paso 2
     s = d.lamina(
         "[EN VIVO] Tres reglas, una por columna. 1) Por intención: una tool genérica ejecutar_sql traslada el "
         "diseño al modelo; afluencia_metro con enums y formato AAAA-MM deja el dominio en el schema. 2) El error es "
@@ -1021,7 +1073,7 @@ def construir_deck() -> Deck:
     d.chip(s, 40, 330, "✓ uv run verificar.py 2", ancho=200)
     d.texto(s, 256, 334, 424, 20, "Reto: ¿qué parámetros le darías a comparar_estaciones(a, b)?", 12.5, OCRE)
 
-    # 19 · Paso 3
+    # 20 · Paso 3
     s = d.lamina(
         "[EN VIVO] registrar_reporte escribe. Los controles, de afuera hacia adentro: el host pide aprobación en "
         "cada llamada (anthropic/requiresUserInteraction; en modo dontAsk la niega), el schema limita tipo y "
@@ -1068,7 +1120,7 @@ def construir_deck() -> Deck:
     )  # fmt: skip
     d.chip(s, 40, 360, "✓ uv run verificar.py 3", ancho=200)
 
-    # 20 · Paso 4
+    # 21 · Paso 4
     s = d.lamina(
         "[EN VIVO] ¿Claude elige bien? Una evaluación es un conjunto de casos con la respuesta esperada. Diez "
         "preguntas reales, cada una en una sesión de claude -p que solo ve nuestro servidor; se cuenta si llamó la "
@@ -1106,7 +1158,7 @@ def construir_deck() -> Deck:
     d.chip(s, 40, 334, "✓ uv run evaluar.py", ancho=200)
     d.texto(s, 256, 338, 424, 20, "Reto: escribe la pregunta que haga fallar a tu servidor.", 12.5, OCRE)
 
-    # 21 · El mapa
+    # 22 · El mapa
     s = d.lamina(
         "El mismo dato que consulta Claude, ahora para personas: preparar.py exporta la afluencia mensual y "
         "mapa/index.html la dibuja, sin servidor. Abre el mapa y mueve el slider en vivo: abril de 2020 (COVID: "
@@ -1150,7 +1202,7 @@ def construir_deck() -> Deck:
         MONO,
     )
 
-    # 22 · En vivo: Claude extiende el mapa
+    # 23 · En vivo: Claude extiende el mapa
     s = d.lamina(
         "[EN VIVO] Pide esto a Claude en la terminal. Usa afluencia_metro, edita mapa/index.html y en el ensayo "
         "tardó 42 segundos. Recarga el mapa y ve a junio de 2021. Luego lee el aviso con la sala: dice «cerrada tras "
@@ -1205,7 +1257,7 @@ def construir_deck() -> Deck:
         margen=18,
     )
 
-    # 23 · Recap (refleja la lámina «Qué te llevas»)
+    # 24 · Recap (refleja la lámina «Qué te llevas»)
     s = d.lamina(
         "Volvemos a la lámina del inicio. A la izquierda, lo que construyeron; pide manos: ¿quién llegó al paso 4? "
         "Quien no, tiene los puntos de control en pasos/. A la derecha, las respuestas a las cinco preguntas del "
@@ -1246,7 +1298,7 @@ def construir_deck() -> Deck:
         GRIS,
     )
 
-    # 24 · Ahora te toca
+    # 25 · Ahora te toca
     s = d.lamina(
         "El repo es suyo: cambien el dato, inventen la tool, rompan el mapa. Las ideas son solo puntos de partida. "
         "La última es la que más me importa: lo que hicimos con el Metro es lo mismo que hicimos en Spot2 con "
@@ -1270,7 +1322,7 @@ def construir_deck() -> Deck:
         s, 48, 340, 624, 20, f"Comparte lo que construyas · {REPO.removeprefix('https://')}", 13, VERDE, negrita=True
     )
 
-    # 25 · Cierre
+    # 26 · Cierre
     s = d.lamina(
         "Una sola idea para llevarse: el modelo solo ve nombre, descripción y schema. Cuando el agente falla, casi "
         "siempre el problema está ahí. Gracias. Abro preguntas. (La siguiente lámina es un glosario para consulta; "
@@ -1293,7 +1345,7 @@ def construir_deck() -> Deck:
     d.texto(s, 48, 322, 440, 20, "Dante Bazaldua · stdout.mx · linkedin.com/in/dantebh", 12.5, GRIS)
     d.imagen(s, foto, 556, 240, 116, 116)
 
-    # 26 · Glosario (apéndice, no se presenta)
+    # 27 · Glosario (apéndice, no se presenta)
     s = d.lamina(
         "Apéndice para consulta: no se presenta. Está aquí para quien revise las láminas después.",
         0,
