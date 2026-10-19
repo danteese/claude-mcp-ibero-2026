@@ -136,3 +136,8 @@ pobres. Aquí van los principios, sus fuentes y cómo se aplicaron en la versió
 
 - Antes: dos tablas de texto. Ahora: el mismo pedido recorre tres caminos; la diferencia se ve en cuántos pasos
   hay y quién está en medio (el host, en MCP), no en una lista de adjetivos.
+
+## Cierre: galería de casos (pedido de Dante)
+
+- La última lámina deja de ser una frase y se vuelve una galería que inspira durante las preguntas: ocho casos
+  que se pueden conectar hoy, cada uno con un pedido concreto y cómo se conecta. Termina en «Gracias».

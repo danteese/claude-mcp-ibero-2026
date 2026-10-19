@@ -55,7 +55,7 @@ Generada a partir de las notas del orador del `.pptx`.
 | 24 | 36–37.5 | Claude extiende el mapa; tú lees lo que añade | — |
 | 25 | 37.5–39 | **Recap: tienes un servidor MCP y sabes cuándo usarlo** | — |
 | 26 | 39–39.5 | Ahora te toca | — |
-| 27 | 39.5–40 | Si el agente falla, arregla la descripción, no el modelo. | — |
+| 27 | 39.5–40 | **Esto ya lo puedes conectar hoy** (8 casos: Blender, impresoras 3D, Ableton, Figma, Home Assistant, ROS, Chrome DevTools, Mercado Pago) y Gracias | — |
 | 28 | — | Glosario del taller (apéndice, no se presenta) | 25 términos |
 
 Las notas del orador de cada lámina tienen el guion, el tiempo y las marcas [EN VIVO]. Las de la lámina 14 explican elicitation (qué es, ejemplo, modos, qué no es y por qué no la usamos hoy), por si sale en preguntas.
@@ -72,7 +72,9 @@ Spot2, «Algunos servidores MCP», «Otros Agentes», «Toda la plataforma dispo
 número; en LLM, «dado un token» y el titular a 21 pt en y=52. Segunda tanda: en Spot2, la tarjeta dice «En
 Spot2 todos los sistemas deben de poder ser accesibles por agentes (first-class citizens)»; en LLM se quitó
 «Claude es uno»; el titular de la tool, a 22 pt en y=54. Tercera tanda: la lámina 10 completa subió 22 pt
-(titular en y=36 con alto 32), incluidas flechas y tarjeta.
+(titular en y=36 con alto 32), incluidas flechas y tarjeta. Cuarta tanda: en la lámina 16, titular con alto 36 y
+tarjeta de definición en y=86 con alto 62; en el cierre, Dante quitó «Si el agente falla, arregla la descripción, no
+el modelo»: la lámina nueva ya no la lleva.
 
 ## Lluvia de preguntas (lámina 2)
 
@@ -124,6 +126,8 @@ Claude extiende.
   la foto ni por un momento, la versión 2 sube un `.pptx` con las imágenes incrustadas y deja
   que Drive lo convierta. Verificado: el archivo sigue siendo `application/vnd.google-apps.presentation`,
   conserva el enlace y queda con `shared: false`.
+- **PDF justo después de subir:** Drive puede exportar todavía la versión anterior; `construir.py` espera
+  8 s antes de exportar. Si una corrección no aparece en el PDF, vuelve a exportarlo.
 - **`gws` y argumentos largos:** el envoltorio de Node (`run.js`) muere con SIGKILL cuando
   `--json` pasa de ~980 bytes; el binario nativo del paquete no. `gws` no lee `--json @archivo`
   ni stdin. `construir.py` usa el binario nativo.

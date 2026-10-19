@@ -243,3 +243,17 @@ pide tmux porque no viene instalado en todas las máquinas.
   list` → GitHub) y MCP (Claude → host `list_issues` → servidor MCP → GitHub). Debajo de cada camino, quién
   tiene el control; a la derecha, «Conviene si». El carril de MCP va en verde. Abajo, el benchmark y la
   salida para muchos pasos (código que llama las tools).
+
+## D23. El cierre muestra lo que ya se puede conectar hoy
+
+- **Por qué:** Dante: «me gustaría que la última diapositiva mostrara los casos más interesantes sobre MCPs…
+  Blender… otros muy interesantes para poderlos conectar directamente».
+- **Qué:** lámina 27, «Esto ya lo puedes conectar hoy», con el dato de MCP Toplist (142,221 servidores activos
+  al 15-oct-2026) y 8 tarjetas: categoría, nombre, un pedido de ejemplo y cómo se conecta (remoto: pegas la URL;
+  local: lo instalas). Casos: Blender, impresoras 3D (con puente a Blender, el ejemplo de la documentación
+  oficial), Ableton Live, Figma (remoto oficial), Home Assistant (integración oficial), ROS, Chrome DevTools
+  (Google) y Mercado Pago (remoto oficial, para desarrolladores; Mercado Libre también tiene uno). Abajo,
+  «Gracias», nombre y foto. Queda en pantalla durante las preguntas.
+- **Sin la frase de cierre:** Dante la borró en Slides; se respeta.
+- **Precisión:** el servidor de Mercado Pago es para integrar pagos (documentación, código, credenciales,
+  webhooks, usuarios de prueba, calidad), no para consultar ventas; el ejemplo de la tarjeta es de ese tipo.

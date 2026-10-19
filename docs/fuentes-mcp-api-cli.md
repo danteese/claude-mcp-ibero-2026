@@ -153,3 +153,18 @@ Consultado el 19-oct-2026 con Parallel y Context7 (documentación de FastMCP).
 | --- | --- |
 | [MCP · What is MCP? (docs 2026-07-28)](https://modelcontextprotocol.io/docs/2026-07-28/getting-started/intro) | «MCP is an open-source standard for connecting AI applications to external systems»; la analogía del USB-C; el diagrama aplicaciones de IA ↔ protocolo estándar ↔ fuentes de datos y herramientas, con flujo bidireccional |
 | [Glama · Tool Definition Quality Score](https://github.com/glama-ai/tool-definition-quality-score) | Marco abierto para calificar qué tan bien comunica una tool MCP al agente. Seis dimensiones de 1 a 5: propósito (25 %), cuándo usarla (20 %), transparencia del comportamiento (20 %), semántica de parámetros (15 %), concisión (10 %), completitud (10 %). Nota 1.0-5.0 y nivel A-F; sólo la rúbrica usa un LLM, el resto es determinista. Glama lo aplica a todo su registro |
+
+## Casos del cierre (lámina 27, 19-oct-2026)
+
+| Caso | Fuente | Qué se verificó |
+| --- | --- | --- |
+| Conteo de servidores | [MCP Toplist](https://mcptoplist.com/) | 142,221 servidores MCP activos, actualizado el 15-oct-2026 (Official Registry, Glama, Smithery, mcp.so, PulseMCP) |
+| Blender | [ahujasid/blender-mcp](https://github.com/ahujasid/blender-mcp) | 22,690 estrellas; complemento de Blender + servidor local; genera assets 3D (Hyper3D) |
+| Blender → impresora 3D | [MCP · What is MCP?](https://modelcontextprotocol.io/docs/2026-07-28/getting-started/intro); [mcp-3D-printer-server](https://github.com/DMontgomery40/mcp-3D-printer-server) | «AI models can create 3D designs on Blender and print them out using a 3D printer»; OctoPrint, Klipper, Bambu Lab, Prusa, Creality, con puente opcional a Blender |
+| Ableton Live | [ahujasid/ableton-mcp](https://github.com/ahujasid/ableton-mcp) | Crea pistas y clips y arma canciones completas (intro, buildup, drop) en Arrangement View |
+| Figma | [Figma · remote server](https://developers.figma.com/docs/figma-mcp-server/remote-server-installation/) | Servidor remoto oficial (`mcp.figma.com/mcp`); lee contexto de diseño y escribe en el lienzo |
+| Home Assistant | [Home Assistant · MCP Server](https://www.home-assistant.io/integrations/mcp_server/) | Integración oficial: ChatGPT o Claude controlan dispositivos y ven el estado de la casa |
+| Robots | [robotmcp/ros-mcp-server](https://github.com/robotmcp/ros-mcp-server) | Conecta Claude o GPT con robots vía ROS |
+| Chrome DevTools | [ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) | De Google; traces de rendimiento, red, consola y automatización con Puppeteer |
+| Mercado Pago | [Mercado Pago MCP Server](https://www.mercadopago.com.mx/developers/es/docs/mcp-server/overview) | Remoto oficial (`mcp.mercadopago.com`): `search-documentation`, generación de código de checkout, aplicaciones y credenciales (OAuth), webhooks, usuarios de prueba, `quality_evaluation` |
+| Mercado Libre | [mercadolibre/mercadolibre-mcp-server](https://github.com/mercadolibre/mercadolibre-mcp-server) | Remoto oficial (`mcp.mercadolibre.com/mcp`) con token de la aplicación |

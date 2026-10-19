@@ -24,6 +24,7 @@ import json
 import re
 import shutil
 import subprocess
+import time
 from pathlib import Path
 
 from PIL import Image, ImageDraw
@@ -929,12 +930,14 @@ def construir_deck() -> Deck:
         1,
         seccion="El concepto",
     )
-    d.titular(s, "Un MCP da acceso; una skill le enseña a usarlo")
-    d.definicion(
-        s, 40, 96, 640, 52, "Skill (Agent Skill)",
-        "una carpeta con un SKILL.md (nombre, descripción e instrucciones) que el agente carga sólo cuando la "
-        "tarea lo pide. Estándar abierto: agentskills.io.",
-        11,
+    d.titular(s, "Un MCP da acceso; una skill le enseña a usarlo", h=36)
+    d.caja(s, 40, 86, 640, 62, BLANCO, BORDE, radio=0.06)
+    d.texto(s, 54, 96, 616, 12, "DEFINICIÓN", 7.5, VERDE, MONO, negrita=True)
+    d.texto(
+        s, 54, 110, 616, 24,
+        "**Skill (Agent Skill)**: una carpeta con un SKILL.md (nombre, descripción e instrucciones) que el agente "
+        "carga sólo cuando la tarea lo pide. Estándar abierto: agentskills.io.",
+        11, TINTA, interlineado=1.2,
     )  # fmt: skip
     d.caja(s, 40, 160, 300, 140, BLANCO, BORDE, radio=0.05)
     d.texto(s, 54, 168, 276, 16, "Un plugin junta las dos cosas", 11.5, TINTA, negrita=True)
@@ -1423,28 +1426,53 @@ def construir_deck() -> Deck:
         s, 48, 340, 624, 20, f"Comparte lo que construyas · {REPO.removeprefix('https://')}", 13, VERDE, negrita=True
     )
 
-    # 27 · Cierre
+    # 27 · Cierre: lo que ya se puede conectar hoy (queda en pantalla durante las preguntas)
     s = d.lamina(
-        "Una sola idea para llevarse: el modelo solo ve nombre, descripción y schema. Cuando el agente falla, casi "
-        "siempre el problema está ahí. Gracias. Abro preguntas. (La siguiente lámina es un glosario para consulta; "
-        "no se presenta.)",
+        "Gracias. Abro preguntas. Mientras preguntan, esto ya existe y lo pueden conectar hoy. Blender: Claude arma "
+        "escenas y modelos 3D (blender-mcp, más de 22 mil estrellas en GitHub). Y se encadena: otro servidor manda "
+        "el modelo a una impresora 3D con OctoPrint, Bambu o Prusa; es el ejemplo de la documentación oficial de "
+        "MCP. Ableton Live: compone una canción completa, con intro, build-up y drop. Figma: su servidor remoto "
+        "oficial lee el diseño para generar código y también escribe en el lienzo. Home Assistant: la integración "
+        "oficial deja que Claude o ChatGPT vean y controlen los dispositivos de tu casa. ROS: conecta un modelo con "
+        "un robot. Chrome DevTools, de Google: el agente graba un trace y te dice por qué tu página carga lento. Y "
+        "cerca de casa: Mercado Pago tiene un servidor oficial para desarrolladores (busca en su documentación, "
+        "genera el código del checkout, crea usuarios de prueba y califica tu integración); Mercado Libre también "
+        "tiene uno. Los que dicen «remoto» se conectan pegando una URL en Claude o ChatGPT; los locales se instalan "
+        "en tu máquina. Ojo: un MCP que mueve tu casa, tu impresora o un robot merece los mismos controles del paso "
+        "3. MCP Toplist cuenta 142,221 servidores activos al 15 de octubre de 2026. (La siguiente lámina es un "
+        "glosario para consulta; no se presenta.)",
         0.5,
     )
+    d.titular(s, "Esto ya lo puedes conectar hoy", y=30, h=34)
     d.texto(
-        s,
-        48,
-        92,
-        470,
-        170,
-        "Si el agente falla, arregla la descripción, no el modelo.",
-        38,
-        TINTA,
-        SERIF,
-        interlineado=1.08,
-    )
-    d.texto(s, 48, 290, 400, 24, "Gracias", 20, VERDE, negrita=True)
-    d.texto(s, 48, 322, 440, 20, "Dante Bazaldua · stdout.mx · linkedin.com/in/dantebh", 12.5, GRIS)
-    d.imagen(s, foto, 556, 240, 116, 116)
+        s, 40, 70, 640, 16,
+        "Hay 142,221 servidores MCP activos (MCP Toplist, 15-oct-2026). Algunos que vale la pena probar:", 10.5, GRIS,
+    )  # fmt: skip
+    casos = [
+        ("CREAR EN 3D", "Blender", "«Arma una escena low-poly de una playa con palmeras»", "local · lo instalas"),
+        ("FABRICAR", "Impresoras 3D", "«Rebana el modelo de Blender y mándalo a imprimir»", "local · lo instalas"),
+        ("MÚSICA", "Ableton Live", "«Haz una canción de house con intro, build-up y drop»", "local · lo instalas"),
+        ("DISEÑO", "Figma", "«Convierte este frame en un componente de React»", "remoto · pegas la URL"),
+        ("TU CASA", "Home Assistant", "«Apaga todas las luces de la casa»", "URL de tu Home Assistant"),
+        ("ROBÓTICA", "Robots con ROS", "«Mueve el brazo a la posición inicial»", "local · lo instalas"),
+        ("WEB", "Chrome DevTools", "«¿Por qué carga lento mi página?»", "local · lo instalas"),
+        ("MÉXICO Y LATAM", "Mercado Pago", "«Genera el código de Checkout Pro y crea usuarios de prueba»",
+         "remoto · pegas la URL"),
+    ]  # fmt: skip
+    for n, (categoria, nombre, pedido, conexion) in enumerate(casos):
+        x, y = 40 + (n % 4) * 162, 92 + (n // 4) * 120
+        remoto = not conexion.startswith("local")
+        d.caja(s, x, y, 152, 112, BLANCO, BORDE, radio=0.06)
+        d.texto(s, x + 10, y + 9, 132, 10, categoria, 7, VERDE, MONO, negrita=True)
+        d.texto(s, x + 10, y + 21, 132, 18, nombre, 12.5, TINTA, negrita=True)
+        d.texto(s, x + 10, y + 42, 134, 42, pedido, 9.5, OCRE, interlineado=1.15)
+        d.caja(
+            s, x + 10, y + 86, 132, 18, VERDE_FONDO if remoto else BLANCO, None if remoto else BORDE, radio=0.5,
+            contenido=conexion, tam=8, tinta=VERDE if remoto else GRIS, margen=2,
+        )  # fmt: skip
+    d.imagen(s, foto, 40, 334, 56, 56)
+    d.texto(s, 108, 338, 300, 24, "Gracias", 20, VERDE, negrita=True)
+    d.texto(s, 108, 366, 440, 20, "Dante Bazaldua · stdout.mx · linkedin.com/in/dantebh", 12.5, GRIS)
 
     # 28 · Glosario (apéndice, no se presenta)
     s = d.lamina(
@@ -1555,6 +1583,7 @@ def main() -> None:
 
     pid = subir(pptx)
     pdf = SALIDA / "taller-mcp.pdf"
+    time.sleep(8)  # recién subido, Drive puede exportar todavía la versión anterior
     gws(
         "drive",
         "files",
