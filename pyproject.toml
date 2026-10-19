@@ -1,0 +1,16 @@
+[project]
+name = "taller-mcp-datos-abiertos"
+version = "0.1.0"
+description = "Taller: datos abiertos de la CDMX expuestos a Claude con un servidor MCP (FastMCP)."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastmcp>=4.1,<5",
+    "httpx>=0.27",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 120

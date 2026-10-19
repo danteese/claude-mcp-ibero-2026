@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Afluencia del Metro CDMX, mes a mes</title>
+<style>
+  :root { --papel: #f7f7f3; --tinta: #202c2a; --gris: #596560; --borde: #d9ded7; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--papel); color: var(--tinta);
+         font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  main { max-width: 1180px; margin: 0 auto; padding: 28px 24px 40px; }
+  h1 { font: 400 clamp(28px, 4vw, 46px)/1.1 Georgia, "Times New Roman", serif; letter-spacing: -.02em; margin: 0 0 8px; }
+  h2 { font-size: 15px; margin: 18px 0 6px; }
+  p { max-width: 72ch; margin: 0 0 8px; }
+  .gris { color: var(--gris); font-size: 14px; }
+  .control { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin: 20px 0 16px; }
+  .control input { flex: 1 1 320px; min-height: 32px; accent-color: var(--tinta); }
+  .control output { font: 600 20px/1 ui-monospace, SFMono-Regular, Consolas, monospace; min-width: 9ch; }
+  .vista { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 24px; align-items: start; }
+  svg { display: block; width: 100%; height: auto; max-height: calc(100vh - 240px);
+        background: #fff; border: 1px solid var(--borde); border-radius: 8px; }
+  ol { margin: 0; padding-left: 22px; font-size: 15px; }
+  #resumen { font-size: 15px; }
+  :focus-visible { outline: 3px solid #305b80; outline-offset: 4px; }
+  @media (max-width: 760px) { main { padding: 20px 16px; } .vista { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>¿Cuánta gente entra a cada estación del Metro?</h1>
+  <p>Promedio diario de entradas por estación y línea, de enero de 2010 a julio de 2026. Mueve el
+     mes: abril de 2020 (COVID), junio de 2021 (Línea 12), octubre de 2022 (Línea 1).</p>
+
+  <div class="control">
+    <label for="mes">Mes</label>
+    <input id="mes" type="range" min="0" step="1" value="0">
+    <output id="etiqueta" for="mes"></output>
+  </div>
+
+  <div class="vista">
+    <svg id="mapa" role="img" aria-labelledby="mapa-titulo mapa-desc">
+      <title id="mapa-titulo">Estaciones del Metro sobre su ubicación real</title>
+      <desc id="mapa-desc">Cada círculo es una estación en una línea; su área es proporcional a las entradas
+        diarias promedio del mes elegido. Un anillo vacío indica afluencia 0. El color identifica la línea.</desc>
+    </svg>
+    <aside>
+      <p id="resumen" aria-live="polite"></p>
+      <h2>Más concurridas este mes</h2>
+      <ol id="top"></ol>
+      <h2>Ecobici en vivo</h2>
+      <svg id="ecobici-mapa" viewBox="0 0 260 260" role="img" aria-labelledby="ecobici-titulo" hidden>
+        <title id="ecobici-titulo">Cicloestaciones alrededor de la estación del Metro elegida</title>
+      </svg>
+      <p class="gris" id="ecobici-texto"></p>
+      <ol id="ecobici-lista"></ol>
+      <h2>Cómo leerlo</h2>
+      <p class="gris">Área del círculo = entradas diarias promedio. La escala es la misma en todos los meses.
+        ○ anillo vacío = 0 entradas en el mes. Las estaciones de transbordo tienen un círculo por línea.</p>
+    </aside>
+  </div>
+
+  <p class="gris" id="fuente"></p>
+  <p class="gris">La afluencia cuenta personas que <strong>entran</strong> a la estación. No mide la ocupación
+    de trenes y andenes, ni los transbordos.</p>
+  <noscript><p>Este mapa necesita JavaScript.</p></noscript>
+</main>
+
+<script src="datos.js"></script>
+<script src="ecobici.js"></script>
+<script>
+const COLORES = {
+  "Línea 1": "#e9468f", "Línea 2": "#0066b3", "Línea 3": "#a39a2a", "Línea 4": "#5fb3ae",
+  "Línea 5": "#e6b800", "Línea 6": "#d6001c", "Línea 7": "#f18a00", "Línea 8": "#008c45",
+  "Línea 9": "#5b3a29", "Línea A": "#8f2c8f", "Línea B": "#8a968f", "Línea 12": "#b99e5a",
+};
+const RADIO_MAX = 22;
+const ANCHO = 800, MARGEN = 30;
+const NS = "http://www.w3.org/2000/svg";
+
+const datos = window.DATOS_MAPA;
+const svg = document.getElementById("mapa");
+const slider = document.getElementById("mes");
+
+function dibujar(tag, atributos, padre = svg) {
+  const nodo = document.createElementNS(NS, tag);
+  for (const [clave, valor] of Object.entries(atributos)) nodo.setAttribute(clave, valor);
+  return padre.appendChild(nodo);
+}
+
+if (!datos) {
+  document.getElementById("resumen").textContent = "Falta mapa/datos.js: ejecuta `uv run preparar.py`.";
+} else {
+  // Proyección simple: a esta escala basta corregir la longitud por el coseno de la latitud.
+  const lats = datos.estaciones.map(e => e.lat), lons = datos.estaciones.map(e => e.lon);
+  const coseno = Math.cos((Math.min(...lats) + Math.max(...lats)) / 2 * Math.PI / 180);
+  const escala = (ANCHO - 2 * MARGEN) / ((Math.max(...lons) - Math.min(...lons)) * coseno);
+  const alto = (Math.max(...lats) - Math.min(...lats)) * escala + 2 * MARGEN;
+  const x = lon => MARGEN + (lon - Math.min(...lons)) * coseno * escala;
+  const y = lat => MARGEN + (Math.max(...lats) - lat) * escala;
+  svg.setAttribute("viewBox", `0 0 ${ANCHO} ${alto.toFixed(0)}`);
+
+  // Las estaciones vienen en orden de recorrido dentro de cada línea: basta unirlas.
+  const porLinea = Object.groupBy(datos.estaciones, e => e.linea);
+  for (const [linea, estaciones] of Object.entries(porLinea)) {
+    dibujar("polyline", {
+      points: estaciones.map(e => `${x(e.lon).toFixed(1)},${y(e.lat).toFixed(1)}`).join(" "),
+      fill: "none", stroke: COLORES[linea], "stroke-width": 3, "stroke-opacity": 0.45,
+    });
+  }
+
+  const maximo = datos.estaciones.reduce((mayor, e) => Math.max(mayor, ...e.diario), 0);
+  const circulos = datos.estaciones.map(e => {
+    const circulo = dibujar("circle", { cx: x(e.lon).toFixed(1), cy: y(e.lat).toFixed(1), stroke: COLORES[e.linea] });
+    dibujar("title", {}, circulo);
+    return circulo;
+  });
+
+  slider.max = datos.meses.length - 1;
+  slider.value = datos.meses.length - 1;
+  slider.addEventListener("input", mostrar);
+  document.getElementById("fuente").textContent = `Fuente: ${datos.fuente}.`;
+  mostrar();
+
+  // mapa/ecobici.js guarda, tal cual, la salida de la tool MCP ecobici_cerca_de_metro.
+  const eco = window.ECOBICI;
+  const textoEco = document.getElementById("ecobici-texto");
+  if (!eco) {
+    textoEco.textContent = "Pídele a Claude: «Usa ecobici_cerca_de_metro para Insurgentes con limite=10 " +
+      "y guarda la respuesta en mapa/ecobici.js como window.ECOBICI = …»";
+  } else {
+    dibujar("circle", { cx: x(eco.metro.lon), cy: y(eco.metro.lat), r: 30, fill: "none",
+      stroke: "#202c2a", "stroke-width": 2, "stroke-dasharray": "4 3" });
+
+    const panel = document.getElementById("ecobici-mapa");
+    panel.hidden = false;
+    const pxPorMetro = 110 / eco.radio_m;
+    const local = (lat, lon) => [
+      130 + (lon - eco.metro.lon) * 111320 * Math.cos(eco.metro.lat * Math.PI / 180) * pxPorMetro,
+      130 - (lat - eco.metro.lat) * 110574 * pxPorMetro,
+    ];
+    dibujar("circle", { cx: 130, cy: 130, r: 110, fill: "#fff", stroke: "#d9ded7", "stroke-dasharray": "4 3" }, panel);
+    dibujar("circle", { cx: 130, cy: 130, r: 9, fill: "#202c2a" }, panel);
+    eco.cicloestaciones.forEach((c, n) => {
+      const [cx, cy] = local(c.lat, c.lon);
+      const conBicis = c.en_servicio && c.bicis_disponibles > 0;
+      dibujar("rect", { x: cx - 8, y: cy - 8, width: 16, height: 16, rx: 3,
+        fill: conBicis ? "#206449" : "#fff", stroke: "#206449" }, panel);
+      dibujar("text", { x: cx, y: cy + 4, "text-anchor": "middle", "font-size": 11,
+        fill: conBicis ? "#fff" : "#206449" }, panel).textContent = n + 1;
+    });
+
+    const hora = new Date(eco.consultado_en).toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit", hour12: false });
+    textoEco.textContent = `${eco.referencia} · ${eco.cicloestaciones_en_radio} cicloestaciones a ` +
+      `${eco.radio_m} m · ${eco.bicis_disponibles_en_radio} bicis disponibles · consultado a las ${hora}. ` +
+      "Cuadro lleno = hay bicis; vacío = sin bicis o fuera de servicio.";
+    document.getElementById("ecobici-lista").replaceChildren(...eco.cicloestaciones.map(c =>
+      Object.assign(document.createElement("li"), {
+        textContent: `${c.cicloestacion} · ${c.distancia_m} m · ${c.bicis_disponibles} ` +
+          (c.bicis_disponibles === 1 ? "bici" : "bicis"),
+      })));
+  }
+
+  function mostrar() {
+    const i = Number(slider.value);
+    const [anio, mes] = datos.meses[i].split("-").map(Number);
+    const nombreMes = new Date(anio, mes - 1).toLocaleDateString("es-MX", { month: "long", year: "numeric" });
+    document.getElementById("etiqueta").textContent = nombreMes;
+
+    let total = 0, enCero = 0;
+    const porEstacion = {};
+    datos.estaciones.forEach((e, n) => {
+      const valor = e.diario[i];
+      const circulo = circulos[n];
+      circulo.firstChild.textContent = `${e.estacion} (${e.linea}): ${valor ?? "sin dato"} entradas diarias`;
+      if (!valor) {
+        if (valor === 0) enCero++;
+        circulo.setAttribute("r", 3);
+        circulo.setAttribute("fill", "none");
+        circulo.setAttribute("stroke-width", 1.5);
+        return;
+      }
+      total += valor;
+      porEstacion[e.estacion] = (porEstacion[e.estacion] ?? 0) + valor;
+      circulo.setAttribute("r", (Math.sqrt(valor / maximo) * RADIO_MAX).toFixed(1));
+      circulo.setAttribute("fill", COLORES[e.linea]);
+      circulo.setAttribute("fill-opacity", 0.7);
+      circulo.setAttribute("stroke-width", 1);
+    });
+
+    document.getElementById("resumen").textContent =
+      `${nombreMes}: ${total.toLocaleString("es-MX")} entradas diarias en toda la red · ` +
+      `${enCero} estaciones-línea en 0.`;
+    document.getElementById("top").replaceChildren(...Object.entries(porEstacion)
+      .sort((a, b) => b[1] - a[1]).slice(0, 5)
+      .map(([estacion, valor]) => Object.assign(document.createElement("li"),
+        { textContent: `${estacion}: ${valor.toLocaleString("es-MX")}` })));
+  }
+}
+</script>
+</body>
+</html>

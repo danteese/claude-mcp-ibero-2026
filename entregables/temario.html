@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>MCP: conceptos, primitives y diseño de tools — Temario</title>
+<style>
+  @page { size: letter; margin: 18mm 18mm 20mm; }
+
+  :root {
+    --ink: #1b1b1b;
+    --mute: #5a5a5a;
+    --rule: #d4d4d4;
+    --paper: #ffffff;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: #f2f2f2;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .sheet {
+    background: var(--paper);
+    color: var(--ink);
+    width: 740px;
+    margin: 40px auto;
+    padding: 36px 28px 72px;
+    font-family: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+    font-size: 11.5pt;
+    line-height: 1.45;
+  }
+
+  /* Membrete */
+  .brand-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 8px;
+    margin-bottom: 22px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    font-size: 10pt;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .brand-bar span:last-child { color: var(--mute); font-weight: 400; }
+
+  .meta {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    font-size: 10pt;
+    color: var(--mute);
+    margin-bottom: 26px;
+  }
+  .meta div { display: grid; grid-template-columns: 60px 1fr; padding: 1px 0; }
+
+  h1 {
+    font-family: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+    font-size: 22pt;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin: 0 0 8px;
+  }
+
+  .deck {
+    font-size: 12.5pt;
+    color: var(--mute);
+    margin: 0 0 28px;
+  }
+
+  h2 {
+    font-family: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+    font-size: 13pt;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 26px 0 8px;
+    break-after: avoid;
+  }
+
+  h3 {
+    font-size: 11.5pt;
+    font-weight: 600;
+    margin: 18px 0 6px;
+  }
+
+  p, li { margin: 0 0 8px; }
+  ul, ol { margin: 0 0 10px; padding-left: 20px; }
+
+  .tag {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    font-size: 9.5pt;
+    color: var(--mute);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 18px;
+    break-inside: avoid;
+  }
+  thead th {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    font-size: 8.5pt;
+    font-weight: 600;
+    color: var(--mute);
+    text-align: left;
+    border-bottom: 1px solid var(--ink);
+    padding: 4px 8px 6px 0;
+  }
+  td {
+    font-size: 10pt;
+    padding: 5px 8px 5px 0;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  td.n { text-align: right; }
+
+  .rule-box {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    font-size: 9.5pt;
+    color: var(--mute);
+    border-top: 1px solid var(--rule);
+    padding-top: 8px;
+    margin: 10px 0 4px;
+  }
+  .rule-box b { color: var(--ink); font-weight: 600; }
+
+  .colofon {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    font-size: 9pt;
+    color: var(--mute);
+    border-top: 1px solid var(--rule);
+    padding-top: 10px;
+    margin-top: 36px;
+  }
+
+  section { break-inside: avoid-page; }
+
+  @media print {
+    body { background: var(--paper); }
+    .sheet { margin: 0; padding: 0; max-width: none; width: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="brand-bar">
+    <span>MCP — Temario de charla</span>
+    <span>Claude for AI Engineering · CDMX</span>
+  </div>
+
+  <div class="meta">
+    <div><span>Evento</span><span>Claude for AI Engineering · Universidad Iberoamericana</span></div>
+    <div><span>Duración</span><span>55 min de contenido + 5 min de colchón</span></div>
+    <div><span>Ponente</span><span>Dante F. Bazaldua Huerta — CTO de Spot2, exalumno de UIA</span></div>
+  </div>
+
+  <h1>MCP: conceptos, primitives y diseño de tools</h1>
+  <p class="deck">Un LLM es una función de texto a texto. Todo lo demás — saber, actuar, verificar — hay que dárselo. La charla recorre cómo se le da, hasta llegar a MCP, y luego cómo diseñarlo bien.</p>
+
+  <section>
+  <h2>0. Apertura <span class="tag">— 1 min</span></h2>
+  <p>Escribir un MCP server es fácil. Que el modelo elija la tool correcta, con los parámetros correctos, no lo es. Empezamos por una pregunta anterior: por qué un modelo necesita herramientas.</p>
+  </section>
+
+  <section>
+  <h2>1. Por qué un LLM necesita herramientas <span class="tag">— 8 min</span></h2>
+  <p>Un LLM recibe texto y produce texto. Eso es todo. De ahí salen cinco límites: conocimiento congelado, sin acceso a lo privado, sin efectos en el mundo, cómputo no determinista, no puede verificar.</p>
+  <p>Esas capacidades se han ido resolviendo por acumulación, no por reemplazo: meter todo en el prompt → RAG (resuelve <i>saber</i>) → function calling (resuelve <i>hacer</i>, pero definido en build time) → acceso a shell/VM (máxima generalidad, sin estructura ni permisos finos) → tools dinámicas, descubiertas en runtime.</p>
+  <p>Con tools dinámicas, las capacidades se componen en runtime: quien las aporta es el dueño del sistema, no el dueño del agente. Eso es lo que <b>MCP</b> estandariza — el problema de M clientes × N sistemas se vuelve M+N. Es a los agentes lo que HTTP es a las aplicaciones: un contrato, no una librería.</p>
+  <p>Lo que no resuelve: un prompt malo, datos sucios, autorización, ni que el modelo entienda tu dominio. Y crea un problema nuevo: elegir bien entre 60 tools de seis servers distintos no es trivial.</p>
+  </section>
+
+  <section>
+  <h2>2. CLI, API REST, function calling y MCP <span class="tag">— 6 min</span></h2>
+  <table>
+    <thead><tr><th>Dimensión</th><th>CLI</th><th>Function calling</th><th>MCP</th></tr></thead>
+    <tbody>
+      <tr><td>Quién invoca</td><td>El humano / modelo generando texto</td><td>El modelo</td><td>Modelo (Tools), app (Resources), usuario (Prompts)</td></tr>
+      <tr><td>Descubrimiento</td><td>El usuario lee la doc</td><td>Hardcodeado en la app</td><td>En runtime, vía <code>tools/list</code></td></tr>
+      <tr><td>Quién escribe la integración</td><td>El usuario</td><td>El dueño del agente</td><td><b>El dueño del sistema</b></td></tr>
+    </tbody>
+  </table>
+  <p><b>MCP vs function calling:</b> no son competidores, son capas distintas. Function calling es el mecanismo (cómo un modelo emite una llamada); MCP es el protocolo (cómo esas capacidades se publican y consumen entre procesos).</p>
+  <p><b>"Esto es REST otra vez":</b> parcialmente cierto a nivel transporte, falso a nivel diseño — el contrato está escrito para un lector que infiere, no uno que lee documentación. Regla práctica: si tu server se ve como un <code>swagger.json</code> traducido, tienes una API con otro nombre.</p>
+  </section>
+
+  <section>
+  <h2>3. Las tres primitives y el modelo de control <span class="tag">— 8 min</span></h2>
+  <p>Tools, Resources y Prompts se declaran igual y se listan por el mismo protocolo. Lo que los separa: <b>quién decide cuándo ocurre la acción.</b></p>
+  <table>
+    <thead><tr><th>Primitive</th><th>Controlado por</th><th>Cuándo elegirlo</th></tr></thead>
+    <tbody>
+      <tr><td>Tools</td><td>El modelo</td><td>Todo lo que tiene efecto: escribir, borrar, enviar</td></tr>
+      <tr><td>Resources</td><td>La aplicación</td><td>Contexto que el host decide inyectar: schemas, docs</td></tr>
+      <tr><td>Prompts</td><td>El usuario</td><td>Workflows empaquetados, vía slash commands</td></tr>
+    </tbody>
+  </table>
+  <p class="rule-box"><b>Regla práctica.</b> Si el modelo decide, es una Tool. Si la aplicación decide, es un Resource. Si el usuario decide, es un Prompt. La mayoría expone todo como Tools porque es el camino de menor resistencia — y ahí se pierde control de compliance (Resources) y workflows empaquetados (Prompts, la de mejor relación esfuerzo/impacto).</p>
+  </section>
+
+  <section>
+  <h2>4. Cómo se escribe un server <span class="tag">— 8 min, hands-on</span></h2>
+  <p>Una demo en vivo con Python + FastMCP: un <b>tool</b> con type hints + docstring (el SDK genera el schema; el docstring es lo único que el modelo lee), un <b>resource</b> con su URI, un <b>prompt</b>. Probado en el MCP Inspector y conectado a Claude Code, observando la selección de tools.</p>
+  </section>
+
+  <section>
+  <h2>5. Diseño de tools <span class="tag">— 13 min</span></h2>
+  <p>El modelo no lee tu código ni tu README. Lee <b>nombre + descripción + schema</b>. Todo el diseño ocurre en esos tres campos.</p>
+  <ul>
+    <li><b>Agrupa por intención, no por endpoints.</b> 5-15 tools por server. <code>query_db(sql)</code> traslada el trabajo de diseño al modelo. Tools que se solapan compiten entre sí.</li>
+    <li><b>Schemas estrictos y side-effects explícitos.</b> Enums, límites, <code>additionalProperties: false</code>. Di en la descripción qué es reversible: "esto borra permanentemente", "esto envía correo a un cliente real".</li>
+    <li><b>El error es una instrucción.</b> <code>{"error": "invalid input"}</code> hace reintentar en ciclo. <code>{"error": "fecha debe ser YYYY-MM-DD, recibí '15 de marzo'"}</code> se corrige en un turno.</li>
+    <li><b>El contexto es presupuesto.</b> 40 tools son tokens en cada llamada, en cada conversación.</li>
+    <li><b>Composición entre servers.</b> Nombres genéricos (<code>search</code>, <code>create</code>, <code>list</code>) colisionan a nivel ecosistema. Usa un prefijo de dominio.</li>
+  </ul>
+  <p class="rule-box"><b>Cómo validar.</b> Escribe 10 prompts realistas → córrelos contra tu server → cuenta aciertos de tool + parámetros → itera <b>descripción y schema</b>, no el system prompt → repite hasta que deje de fallar.</p>
+  </section>
+
+  <section>
+  <h2>6. Dónde vive el estado <span class="tag">— 4 min</span></h2>
+  <p>El protocolo es stateless: cada request es autosuficiente. El estado no desapareció, se volvió explícito — emites un <i>handle</i> desde una tool y el modelo lo pasa de vuelta como argumento. Eso lo hace visible para el actor que tiene que razonar sobre él.</p>
+  <p class="rule-box"><b>Regla práctica.</b> Diseña cada tool para que se ejecute de forma independiente. Si hay continuidad, hazla visible como parámetro.</p>
+  </section>
+
+  <section>
+  <h2>7. Seguridad al conectar sistemas internos <span class="tag">— 5 min</span></h2>
+  <ul>
+    <li><b>Least privilege por tool</b>, no por server. Un server con credencial de admin y 12 tools tiene 12 caminos de escalación.</li>
+    <li><b>Valida siempre los inputs</b>, aunque el schema ya los declare.</li>
+    <li><b>Prompt injection vía resultados de tools:</b> lo que devuelve tu sistema interno entra al contexto del modelo.</li>
+    <li><b>Tool poisoning:</b> la descripción que aprobaste puede no ser la que corre después.</li>
+    <li><b>Confirmación del usuario</b> para acciones destructivas o costosas, y <b>sandboxing</b> cuando el server toca datos reales.</li>
+  </ul>
+  </section>
+
+  <section>
+  <h2>8. Cierre <span class="tag">— 2 min</span></h2>
+  <ol>
+    <li>Escribe un server con las tres primitives, no solo tools.</li>
+    <li>Pruébalo con el Inspector.</li>
+    <li>Conéctalo a Claude Code / Claude Desktop.</li>
+    <li>Corre la evaluación de 10 prompts.</li>
+    <li>Itera descripciones y schemas hasta que deje de fallar.</li>
+  </ol>
+  </section>
+
+  <section>
+  <h2>Presupuesto de tiempo</h2>
+  <table>
+    <thead><tr><th>Bloque</th><th class="n">Min</th></tr></thead>
+    <tbody>
+      <tr><td>0. Apertura</td><td class="n">1</td></tr>
+      <tr><td>1. Por qué un LLM necesita herramientas</td><td class="n">8</td></tr>
+      <tr><td>2. Diferencias de ejecución</td><td class="n">6</td></tr>
+      <tr><td>3. Las tres primitives y el modelo de control</td><td class="n">8</td></tr>
+      <tr><td>4. Cómo se escribe un server</td><td class="n">8</td></tr>
+      <tr><td>5. Diseño de tools</td><td class="n">13</td></tr>
+      <tr><td>6. Dónde vive el estado</td><td class="n">4</td></tr>
+      <tr><td>7. Seguridad</td><td class="n">5</td></tr>
+      <tr><td>8. Cierre</td><td class="n">2</td></tr>
+      <tr><td><b>Total contenido</b></td><td class="n"><b>55</b></td></tr>
+      <tr><td>Colchón</td><td class="n">5</td></tr>
+    </tbody>
+  </table>
+  </section>
+
+  <div class="colofon">
+    Temario para presentación · Claude for AI Engineering · CDMX · Universidad Iberoamericana
+  </div>
+
+</div>
+</body>
+</html>

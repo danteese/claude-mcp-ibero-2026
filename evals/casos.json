@@ -1,0 +1,65 @@
+[
+  {
+    "pregunta": "¿Qué conjuntos de datos abiertos hay sobre calidad del aire en la CDMX?",
+    "tool": "buscar_datasets_cdmx"
+  },
+  {
+    "pregunta": "¿Cuál fue la estación del Metro con más afluencia en 2025?",
+    "tool": "ranking_estaciones_metro",
+    "argumentos": {
+      "desde": "2025-01",
+      "hasta": "2025-12"
+    }
+  },
+  {
+    "pregunta": "¿Cuánta gente usó la Línea 12 cada año entre 2020 y 2024?",
+    "tool": "afluencia_metro",
+    "argumentos": {
+      "linea": "12",
+      "agrupar_por": "anio"
+    }
+  },
+  {
+    "pregunta": "¿En qué alcaldía está la estación Mixiuhca y en qué año abrió?",
+    "tool": "buscar_estacion_metro"
+  },
+  {
+    "pregunta": "¿Cuánta gente entró a la estación Zócalo en marzo de 2024?",
+    "tool": "afluencia_metro",
+    "argumentos": {
+      "estacion": "zocalo",
+      "desde": "2024-03",
+      "hasta": "2024-03"
+    }
+  },
+  {
+    "pregunta": "¿Cuáles son las 5 estaciones menos concurridas de la Línea A en el último año?",
+    "tool": "ranking_estaciones_metro",
+    "argumentos": {
+      "linea": "A",
+      "orden": "menos_concurridas",
+      "limite": 5
+    }
+  },
+  {
+    "pregunta": "¿Hay ecobicis disponibles ahorita cerca del Metro Insurgentes?",
+    "tool": "ecobici_cerca_de_metro"
+  },
+  {
+    "pregunta": "Levanta un reporte: la escalera eléctrica de Tacubaya, Línea 7, no funciona desde la mañana.",
+    "tool": "registrar_reporte",
+    "argumentos": {
+      "estacion": "tacubaya",
+      "linea": "7",
+      "tipo": "elevador_o_escalera"
+    }
+  },
+  {
+    "pregunta": "¿Qué reportes ciudadanos se han registrado?",
+    "tool": "consultar_reportes"
+  },
+  {
+    "pregunta": "¿Cuál es la capital de Francia?",
+    "tool": null
+  }
+]
