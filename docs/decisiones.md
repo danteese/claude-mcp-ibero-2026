@@ -184,3 +184,28 @@ pide tmux porque no viene instalado en todas las máquinas.
   código; Devin no lo puede dar y se deja como `PERSONAS_MCP`.
 - **Lo que no se dice:** URLs internas ni detalles de autenticación más allá de «te conectas con tu cuenta
   de Google de Spot2».
+
+## D18. Ecobici: una tool que escribe el mapa y un panel que se entiende
+
+- **Por qué:** el panel «Ecobici en vivo» no se entendía (cuadros numerados sin rótulos, encimados, en una
+  columna de 280 px) y dependía de que Claude copiara el JSON completo de la tool a `mapa/ecobici.js`.
+- **Qué:** `actualizar_mapa_ecobici` en el paso 4. Hace la misma consulta que `ecobici_cerca_de_metro`
+  (función compartida `consultar_ecobici`), escribe `mapa/ecobici.js` y a Claude sólo le devuelve un
+  resumen de 7 campos: el detalle no pasa por el contexto. Escribe una ruta fija (`MAPA_ECOBICI`), no un
+  parámetro: el modelo no elige dónde escribir. `ecobici_cerca_de_metro` sigue para responder en el chat.
+- **Panel:** sección a todo lo ancho debajo del mapa, con la respuesta en una frase, una vista de la zona
+  (Metro rotulado, anillos de 250 y 500 m, norte, círculos con el número de bicis que se separan si se
+  enciman) y la lista por distancia con barras; al pasar el mouse por una fila se resalta su círculo.
+- **Código comentado:** qué es CKAN, qué es GBFS y de dónde sale cada dato (local o en vivo) junto a las
+  constantes de cada paso. El README tiene la sección «De dónde sale cada dato».
+- **Efecto:** el servidor final tiene 8 tools (las láminas 5 y 24 lo dicen). Evaluación: 10/10.
+
+## D19. El diagrama de MCP no tiene nada en medio
+
+- **Por qué:** Dante: «aquí puedes tener un MCP por cada uno, no estamos hablando de un MCP gateway… no
+  demuestra realmente una ventaja». El hub central sugería un intermediario y que las líneas disminuían.
+- **Qué:** las dos mitades tienen las mismas 12 conexiones. Sin estándar son rojas (cada una es código a la
+  medida); con MCP son grises y el código está en las 7 pastillas «MCP»: un cliente por app y un servidor
+  por sistema. Nota al pie: MCP no es un intermediario; un gateway existe, pero es opcional. Las notas
+  agregan que la ventaja sólo aparece con más de una app.
+- **Pendiente:** la lámina 7 (Spot2) todavía dibuja un «MCP» al centro.

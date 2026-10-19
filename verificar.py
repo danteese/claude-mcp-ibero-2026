@@ -10,6 +10,7 @@ Usa un cliente MCP en memoria: llama a las tools igual que Claude, sin abrir pro
 import argparse
 import asyncio
 import importlib.util
+import json
 import logging
 import shutil
 import sqlite3
@@ -87,6 +88,8 @@ async def revisar_servidor(archivo: Path, paso: int, en_linea: bool) -> None:
     temporal = tempfile.TemporaryDirectory()
     if hasattr(modulo, "BASE_REPORTES"):
         modulo.BASE_REPORTES = Path(temporal.name) / "reportes.sqlite"
+    if hasattr(modulo, "MAPA_ECOBICI"):  # no reemplaza el mapa/ecobici.js de la persona
+        modulo.MAPA_ECOBICI = Path(temporal.name) / "ecobici.js"
 
     async with Client(modulo.mcp) as cliente:
         tools = {t.name: t for t in await cliente.list_tools()}
@@ -177,6 +180,20 @@ async def revisar_servidor(archivo: Path, paso: int, en_linea: bool) -> None:
                     falla("ecobici_cerca_de_metro no trae coordenadas", "agrega `metro` y lat/lon por cicloestación")
                 elif r:
                     falla("ecobici_cerca_de_metro falló", r.content[0].text)
+
+                r = await llamar("actualizar_mapa_ecobici", {"estacion": "Insurgentes"})
+                archivo = Path(temporal.name) / "ecobici.js"
+                if r and not r.is_error and archivo.exists():
+                    contenido = archivo.read_text(encoding="utf-8").strip()
+                    datos = json.loads(contenido.removeprefix("window.ECOBICI = ").removesuffix(";"))
+                    ok(
+                        f"actualizar_mapa_ecobici escribe mapa/ecobici.js ({len(datos['cicloestaciones'])} "
+                        f"cicloestaciones) y le devuelve a Claude un resumen de {len(r.data)} campos"
+                    )
+                elif r and not r.is_error:
+                    falla("actualizar_mapa_ecobici no escribió el archivo", "revisa que use MAPA_ECOBICI")
+                elif r:
+                    falla("actualizar_mapa_ecobici falló", r.content[0].text)
             else:
                 aviso("sin red: omito ecobici_cerca_de_metro")
     temporal.cleanup()

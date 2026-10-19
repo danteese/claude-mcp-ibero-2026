@@ -62,7 +62,7 @@ punto de control en `pasos/` con la solución.
 | 1 · Una tool | `buscar_datasets_cdmx`: busca en el catálogo de datos.cdmx.gob.mx | `uv run verificar.py 1` | `pasos/01_hola.py` |
 | 2 · Diseño | `buscar_estacion_metro`, `afluencia_metro`, `ranking_estaciones_metro` y el resource `fuentes`: tools por intención, errores que corrigen, respuestas cortas | `uv run verificar.py 2` | `pasos/02_consulta.py` |
 | 3 · Una acción | `registrar_reporte` (escribe, con aprobación humana en cada llamada), `consultar_reportes` y el prompt `informe_estacion` | `uv run verificar.py 3` | `pasos/03_accion.py` |
-| 4 · Medir | `ecobici_cerca_de_metro` (en vivo) y la evaluación con `uv run evaluar.py` | `uv run verificar.py 4` | `pasos/04_final.py` |
+| 4 · Medir | `ecobici_cerca_de_metro` (en vivo), `actualizar_mapa_ecobici` (escribe `mapa/ecobici.js` para el mapa) y la evaluación con `uv run evaluar.py` | `uv run verificar.py 4` | `pasos/04_final.py` |
 
 **¿Te atrasaste?** Copia el punto de control y reinicia la terminal 1:
 
@@ -96,8 +96,14 @@ tool, no el prompt.
 `uv run preparar.py` también genera los datos del mapa. Abre `mapa/index.html` en tu navegador y
 mueve el slider de meses: cada círculo es una estación, y su tamaño, las entradas diarias promedio.
 
-El panel «Ecobici en vivo» se llena cuando le pides a Claude que guarde la respuesta de
-`ecobici_cerca_de_metro` en `mapa/ecobici.js` (el texto exacto está en el panel).
+Debajo del mapa está la sección «Ecobici en vivo cerca del Metro». Se llena con el paso 4: pídele a
+Claude «Actualiza el mapa de Ecobici para el Metro Insurgentes». La tool `actualizar_mapa_ecobici`
+consulta Ecobici, escribe `mapa/ecobici.js` y a Claude sólo le devuelve un resumen. Recarga la página.
+Es una foto del momento de la consulta: para actualizarla, se lo vuelves a pedir. Sin Claude:
+
+```sh
+uv run fastmcp call pasos/04_final.py actualizar_mapa_ecobici estacion=Insurgentes
+```
 
 Reto de cierre, en Claude Code:
 
@@ -129,8 +135,32 @@ revisar en qué paso vas y qué sigue.
 | --- | --- |
 | `address already in use` al levantar el servidor | Ya hay otro servidor en el puerto 8765. Ciérralo (`Ctrl-C` en su terminal) o búscalo con `lsof -i :8765`. |
 | Claude no ve las tools | ¿Está corriendo la terminal 1? Revisa `/mcp` en Claude Code y reconecta. |
-| Falla `buscar_datasets_cdmx` o `ecobici_cerca_de_metro` | Necesitan internet. Las tools del Metro funcionan sin red. |
+| Falla `buscar_datasets_cdmx`, `ecobici_cerca_de_metro` o `actualizar_mapa_ecobici` | Necesitan internet. Las tools del Metro funcionan sin red. |
 | `falta datos/cdmx.sqlite` | Corre `uv run preparar.py`. |
+
+## De dónde sale cada dato
+
+El servidor corre en tu máquina. La mayoría de las tools lee una copia local; sólo tres salen a internet.
+
+```
+Claude Code ──► tu servidor MCP (127.0.0.1:8765)
+                  ├─ datos/cdmx.sqlite ............ Metro: copia local, sin internet
+                  ├─ datos/reportes.sqlite ........ reportes del paso 3 (local)
+                  ├─ API CKAN de datos.cdmx.gob.mx  catálogo (internet)
+                  └─ feed GBFS de Ecobici ......... bicis en vivo (internet)
+```
+
+- **El histórico del Metro es local** porque no cambia: la consulta es instantánea y el taller funciona
+  sin Wi-Fi. `preparar.py` lo arma con los CSV del repo.
+- **Lo que cambia se consulta en vivo**: el catálogo de datos y las bicis disponibles.
+- **CKAN** (*Comprehensive Knowledge Archive Network*) es el software de código abierto con el que
+  muchos gobiernos publican datos abiertos; datos.cdmx.gob.mx es un portal CKAN. `buscar_datasets_cdmx`
+  usa su API (`/api/3/action/package_search`), que devuelve qué conjuntos existen (título, dependencia,
+  formatos, enlace), no los datos. Cualquier otro portal CKAN responde igual.
+- **GBFS** (*General Bikeshare Feed Specification*) es el formato abierto en el que los sistemas de
+  bicis compartidas publican sus estaciones y su disponibilidad.
+- El modelo no corre en tu máquina: lo que devuelve cada tool viaja a Claude como parte de la
+  conversación. Por eso las tools devuelven resúmenes y no tablas completas.
 
 ## Los datos
 

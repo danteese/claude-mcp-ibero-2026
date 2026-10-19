@@ -15,6 +15,11 @@ from fastmcp import FastMCP
 from fastmcp.exceptions import ToolError
 from pydantic import Field
 
+# CKAN (Comprehensive Knowledge Archive Network) es el software de código abierto con el que muchos
+# gobiernos publican datos abiertos; datos.cdmx.gob.mx es un portal CKAN. Su API responde en
+# /api/3/action/<acción>: package_search busca conjuntos de datos («packages») y devuelve sus
+# metadatos (título, dependencia, archivos o «resources»), no los datos. La consultamos en vivo
+# porque el catálogo cambia; cualquier otro portal CKAN responde igual.
 CKAN = "https://datos.cdmx.gob.mx/api/3/action"
 
 mcp = FastMCP(

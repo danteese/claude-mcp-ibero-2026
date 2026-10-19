@@ -23,7 +23,28 @@
   ol { margin: 0; padding-left: 22px; font-size: 15px; }
   #resumen { font-size: 15px; }
   :focus-visible { outline: 3px solid #305b80; outline-offset: 4px; }
-  @media (max-width: 760px) { main { padding: 20px 16px; } .vista { grid-template-columns: 1fr; } }
+  .ecobici { margin-top: 36px; }
+  .ecobici h2 { font: 400 clamp(22px, 2.6vw, 30px)/1.2 Georgia, "Times New Roman", serif; margin: 0 0 8px; }
+  .respuesta { font-size: 19px; font-weight: 600; max-width: none; }
+  .ecobici-vista { display: grid; grid-template-columns: minmax(0, 460px) minmax(0, 1fr); gap: 32px;
+                   align-items: start; margin-top: 16px; }
+  .ecobici-vista[hidden] { display: none; }
+  figure { margin: 0; }
+  #ecobici-mapa { max-height: none; }
+  .eco-punto circle { transition: stroke-width .15s; }
+  .eco-punto.activa circle { stroke: var(--tinta); stroke-width: 3; }
+  h3 { font-size: 16px; margin: 0 0 10px; }
+  #ecobici-lista { list-style: none; padding: 0; display: grid; gap: 12px; }
+  #ecobici-lista li { display: grid; grid-template-columns: minmax(0, 1fr) 140px 92px; gap: 12px; align-items: center;
+                      padding: 4px 6px; border-radius: 6px; }
+  #ecobici-lista li.activa { background: #e6f0e6; }
+  .nombre { font-weight: 600; }
+  .detalle { display: block; color: var(--gris); font-size: 14px; font-weight: 400; }
+  .barra { height: 12px; background: #e6f0e6; border-radius: 6px; overflow: hidden; }
+  .barra span { display: block; height: 100%; background: #206449; }
+  .cuantas { font-weight: 600; text-align: right; }
+  .cuantas.sin { color: var(--gris); font-weight: 400; }
+  @media (max-width: 760px) { main { padding: 20px 16px; } .vista, .ecobici-vista { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -48,17 +69,30 @@
       <p id="resumen" aria-live="polite"></p>
       <h2>Más concurridas este mes</h2>
       <ol id="top"></ol>
-      <h2>Ecobici en vivo</h2>
-      <svg id="ecobici-mapa" viewBox="0 0 260 260" role="img" aria-labelledby="ecobici-titulo" hidden>
-        <title id="ecobici-titulo">Cicloestaciones alrededor de la estación del Metro elegida</title>
-      </svg>
-      <p class="gris" id="ecobici-texto"></p>
-      <ol id="ecobici-lista"></ol>
       <h2>Cómo leerlo</h2>
       <p class="gris">Área del círculo = entradas diarias promedio. La escala es la misma en todos los meses.
         ○ anillo vacío = 0 entradas en el mes. Las estaciones de transbordo tienen un círculo por línea.</p>
     </aside>
   </div>
+
+  <section class="ecobici" aria-labelledby="ecobici-h">
+    <h2 id="ecobici-h">Ecobici en vivo cerca del Metro</h2>
+    <p class="respuesta" id="ecobici-respuesta"></p>
+    <p class="gris" id="ecobici-texto"></p>
+    <div class="ecobici-vista" id="ecobici-vista" hidden>
+      <figure>
+        <svg id="ecobici-mapa" viewBox="0 0 460 460" role="img" aria-labelledby="ecobici-titulo">
+          <title id="ecobici-titulo">Cicloestaciones alrededor de la estación del Metro, con sus bicis disponibles</title>
+        </svg>
+        <figcaption class="gris">● Tamaño y número = bicis disponibles ahora. ○ Sin bicis o fuera de servicio.
+          Los anillos marcan la distancia a la estación del Metro.</figcaption>
+      </figure>
+      <div>
+        <h3 id="ecobici-lista-h"></h3>
+        <ol id="ecobici-lista"></ol>
+      </div>
+    </div>
+  </section>
 
   <p class="gris" id="fuente"></p>
   <p class="gris">La afluencia cuenta personas que <strong>entran</strong> a la estación. No mide la ocupación
@@ -122,43 +156,108 @@ if (!datos) {
   document.getElementById("fuente").textContent = `Fuente: ${datos.fuente}.`;
   mostrar();
 
-  // mapa/ecobici.js guarda, tal cual, la salida de la tool MCP ecobici_cerca_de_metro.
+  // mapa/ecobici.js lo escribe la tool MCP actualizar_mapa_ecobici (o Claude con la salida de
+  // ecobici_cerca_de_metro). La página no consulta nada: sólo dibuja ese archivo.
   const eco = window.ECOBICI;
   const textoEco = document.getElementById("ecobici-texto");
+  const pedido = "pídele a Claude «Actualiza el mapa de Ecobici para el Metro Insurgentes» y recarga esta página.";
   if (!eco) {
-    textoEco.textContent = "Pídele a Claude: «Usa ecobici_cerca_de_metro para Insurgentes con limite=10 " +
-      "y guarda la respuesta en mapa/ecobici.js como window.ECOBICI = …»";
+    textoEco.textContent = `Todavía no hay datos de Ecobici. En Claude Code, ${pedido}`;
   } else {
     dibujar("circle", { cx: x(eco.metro.lon), cy: y(eco.metro.lat), r: 30, fill: "none",
       stroke: "#202c2a", "stroke-width": 2, "stroke-dasharray": "4 3" });
 
-    const panel = document.getElementById("ecobici-mapa");
-    panel.hidden = false;
-    const pxPorMetro = 110 / eco.radio_m;
-    const local = (lat, lon) => [
-      130 + (lon - eco.metro.lon) * 111320 * Math.cos(eco.metro.lat * Math.PI / 180) * pxPorMetro,
-      130 - (lat - eco.metro.lat) * 110574 * pxPorMetro,
-    ];
-    dibujar("circle", { cx: 130, cy: 130, r: 110, fill: "#fff", stroke: "#d9ded7", "stroke-dasharray": "4 3" }, panel);
-    dibujar("circle", { cx: 130, cy: 130, r: 9, fill: "#202c2a" }, panel);
-    eco.cicloestaciones.forEach((c, n) => {
-      const [cx, cy] = local(c.lat, c.lon);
-      const conBicis = c.en_servicio && c.bicis_disponibles > 0;
-      dibujar("rect", { x: cx - 8, y: cy - 8, width: 16, height: 16, rx: 3,
-        fill: conBicis ? "#206449" : "#fff", stroke: "#206449" }, panel);
-      dibujar("text", { x: cx, y: cy + 4, "text-anchor": "middle", "font-size": 11,
-        fill: conBicis ? "#fff" : "#206449" }, panel).textContent = n + 1;
-    });
+    const conBicis = c => c.en_servicio && c.bicis_disponibles > 0;
+    const bicis = eco.bicis_disponibles_en_radio, total = eco.cicloestaciones_en_radio;
+    document.getElementById("ecobici-respuesta").textContent =
+      total === 0 ? `No hay cicloestaciones a menos de ${eco.radio_m} m del ${eco.referencia}.`
+      : bicis === 0 ? `Ahora no hay bicis disponibles a menos de ${eco.radio_m} m del ${eco.referencia}.`
+      : `Sí: ${bicis} bicis disponibles en ${total} cicloestaciones a menos de ${eco.radio_m} m del ${eco.referencia}.`;
+    const consultado = new Date(eco.consultado_en);
+    const fecha = consultado.toLocaleDateString("es-MX", { day: "numeric", month: "long" });
+    const hora = consultado.toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit", hour12: false });
+    textoEco.textContent = `Consultado el ${fecha} a las ${hora} (feed público de Ecobici). Es una foto de ese ` +
+      `momento; para actualizarla, ${pedido}`;
 
-    const hora = new Date(eco.consultado_en).toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit", hour12: false });
-    textoEco.textContent = `${eco.referencia} · ${eco.cicloestaciones_en_radio} cicloestaciones a ` +
-      `${eco.radio_m} m · ${eco.bicis_disponibles_en_radio} bicis disponibles · consultado a las ${hora}. ` +
-      "Cuadro lleno = hay bicis; vacío = sin bicis o fuera de servicio.";
-    document.getElementById("ecobici-lista").replaceChildren(...eco.cicloestaciones.map(c =>
-      Object.assign(document.createElement("li"), {
-        textContent: `${c.cicloestacion} · ${c.distancia_m} m · ${c.bicis_disponibles} ` +
-          (c.bicis_disponibles === 1 ? "bici" : "bicis"),
-      })));
+    // Vista de la zona: el Metro al centro y el radio de búsqueda en el anillo exterior.
+    const panel = document.getElementById("ecobici-mapa");
+    document.getElementById("ecobici-vista").hidden = false;
+    const C = 230, R = 200, pxPorMetro = R / eco.radio_m;
+    const local = (lat, lon) => [
+      C + (lon - eco.metro.lon) * 111320 * Math.cos(eco.metro.lat * Math.PI / 180) * pxPorMetro,
+      C - (lat - eco.metro.lat) * 110574 * pxPorMetro,
+    ];
+    const etiqueta = (atributos, texto) => {
+      const nodo = dibujar("text", { "paint-order": "stroke", stroke: "#fff", "stroke-width": 4, ...atributos }, panel);
+      nodo.textContent = texto;
+      return nodo;
+    };
+    for (const r of [R / 2, R]) {
+      dibujar("circle", { cx: C, cy: C, r, fill: "none", stroke: "#c9cfcb", "stroke-dasharray": "4 4" }, panel);
+      etiqueta({ x: C, y: C - r - 6, "text-anchor": "middle", "font-size": 12, fill: "#596560" },
+        `${Math.round(r / pxPorMetro)} m`);
+    }
+    etiqueta({ x: 18, y: 28, "font-size": 13, fill: "#596560" }, "↑ norte");
+
+    const maximo = Math.max(1, ...eco.cicloestaciones.map(c => c.bicis_disponibles));
+    const puntos = eco.cicloestaciones.map(c => {
+      const [px, py] = local(c.lat, c.lon);
+      return { c, x: px, y: py, r: conBicis(c) ? 9 + Math.sqrt(c.bicis_disponibles / maximo) * 13 : 9 };
+    });
+    // Separa los círculos que se enciman (dos cicloestaciones pueden estar a pocos metros) y los
+    // aleja del marcador del Metro. Se mueven lo mínimo para no perder la ubicación.
+    for (let paso = 0; paso < 80; paso++) {
+      for (const a of puntos) {
+        for (const b of [...puntos, { x: C, y: C, r: 14, fijo: true }]) {
+          if (a === b) continue;
+          const dx = a.x - b.x, dy = a.y - b.y, d = Math.hypot(dx, dy) || 0.01, minimo = a.r + b.r + 2;
+          if (d >= minimo) continue;
+          const empuje = (minimo - d) / (b.fijo ? 1 : 2);
+          a.x += dx / d * empuje;
+          a.y += dy / d * empuje;
+        }
+      }
+    }
+
+    const metro = eco.referencia.match(/Línea \w+/);
+    dibujar("circle", { cx: C, cy: C, r: 10, fill: COLORES[metro?.[0]] ?? "#202c2a", stroke: "#fff",
+      "stroke-width": 3 }, panel);
+    const grupos = puntos.map(({ c, x: px, y: py, r }) => {
+      const grupo = dibujar("g", { class: "eco-punto" }, panel);
+      dibujar("circle", { cx: px, cy: py, r, fill: conBicis(c) ? "#206449" : "#fff",
+        "fill-opacity": conBicis(c) ? 0.9 : 1, stroke: conBicis(c) ? "#fff" : "#8e9792", "stroke-width": 1.5 }, grupo);
+      dibujar("text", { x: px, y: py + 4, "text-anchor": "middle", "font-size": 12, "font-weight": 600,
+        fill: conBicis(c) ? "#fff" : "#596560" }, grupo).textContent = c.en_servicio ? c.bicis_disponibles : "×";
+      dibujar("title", {}, grupo).textContent =
+        `${c.cicloestacion}: ${c.distancia_m} m, ${c.bicis_disponibles} bicis disponibles`;
+      return grupo;
+    });
+    etiqueta({ x: C, y: C + 30, "text-anchor": "middle", "font-size": 14, "font-weight": 600, fill: "#202c2a" },
+      eco.referencia.replace(/ \(.*\)/, ""));
+
+    document.getElementById("ecobici-lista-h").textContent =
+      `Las ${eco.cicloestaciones.length} más cercanas` + (total > eco.cicloestaciones.length ? ` de ${total}` : "");
+    document.getElementById("ecobici-lista").replaceChildren(...eco.cicloestaciones.map((c, n) => {
+      const fila = document.createElement("li");
+      const nombre = Object.assign(document.createElement("span"), { className: "nombre", textContent: c.cicloestacion });
+      nombre.append(Object.assign(document.createElement("span"), {
+        className: "detalle", textContent: `${c.distancia_m} m · ${c.anclajes_libres} anclajes libres` }));
+      const barra = Object.assign(document.createElement("span"), { className: "barra" });
+      barra.append(Object.assign(document.createElement("span"), {
+        style: `width: ${conBicis(c) ? c.bicis_disponibles / maximo * 100 : 0}%` }));
+      const cuantas = Object.assign(document.createElement("span"), {
+        className: conBicis(c) ? "cuantas" : "cuantas sin",
+        textContent: !c.en_servicio ? "fuera de servicio" : `${c.bicis_disponibles} ${c.bicis_disponibles === 1 ? "bici" : "bicis"}`,
+      });
+      fila.append(nombre, barra, cuantas);
+      for (const [evento, activa] of [["mouseenter", true], ["mouseleave", false]]) {
+        fila.addEventListener(evento, () => {
+          fila.classList.toggle("activa", activa);
+          grupos[n].classList.toggle("activa", activa);
+        });
+      }
+      return fila;
+    }));
   }
 
   function mostrar() {

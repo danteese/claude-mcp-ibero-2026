@@ -21,7 +21,7 @@ cortos, y explica el porqué en una o dos frases.
 | 1 | `buscar_datasets_cdmx` | `uv run verificar.py 1` |
 | 2 | `buscar_estacion_metro`, `afluencia_metro`, `ranking_estaciones_metro`, resource `fuentes` | `uv run verificar.py 2` |
 | 3 | `registrar_reporte` (aprobación humana), `consultar_reportes`, prompt `informe_estacion` | `uv run verificar.py 3` |
-| 4 | `ecobici_cerca_de_metro`; evaluación con `uv run evaluar.py` | `uv run verificar.py 4` |
+| 4 | `ecobici_cerca_de_metro`, `actualizar_mapa_ecobici` (escribe `mapa/ecobici.js`); evaluación con `uv run evaluar.py` | `uv run verificar.py 4` |
 
 ## Cómo está armado
 
@@ -30,12 +30,15 @@ cortos, y explica el porqué en una o dos frases.
 - `servidor.py` es su copia de trabajo. `pasos/` son las soluciones de referencia.
 - `datos/cdmx.sqlite` es de solo lectura y se reconstruye con `uv run preparar.py`. Los reportes se
   escriben aparte, en `datos/reportes.sqlite`.
+- Las tools del Metro leen la copia local; `buscar_datasets_cdmx` (API CKAN de datos.cdmx.gob.mx) y las
+  de Ecobici (feed GBFS) salen a internet. Si preguntan por qué, el README lo explica en «De dónde sale
+  cada dato».
 - Para ver las tools como las ve el modelo: `uv run fastmcp list http://127.0.0.1:8765/mcp`.
 
 ## Reglas
 
-- Edita solo `servidor.py` y, en los retos del mapa, `mapa/index.html` y `mapa/ecobici.js`. No
-  modifiques `pasos/`, `evals/casos.json` ni los CSV de `datos/`.
+- Edita solo `servidor.py` y, en el reto del mapa, `mapa/index.html`. `mapa/ecobici.js` lo escribe la
+  tool `actualizar_mapa_ecobici`. No modifiques `pasos/`, `evals/casos.json` ni los CSV de `datos/`.
 - Conserva `host="127.0.0.1"` y `host_origin_protection=True` en `mcp.run`: el servidor no debe quedar
   expuesto al Wi-Fi del evento.
 - Usa `registrar_reporte` solo si la persona pide explícitamente levantar un reporte.

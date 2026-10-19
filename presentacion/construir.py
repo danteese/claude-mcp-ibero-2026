@@ -168,10 +168,10 @@ class Deck:
                 r.font.bold = es_resaltado
                 r.font.color.rgb = color(VERDE if es_resaltado else TINTA)
 
-    def titular(self, s, texto, y=40, h=66, tam=25):
+    def titular(self, s, texto, y=40, h=66, tam=25, w=640):
         if len(texto) > 80:
             raise ValueError(f"Titular de más de dos líneas: {texto!r}")
-        self.texto(s, 40, y, 640, h, texto, tam, TINTA, SERIF, interlineado=1.05)
+        self.texto(s, 40, y, w, h, texto, tam, TINTA, SERIF, interlineado=1.05)
 
     def progreso(self, s, actual):
         for n in range(1, 5):
@@ -397,7 +397,7 @@ def construir_deck() -> Deck:
     # 5 · Qué te llevas (apertura; se refleja en el recap)
     s = d.lamina(
         "Antes de entrar, el contrato del taller. A la izquierda, lo que van a tener en su laptop al terminar: un "
-        "servidor MCP propio con siete tools, un resource y un prompt sobre el Metro; conectado a Claude Code; con "
+        "servidor MCP propio con ocho tools, un resource y un prompt sobre el Metro; conectado a Claude Code; con "
         "una acción que escribe y pide aprobación; una evaluación de diez preguntas y un mapa que Claude extiende. "
         "A la derecha, las cinco preguntas que van a poder responder. Al final volvemos a esta misma lámina, ya con "
         "las respuestas. Si en algún momento se pierden, esta es la brújula.",
@@ -408,7 +408,7 @@ def construir_deck() -> Deck:
     tablero(
         d, s,
         [
-            "Un servidor MCP en tu laptop: 7 tools, un resource y un prompt sobre el Metro",
+            "Un servidor MCP en tu laptop: 8 tools, un resource y un prompt sobre el Metro",
             "Conectado a Claude Code por HTTP, con una acción que escribe y pide tu aprobación",
             "Una evaluación de 10 preguntas que mide si Claude elige bien",
             "Un mapa de 16 años del Metro que Claude extiende con tus tools",
@@ -494,8 +494,8 @@ def construir_deck() -> Deck:
     d.caja(s, 464, 100, 216, 90, BLANCO, BORDE, radio=0.06)
     d.texto(
         s, 476, 113, 192, 40,
-        "personas de Spot2 los usan; cada llamada queda auditada.",
-        10.5, TINTA, interlineado=1.2,
+        "En Spot2 todos los sistemas deben de poder ser accesibles por agentes (first-class citizens)",
+        12, TINTA, interlineado=1.2,
     )  # fmt: skip
     d.texto(s, 464, 204, 216, 18, "Diseñamos API/MCP first", 12, TINTA, negrita=True)
     d.caja(s, 464, 230, 104, 24, AZUL_FONDO, radio=0.5, contenido="Endpoint REST", tam=10, tinta=AZUL, margen=4)
@@ -527,7 +527,7 @@ def construir_deck() -> Deck:
     d.titular(s, "Un modelo convierte texto en texto: saber y actuar hay que dárselo", y=52, h=40, tam=21)
     d.definicion(
         s, 40, 108, 640, 60, "LLM (modelo de lenguaje grande)",
-        "un modelo que, dado un token, predice el token que sigue. Claude es uno. Por sí solo no consulta ni ejecuta nada.",
+        "un modelo que, dado un token, predice el token que sigue. Por sí solo no consulta ni ejecuta nada.",
     )  # fmt: skip
     d.caja(s, 160, 184, 110, 40, OCRE_FONDO, contenido="texto", tam=14, tinta=OCRE)
     d.caja(s, 300, 178, 120, 52, TINTA, contenido="**LLM**", tam=17, tinta=PAPEL)
@@ -557,7 +557,7 @@ def construir_deck() -> Deck:
         1.5,
         seccion="El concepto",
     )
-    d.titular(s, "Una tool es una función que el modelo pide y tu código ejecuta")
+    d.titular(s, "Una tool es una función que el modelo pide y tu código ejecuta", y=54, h=40, tam=22, w=620)
     definiciones = [
         (
             "Tool (herramienta)",
@@ -600,10 +600,16 @@ def construir_deck() -> Deck:
     # 10 · Qué es MCP
     s = d.lamina(
         "Si una tool es una función, ¿quién la define? Antes, cada aplicación definía sus tools en su propio "
-        "código. MCP es el estándar que permite que las tools vivan en un servidor aparte y cualquier aplicación "
-        "compatible las descubra al conectarse. La analogía oficial: un puerto USB-C para aplicaciones de IA. Sin "
-        "estándar, cada app integra cada sistema a mano (3 × 4 = 12 integraciones). Con MCP, cada lado implementa "
-        "el protocolo una vez (3 + 4 = 7), y la conexión de cada sistema la escribe su dueño.",
+        "código. MCP es el estándar que permite que las tools vivan en un servidor aparte y que cualquier "
+        "aplicación compatible las descubra al conectarse. La analogía oficial: un puerto USB-C. Ojo con el "
+        "diagrama: las conexiones son las mismas de los dos lados, 3 × 4 = 12; cualquier app puede hablar con "
+        "cualquier sistema. Lo que cambia es quién escribe código. Sin estándar, cada línea roja es una "
+        "integración a la medida: el plugin de ChatGPT para tu CRM, la extensión de Cursor para GitHub. Con MCP, "
+        "cada app implementa el cliente una vez (lo hacen Anthropic, OpenAI, Cursor) y cada sistema implementa su "
+        "servidor una vez (lo escribe su dueño): 3 + 4 = 7. Las 12 conexiones salen solas porque todos hablan el "
+        "mismo protocolo. No hay nada en medio: cada servidor es independiente; un gateway que los agrupe existe, "
+        "pero es opcional. Y la ventaja sólo aparece si hay más de una app: con una sola, MCP cuesta casi lo mismo "
+        "que una integración directa. Eso lo vemos en la siguiente lámina.",
         1.5,
         seccion="El concepto",
     )
@@ -614,28 +620,41 @@ def construir_deck() -> Deck:
         11,
     )  # fmt: skip
     apps, sistemas = ["Claude", "ChatGPT", "Cursor"], ["Metro CDMX", "Tu CRM", "Drive", "GitHub"]
-    d.texto(s, 40, 176, 300, 18, "Sin estándar", 13, ROJO, negrita=True)
     ya = [208 + n * 44 for n in range(3)]
     ys = [200 + n * 36 for n in range(4)]
+    # Las dos mitades tienen las mismas 12 conexiones; lo que cambia es dónde está el código.
+    d.texto(s, 40, 176, 296, 18, "Sin estándar", 13, ROJO, negrita=True)
     for y1 in ya:
         for y2 in ys:
-            d.linea(s, 128, y1 + 11, 230, y2 + 11, "C9CFCB", 1)
+            d.linea(s, 118, y1 + 12, 248, y2 + 12, "D9A79A", 1.25)
     for y, nombre in zip(ya, apps):
-        d.chip(s, 40, y, nombre, VERDE_FONDO, VERDE, 10.5, ancho=88)
+        d.chip(s, 40, y, nombre, VERDE_FONDO, VERDE, 10.5, ancho=78)
     for y, nombre in zip(ys, sistemas):
-        d.chip(s, 230, y, nombre, AZUL_FONDO, AZUL, 10.5, ancho=96)
-    d.texto(s, 40, 356, 300, 18, "3 × 4 = 12 integraciones a mano", 12, GRIS)
-    d.texto(s, 384, 176, 300, 18, "Con MCP", 13, VERDE, negrita=True)
-    for y in ya:
-        d.linea(s, 472, y + 11, 506, 263, VERDE, 1.75)
-    for y in ys:
-        d.linea(s, 566, 263, 590, y + 11, AZUL, 1.75)
+        d.chip(s, 248, y, nombre, AZUL_FONDO, AZUL, 10.5, ancho=88)
+    d.texto(
+        s, 40, 344, 296, 34, "**12** integraciones a la medida: cada app programa cada sistema", 11.5, GRIS,
+        interlineado=1.2,
+    )  # fmt: skip
+    d.texto(s, 384, 176, 296, 18, "Con MCP", 13, VERDE, negrita=True)
+    for y1 in ya:
+        for y2 in ys:
+            d.linea(s, 494, y1 + 12, 560, y2 + 12, "C9CFCB", 1)
     for y, nombre in zip(ya, apps):
-        d.chip(s, 384, y, nombre, VERDE_FONDO, VERDE, 10.5, ancho=88)
-    d.caja(s, 506, 246, 60, 34, TINTA, contenido="**MCP**", tam=13, tinta=PAPEL, margen=2, radio=0.5)
+        d.chip(s, 384, y, nombre, VERDE_FONDO, VERDE, 10.5, ancho=78)
+        d.caja(s, 464, y + 4, 30, 16, TINTA, radio=0.5, contenido="MCP", tam=7, tinta=PAPEL, margen=0, negrita=True)
     for y, nombre in zip(ys, sistemas):
-        d.chip(s, 590, y, nombre, AZUL_FONDO, AZUL, 10.5, ancho=90)
-    d.texto(s, 384, 356, 300, 34, "3 + 4 = 7 conexiones; cada una la escribe el dueño del sistema", 12, GRIS)
+        d.caja(s, 560, y + 4, 30, 16, TINTA, radio=0.5, contenido="MCP", tam=7, tinta=PAPEL, margen=0, negrita=True)
+        d.chip(s, 592, y, nombre, AZUL_FONDO, AZUL, 10.5, ancho=88)
+    d.texto(
+        s, 384, 344, 296, 34,
+        "**7** implementaciones: un cliente por app y un servidor por sistema. Las 12 conexiones ya no se programan.",
+        11.5, GRIS, interlineado=1.2,
+    )  # fmt: skip
+    d.texto(
+        s, 40, 382, 640, 14,
+        "MCP no es un intermediario: cada sistema expone su propio servidor. Un gateway que los agrupe existe, pero es opcional.",
+        9.5, GRIS,
+    )  # fmt: skip
 
     # 11 · ¿Cuál conviene? API, CLI o MCP
     s = d.lamina(
@@ -1126,7 +1145,7 @@ def construir_deck() -> Deck:
         "preguntas reales, cada una en una sesión de claude -p que solo ve nuestro servidor; se cuenta si llamó la "
         "tool correcta con los argumentos correctos. La primera corrida dio 9 de 10, y el error era de la métrica: "
         "Claude confirmó la estación antes de levantar el reporte, que es lo que pide la descripción. Incluye un "
-        "caso que no debe usar tools («¿capital de Francia?»). El paso 4 también agrega Ecobici en vivo. Reto: "
+        "caso que no debe usar tools («¿capital de Francia?»). El paso 4 también agrega Ecobici en vivo, en dos tools: ecobici_cerca_de_metro responde en el chat y actualizar_mapa_ecobici escribe mapa/ecobici.js para el mapa y sólo devuelve un resumen, así el detalle no gasta contexto. Reto: "
         "escriban la pregunta que haga fallar a su servidor y arreglen la descripción, no el prompt.",
         3,
         seccion="Paso 4 · Medir",
@@ -1273,7 +1292,7 @@ def construir_deck() -> Deck:
     tablero(
         d, s,
         [
-            "Un servidor MCP con 7 tools, un resource y un prompt (tu servidor.py)",
+            "Un servidor MCP con 8 tools, un resource y un prompt (tu servidor.py)",
             "Conectado a Claude Code por HTTP, con una acción que pide tu aprobación",
             "Una evaluación de 10 preguntas (evaluar.py)",
             "Un mapa de 16 años del Metro que Claude extendió con tus tools",

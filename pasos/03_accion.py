@@ -30,10 +30,17 @@ from fastmcp import FastMCP
 from fastmcp.exceptions import ToolError
 from pydantic import Field
 
+# De dónde sale cada dato. El servidor corre en tu máquina; sólo una tool sale a internet.
+# - Metro (afluencia y estaciones): copia local en datos/cdmx.sqlite, que arma `uv run preparar.py`
+#   con los CSV del repo. El histórico no cambia, la consulta es instantánea y funciona sin red.
+# - Reportes: datos/reportes.sqlite, también local; es la única base en la que se escribe.
+# - Catálogo de datos.cdmx.gob.mx (CKAN): en vivo, porque cambia.
 RAIZ = Path(__file__).resolve().parent
 DATOS = RAIZ / "datos" if (RAIZ / "datos").is_dir() else RAIZ.parent / "datos"
 BASE = DATOS / "cdmx.sqlite"
 BASE_REPORTES = DATOS / "reportes.sqlite"
+# CKAN (Comprehensive Knowledge Archive Network): software abierto para portales de datos; datos.cdmx.gob.mx
+# es uno. package_search busca conjuntos y sólo trae metadatos (título, formatos, enlace), no los datos.
 CKAN = "https://datos.cdmx.gob.mx/api/3/action"
 FUENTE_AFLUENCIA = "Afluencia diaria del Metro CDMX · datos.cdmx.gob.mx · CC-BY-4.0"
 MAX_REPORTES_POR_HORA = 20

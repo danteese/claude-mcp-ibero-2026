@@ -41,14 +41,16 @@ datos/cdmx.sqlite ──► preparar.py ──► mapa/datos.js ──► mapa/i
 **Regla: el navegador no consulta Ecobici.** El dato pasa por el MCP:
 
 ```text
-GBFS en vivo ──► tool ecobici_cerca_de_metro ──► Claude ──► mapa/ecobici.js ──► panel "Ecobici en vivo"
+GBFS en vivo ──► tool actualizar_mapa_ecobici ──► mapa/ecobici.js ──► sección "Ecobici en vivo cerca del Metro"
+                          └──► resumen corto ──► Claude
 ```
 
 - **Un momento de construcción del MCP:** la tool no devolvía coordenadas y el mapa las
   necesitaba. Se agregó `metro: {lat, lon}` y `lat`/`lon` por cicloestación. Un consumidor
   nuevo cambió el contrato de la tool, y `verificar.py 4` ahora protege ese contrato (falla
   con "no trae coordenadas" si se quitan).
-- `mapa/ecobici.js` es la salida de la tool tal cual. Lo escribe Claude y no se versiona
+- `mapa/ecobici.js` lo escribe la tool `actualizar_mapa_ecobici` (desde el 19-oct-2026; antes lo escribía
+  Claude con la salida de `ecobici_cerca_de_metro`) y no se versiona
   (está en `.gitignore`; además, el feed no declara licencia).
 - Sin ese archivo, el panel muestra qué pedirle a Claude.
 - Ensayo con `claude -p`: **31 s, US$0.20, 4 turnos.** Hizo `ToolSearch`, llamó
@@ -84,4 +86,4 @@ un buen ejemplo para separar lo que dice la fuente de lo que añade el modelo.
 
 - [ ] Probar el ejercicio en Claude Code interactivo (el ensayo fue con `claude -p`).
 - [ ] Captura o video de respaldo por si falla la red.
-- [ ] Decidir si se conserva `ecobici_cerca_de_metro` en el paso 4, ahora que el cierre es solo Metro.
+- [x] Se conserva `ecobici_cerca_de_metro` y se agrega `actualizar_mapa_ecobici` (D18).

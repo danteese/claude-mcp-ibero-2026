@@ -68,7 +68,9 @@ como `.pptx` (`gws drive files export`, con `mimeType` de PowerPoint), compararl
 El 19-oct-2026 se incorporaron así: «Álvaro Obregón» en la lluvia; «(Solo repaso, ya se vio antes)» en
 «Qué te llevas»; la bio de «Quién soy» (CMS del CERN, microbioma en UC San Diego, spot2.mx al pie); en
 Spot2, «Algunos servidores MCP», «Otros Agentes», «Toda la plataforma disponible para agentes» y sin el
-número; en LLM, «dado un token» y el titular a 21 pt en y=52.
+número; en LLM, «dado un token» y el titular a 21 pt en y=52. Segunda tanda: en Spot2, la tarjeta dice «En
+Spot2 todos los sistemas deben de poder ser accesibles por agentes (first-class citizens)»; en LLM se quitó
+«Claude es uno»; el titular de la tool, a 22 pt en y=54.
 
 ## Lluvia de preguntas (lámina 2)
 

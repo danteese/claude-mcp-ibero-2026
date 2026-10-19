@@ -1,11 +1,17 @@
 """Paso 4 · Servidor final: combinar una copia local con una fuente en vivo.
 
-Todo lo del paso 3, más `ecobici_cerca_de_metro`: cruza la ubicación oficial de
-una estación del Metro (copia local) con la disponibilidad de Ecobici en tiempo
-real (feed GBFS público). Es la única tool de Metro que necesita internet, y lo dice.
+Todo lo del paso 3, más dos tools de Ecobici:
+
+- `ecobici_cerca_de_metro` cruza la ubicación oficial de una estación del Metro (copia
+  local) con la disponibilidad de Ecobici en tiempo real (feed GBFS público) y le
+  responde a Claude. Es la única tool de Metro que necesita internet, y lo dice.
+- `actualizar_mapa_ecobici` hace la misma consulta, pero guarda el detalle en
+  mapa/ecobici.js para que lo dibuje mapa/index.html, y a Claude sólo le devuelve un
+  resumen. Así el detalle no pasa por el contexto del modelo.
 
     uv run fastmcp list pasos/04_final.py
     uv run fastmcp call pasos/04_final.py ecobici_cerca_de_metro estacion=insurgentes
+    uv run fastmcp call pasos/04_final.py actualizar_mapa_ecobici estacion=insurgentes
 """
 
 import asyncio
@@ -26,11 +32,22 @@ from fastmcp import FastMCP
 from fastmcp.exceptions import ToolError
 from pydantic import Field
 
+# De dónde sale cada dato. El servidor corre en tu máquina; sólo dos tools salen a internet.
+# - Metro (afluencia y estaciones): copia local en datos/cdmx.sqlite, que arma `uv run preparar.py`
+#   con los CSV del repo. El histórico no cambia, la consulta es instantánea y funciona sin red.
+# - Reportes: datos/reportes.sqlite, también local; es la única base en la que se escribe.
+# - Catálogo de datos.cdmx.gob.mx (CKAN) y Ecobici (GBFS): en vivo, porque cambian a cada rato.
 RAIZ = Path(__file__).resolve().parent
 DATOS = RAIZ / "datos" if (RAIZ / "datos").is_dir() else RAIZ.parent / "datos"
 BASE = DATOS / "cdmx.sqlite"
 BASE_REPORTES = DATOS / "reportes.sqlite"
+# Única ruta que escribe actualizar_mapa_ecobici. No es un parámetro: el modelo no elige dónde escribir.
+MAPA_ECOBICI = (RAIZ / "mapa" if (RAIZ / "mapa").is_dir() else RAIZ.parent / "mapa") / "ecobici.js"
+# CKAN (Comprehensive Knowledge Archive Network): software abierto para portales de datos; datos.cdmx.gob.mx
+# es uno. package_search busca conjuntos y sólo trae metadatos (título, formatos, enlace), no los datos.
 CKAN = "https://datos.cdmx.gob.mx/api/3/action"
+# GBFS (General Bikeshare Feed Specification): formato abierto en el que los sistemas de bicis compartidas
+# publican, en JSON y sin llave, sus estaciones (station_information) y su disponibilidad (station_status).
 GBFS = "https://gbfs.mex.lyftbikes.com/gbfs/es"
 FUENTE_AFLUENCIA = "Afluencia diaria del Metro CDMX · datos.cdmx.gob.mx · CC-BY-4.0"
 MAX_REPORTES_POR_HORA = 20
@@ -46,7 +63,8 @@ mcp = FastMCP(
         "Datos abiertos de la Ciudad de México: afluencia mensual del Metro por estación y línea "
         "(copia local desde 2010), ubicación de estaciones, Ecobici en vivo y catálogo de "
         "datos.cdmx.gob.mx. Úsalo para preguntas de movilidad en la CDMX (Metro, Ecobici) "
-        "o para descubrir datos públicos. "
+        "o para descubrir datos públicos. Para dibujar Ecobici en mapa/index.html usa "
+        "actualizar_mapa_ecobici. "
         "Si el nombre de una estación es ambiguo, llama primero a buscar_estacion_metro. "
         "registrar_reporte escribe en una base local de prueba y siempre requiere aprobación."
     ),
@@ -329,16 +347,8 @@ def distancia_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     return 2 * 6_371_000 * math.asin(math.sqrt(a))
 
 
-@mcp.tool(annotations={"readOnlyHint": True, "openWorldHint": True})
-async def ecobici_cerca_de_metro(
-    estacion: Annotated[str, Field(description="Estación del Metro de referencia.")],
-    radio_m: Annotated[int, Field(ge=100, le=1500, description="Radio de búsqueda en metros.")] = 500,
-    limite: Annotated[int, Field(ge=1, le=10)] = 5,
-) -> dict:
-    """Disponibilidad EN VIVO de Ecobici (bicis y anclajes libres) alrededor de una estación del
-    Metro CDMX, de la más cercana a la más lejana, con coordenadas para ubicarlas en un mapa.
-    Requiere internet; los datos cambian cada minuto.
-    """
+async def consultar_ecobici(estacion: str, radio_m: int, limite: int) -> dict:
+    """Cicloestaciones a menos de radio_m de una estación del Metro, de la más cercana a la más lejana."""
     with conectar() as db:
         filas = resolver_estacion(db, estacion, None)
     lat = sum(f["lat"] for f in filas) / len(filas)
@@ -389,6 +399,46 @@ async def ecobici_cerca_de_metro(
         "cicloestaciones": cercanas[:limite],
         "nota": None if cercanas else f"Sin cicloestaciones a {radio_m} m; Ecobici cubre sobre todo la zona central.",
         "fuente": "Ecobici · feed GBFS público (gbfs.mex.lyftbikes.com) · ubicación del Metro: datos.cdmx.gob.mx",
+    }
+
+
+@mcp.tool(annotations={"readOnlyHint": True, "openWorldHint": True})
+async def ecobici_cerca_de_metro(
+    estacion: Annotated[str, Field(description="Estación del Metro de referencia.")],
+    radio_m: Annotated[int, Field(ge=100, le=1500, description="Radio de búsqueda en metros.")] = 500,
+    limite: Annotated[int, Field(ge=1, le=10)] = 5,
+) -> dict:
+    """Disponibilidad EN VIVO de Ecobici (bicis y anclajes libres) alrededor de una estación del
+    Metro CDMX, de la más cercana a la más lejana, con coordenadas para ubicarlas en un mapa.
+    Requiere internet; los datos cambian cada minuto.
+    """
+    return await consultar_ecobici(estacion, radio_m, limite)
+
+
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True, "openWorldHint": True})
+async def actualizar_mapa_ecobici(
+    estacion: Annotated[str, Field(description="Estación del Metro de referencia.")],
+    radio_m: Annotated[int, Field(ge=100, le=1500, description="Radio de búsqueda en metros.")] = 500,
+    limite: Annotated[int, Field(ge=1, le=10)] = 10,
+) -> dict:
+    """Consulta Ecobici EN VIVO alrededor de una estación del Metro y guarda el resultado en
+    mapa/ecobici.js para que mapa/index.html lo dibuje. Úsala sólo si la persona pide ver o
+    actualizar el mapa de Ecobici; para responder preguntas usa ecobici_cerca_de_metro.
+
+    Sólo escribe mapa/ecobici.js (lo reemplaza). Devuelve un resumen: el detalle queda en el archivo.
+    """
+    datos = await consultar_ecobici(estacion, radio_m, limite)
+    MAPA_ECOBICI.write_text(f"window.ECOBICI = {json.dumps(datos, ensure_ascii=False, indent=2)};\n", encoding="utf-8")
+    cercana = datos["cicloestaciones"][0] if datos["cicloestaciones"] else None
+    return {
+        "archivo": "mapa/ecobici.js",
+        "referencia": datos["referencia"],
+        "cicloestaciones_en_radio": datos["cicloestaciones_en_radio"],
+        "bicis_disponibles_en_radio": datos["bicis_disponibles_en_radio"],
+        "mas_cercana": cercana
+        and f"{cercana['cicloestacion']} · {cercana['distancia_m']} m · {cercana['bicis_disponibles']} bicis",
+        "consultado_en": datos["consultado_en"],
+        "siguiente_paso": "Recarga mapa/index.html en el navegador.",
     }
 
 
