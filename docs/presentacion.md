@@ -88,8 +88,8 @@ Claude extiende.
 
 ## Pendiente
 
-- [ ] Poner la URL real del repo en las láminas 16 y 24 (`REPO` en `construir.py`; hoy dice `URL-DEL-REPO`).
-- [ ] Escribir el `CLAUDE.md`: la lámina 16 promete «abre claude en el repo y pídele que te guíe».
+- [x] URL real del repo en las láminas 16 y 24 (`REPO` en `construir.py`). La lámina 16 dice `cd claude-mcp-ibero-2026`.
+- [x] `CLAUDE.md`: la lámina 16 promete «abre claude en el repo y pídele que te guíe».
 - [ ] Ensayar en voz alta con cronómetro; los minutos son una estimación.
 - [ ] Poner en la lámina 6 cuántas personas de Spot2 usan los MCP (`PERSONAS_MCP` en `construir.py`; hoy
   dice `‹N›`). El dato vive en la base de auditoría de Djinn (Postgres `wormhole`, `AUTH_DATABASE_URL`), que

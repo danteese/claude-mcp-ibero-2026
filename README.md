@@ -38,8 +38,12 @@ uv run verificar.py     # ¿todo listo?
 | 1 | `uv run servidor.py` | Levanta tu servidor MCP en `http://127.0.0.1:8765/mcp`. Solo tu máquina puede conectarse. Déjala abierta. |
 | 2 | `claude` | Abre Claude Code en la carpeta del repo. El archivo `.mcp.json` ya lo conecta al servidor `cdmx`. |
 
-- **La primera vez**, Claude Code te pregunta si confías en el servidor `cdmx` de `.mcp.json`: acéptalo.
-  Con `/mcp` ves si está conectado y qué tools expone.
+- **La primera vez**, Claude Code hace dos preguntas y en las dos viene marcada la opción que no
+  sirve. Muévete con las flechas antes de presionar Enter:
+  1. «Is this a project you created or one you trust?» → **Yes, I trust this folder**.
+  2. «New MCP server found in this project: cdmx» → **Use this MCP server**.
+
+  Con `/mcp` ves si está conectado y qué tools expone. Si lo saltaste, aprúebalo desde ahí.
 - **Cada vez que cambies `servidor.py`**, reinícialo en la terminal 1 (`Ctrl-C` y otra vez
   `uv run servidor.py`). Si Claude no ve las tools nuevas, reconéctalo desde `/mcp`.
 - **Para ver tus tools sin Claude**, tal como las verá el modelo:
@@ -92,6 +96,9 @@ tool, no el prompt.
 `uv run preparar.py` también genera los datos del mapa. Abre `mapa/index.html` en tu navegador y
 mueve el slider de meses: cada círculo es una estación, y su tamaño, las entradas diarias promedio.
 
+El panel «Ecobici en vivo» se llena cuando le pides a Claude que guarde la respuesta de
+`ecobici_cerca_de_metro` en `mapa/ecobici.js` (el texto exacto está en el panel).
+
 Reto de cierre, en Claude Code:
 
 > Usa el servidor cdmx para saber cuándo estuvo en cero la Línea 12 y agrega a mapa/index.html un
@@ -108,6 +115,10 @@ uv run fastmcp install claude-desktop servidor.py --project .
 ```
 
 Reinicia Claude Desktop. Si después cambias `servidor.py`, vuelve a reiniciar Claude Desktop.
+
+Si Claude Desktop dice que no encuentra `uv`, abre su configuración (Settings → Developer → Edit Config)
+y cambia `"command": "uv"` por la ruta completa que te da `which uv` (por ejemplo,
+`/opt/homebrew/bin/uv`). Las apps de macOS no siempre ven el mismo PATH que tu terminal.
 
 ## ¿Atorado?
 

@@ -79,6 +79,17 @@ promedio. Las dos corridas usaron el modelo por defecto de Claude Code.
 | Versión 6: apertura y recap | 25 páginas, 40 min (sumados desde las notas del `.pptx`); 0 `<p:style>`. Primera pasada: los dos titulares ocupaban dos líneas y chocaban con los encabezados; se acortaron a una línea |
 | Versión 7: lámina de transporte y FastMCP; notas de elicitation | 26 páginas, 40 min (sumados desde las notas); 0 `<p:style>`; las notas de la lámina 13 contienen la explicación de elicitation. Primera pasada: titular en dos líneas y texto pegado al bloque de código; corregido |
 | Lámina 6 (Spot2) con datos de Devin | Cuatro preguntas a DeepWiki sobre 10 repos; tools contadas en las conexiones de producción (Djinn 44, Colossu 65). La auditoría de Djinn no está en ClickHouse (sin tablas `tool_invocations` ni base `wormhole`). Primera pasada: negrita partida en «Una sola acción» y texto de la tarjeta en tres líneas; corregido |
+| Clon limpio (19-oct-2026): `git clone` local → `uv run preparar.py` → `uv run verificar.py` | 38,804 filas (2010-01 a 2026-07), 195 estaciones, `mapa/datos.js`; entorno «Todo en orden» |
+| Clon limpio: `uv run verificar.py N --archivo pasos/0N_*.py` (N = 1 a 4) y `cp pasos/04_final.py servidor.py` + `verificar.py 4` | Los cuatro contratos pasan; el punto de control copiado a `servidor.py` encuentra `datos/` |
+| Clon limpio: `uv run servidor.py` + `uv run fastmcp list http://127.0.0.1:8765/mcp` | 7 tools por HTTP |
+| `claude mcp list` en el clon | `cdmx` en «Pending approval» hasta abrir `claude` |
+| `claude` interactivo en el clon (tmux) | Dos pantallas: confianza en la carpeta y «New MCP server found: cdmx»; en las dos viene marcada la opción que no sirve (se documentó en el README). `registrar_reporte` pidió aprobación aunque Claude Code estaba en modo auto; aprobado → folio CDMX-00001 en `datos/reportes.sqlite` |
+| `claude -p` con las 4 preguntas del README (`--allowedTools mcp__cdmx__*`) | Bicicletas → `buscar_datasets_cdmx`; Pantitlán jul-2026 → 4,623,233; reporte → bloqueado («requires permission»), sin escribir; Ecobici → 12 cicloestaciones a 500 m de Insurgentes |
+| `claude -p "guíame paso a paso"` con `servidor.py` en el paso 1 | Corrió `verificar.py`, detectó el paso 1 completo y explicó el paso 2 con sus comprobaciones |
+| `uv run evaluar.py` en el clon | 10/10 |
+| `fastmcp install claude-desktop servidor.py --project . --config-path <temporal>` | Genera la configuración con `"command": "uv"`; un cliente stdio con esa configuración lista y llama la tool. `uv` no está en el PATH mínimo de macOS (nota en el README) |
+| `mapa/index.html` en el clon (agent-browser) | 199 meses, 195 círculos, julio de 2026 con Pantitlán primero (149,137) |
+| `uv run presentacion/construir.py --local` en el clon | Sin `recursos/`: mensaje claro con las tres imágenes que faltan. Con ellas: 26 láminas, 40 min |
 | `gws` con `--json` largo | El envoltorio de Node muere (exit 137 / -9) a partir de ~980 bytes; el binario nativo acepta 10 KB |
 
 ## Estilo

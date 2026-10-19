@@ -34,8 +34,8 @@ cortos, y explica el porqué en una o dos frases.
 
 ## Reglas
 
-- Edita solo `servidor.py` (y `mapa/index.html` en el reto del mapa). No modifiques `pasos/`,
-  `evals/casos.json` ni los CSV de `datos/`.
+- Edita solo `servidor.py` y, en los retos del mapa, `mapa/index.html` y `mapa/ecobici.js`. No
+  modifiques `pasos/`, `evals/casos.json` ni los CSV de `datos/`.
 - Conserva `host="127.0.0.1"` y `host_origin_protection=True` en `mcp.run`: el servidor no debe quedar
   expuesto al Wi-Fi del evento.
 - Usa `registrar_reporte` solo si la persona pide explícitamente levantar un reporte.

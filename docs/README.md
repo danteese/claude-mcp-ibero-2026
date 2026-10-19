@@ -3,7 +3,7 @@
 **Taller:** Datos abiertos over MCP: Claude que consulta fuentes reales
 **Evento:** Claude for AI Engineering · CDMX · Universidad Iberoamericana
 **Duración:** 40 minutos. El temario v6 (`../temario-mcp-v6.md`) está escrito para 55: hay que recortarlo.
-**Última actualización:** 17-oct-2026
+**Última actualización:** 19-oct-2026
 
 Esta carpeta guarda lo que decidimos, lo que investigamos y lo que verificamos, para no
 reconstruirlo de memoria. Cada documento distingue entre **medido** (lo corrimos),
@@ -33,10 +33,10 @@ reconstruirlo de memoria. Cada documento distingue entre **medido** (lo corrimos
 | `.mcp.json` | Conecta Claude Code al servidor en `http://127.0.0.1:8765/mcp` | Listo |
 | `mapa/index.html` | Mapa de afluencia del Metro con slider de mes; los datos los genera `preparar.py` | Listo |
 | `presentacion/construir.py` | Genera la presentación (versión 7: 25 láminas en 40 min más un glosario) y la sube a Google Slides con `gws` | Listo, en revisión de Dante |
-| `README.md` (raíz) | Guía para participantes | **Falta** |
-| `CLAUDE.md` | Instrucciones para que Claude Code guíe la instalación paso a paso (la lámina 10 lo promete) | **Falta** |
+| `README.md` (raíz) | Guía para participantes: requisitos, dos terminales, los cuatro pasos, evaluación, mapa, Claude Desktop y problemas comunes | Listo |
+| `CLAUDE.md` | Instrucciones para que Claude Code guíe paso a paso (la lámina 16 lo promete) | Listo, probado con `claude -p "guíame paso a paso"` |
 
-El repositorio aún no tiene commits.
+Repositorio: https://github.com/danteese/claude-mcp-ibero-2026 (privado por ahora).
 
 ## Entorno de desarrollo (tmux)
 
@@ -58,14 +58,15 @@ El taller **no** requiere tmux: los participantes usan dos pestañas de terminal
 ## Pendientes
 
 - [x] Agenda de 40 minutos y presentación en Google Slides (`presentacion.md`).
-- [ ] `README.md` para participantes y `CLAUDE.md` para que Claude Code los guíe paso a paso.
-- [ ] Publicar el repo y poner su URL en las láminas 16 y 24.
+- [x] `README.md` para participantes y `CLAUDE.md` para que Claude Code los guíe paso a paso.
+- [x] Subir el repo y poner su URL en las láminas 16 y 24.
+- [ ] Hacer público el repo antes del evento. Antes, revisar si `docs/` debe incluir las notas internas de Spot2 (`ponente.md`, D17).
 - [ ] Poner el número de personas que usan los MCP de Spot2 en la lámina 6 (`PERSONAS_MCP`).
 - [ ] Ensayar la presentación con cronómetro.
 - [x] Cierre decidido: mapa del Metro por mes, 5 minutos (`demo-mapa.md`, decisión D12).
 - [ ] Probar el ejercicio del mapa en Claude Code interactivo y grabar un respaldo.
 - [ ] Confirmar los datos marcados "por confirmar" en `ponente.md`.
-- [ ] Probar el servidor HTTP con Claude Desktop (no probado).
+- [ ] Probar Claude Desktop de punta a punta. Probado: `fastmcp install claude-desktop` genera la configuración y el servidor responde por stdio; falta abrirlo en la app.
 - [ ] Probar si Claude Code se reconecta solo al reiniciar el servidor HTTP (no probado).
 - [ ] Revisar la licencia del feed GBFS de Ecobici antes de presentarlo como dato abierto.
 - [ ] Confirmar con Ricardo y Andrés qué cubren los demás speakers (pendiente del temario v6).
