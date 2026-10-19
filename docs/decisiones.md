@@ -281,3 +281,13 @@ pide tmux porque no viene instalado en todas las máquinas.
   (MCP Bundles, `.mcpb`) para empaquetar servidores locales, adoptado por el proyecto en noviembre de 2025, y
   el Registry oficial. La lámina 18 ahora lo dice.
 - **Lámina 17:** el diagrama que Dante agregó en Slides se incorporó al generador, sin tiempo propio.
+
+## D26. Referencias al final y el orden de Dante
+
+- **Referencias (lámina 33):** apéndice «Para aprender más», 20 enlaces en seis grupos (MCP, construir, diseñar
+  tools, medir, skills y empaquetado, descubrir servidores), todos comprobados con código 200 el 19-oct-2026 y
+  clicables en Slides y en el PDF. Dos se actualizaron a su dirección nueva (OpenAI «Optimize metadata» y el
+  directorio de conectores de Claude).
+- **Orden de Dante:** se respeta lo que hizo en Slides: LLM antes de Spot2, «Clonemos repo para empezar» con QR
+  como lámina 10 (para que clonen mientras escuchan los conceptos), skills entre el paso 3 y el paso 4, y la
+  versión con texto de «Tres piezas» oculta (lámina 17). El generador ahora sabe ocultar láminas.

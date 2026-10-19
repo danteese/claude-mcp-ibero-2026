@@ -4,9 +4,9 @@
 Es privada: solo la persona dueña tiene permiso. El enlace y los IDs están en
 `presentacion/.ids.json` (no se versiona).
 
-**Versión actual:** 11. Son 31 láminas: 29 se presentan en 40 minutos (el meme de la lámina 2 y el diagrama de la 17 no tienen tiempo propio) y las dos últimas son apéndices de consulta: buenas prácticas y glosario. Historial en `storytelling.md`.
+**Versión actual:** 12. Son 33 láminas: 29 se presentan en 40 minutos (el meme de la lámina 2 no tiene tiempo propio), la 17 está oculta a propósito y las tres últimas son apéndices de consulta: buenas prácticas, glosario y referencias. Historial en `storytelling.md`.
 
-**Reglas:** todas las láminas son claras (no sabemos cómo proyecta el foro una oscura); sin sombras ni líneas decorativas, así que solo hay flechas y líneas con significado (el diagrama M×N); cada concepto lleva su tarjeta de «Definición». La lámina 8 (Spot2) se armó con lo que respondió Devin sobre los repositorios de Spot2 (D17); falta el número de personas (`PERSONAS_MCP`).
+**Reglas:** todas las láminas son claras (no sabemos cómo proyecta el foro una oscura); sin sombras ni líneas decorativas, así que solo hay flechas y líneas con significado (el diagrama M×N); cada concepto lleva su tarjeta de «Definición». La lámina 9 (Spot2) se armó con lo que respondió Devin sobre los repositorios de Spot2 (D17); falta el número de personas (`PERSONAS_MCP`).
 
 **Cómo se construye:** `uv run presentacion/construir.py`.
 1. Genera `presentacion/salida/taller-mcp.pptx` con `python-pptx`. El script declara sus
@@ -23,6 +23,8 @@ Es privada: solo la persona dueña tiene permiso. El enlace y los IDs están en
   Miroshnychenko en Medium; por eso no se versiona.
 - `piezas-mcp.png`: el diagrama de la lámina 17 (cliente, servidor, tools, resources y prompts), que Dante
   agregó en Slides; en inglés y sin fuente anotada, por eso no se versiona.
+- `qr-repo.png`: el QR de la lámina 10 (TQRCG), que Dante agregó en Slides; verificado: abre
+  https://github.com/danteese/claude-mcp-ibero-2026.
 - `mapa-portada.png`: captura a 2× de `mapa/index.html` en julio de 2026, sin la capa de Ecobici, con el fondo del SVG igualado al papel (`#F7F7F3`), recortada al contenido y con el fondo transparente para que no se note un rectángulo en la portada.
 - `mapa-oct-2022.png`: captura a 2× de `mapa/index.html` en octubre de 2022, sin la capa de
   Ecobici para no mezclar un dato de hoy con uno de 2022.
@@ -38,34 +40,36 @@ Generada a partir de las notas del orador del `.pptx`.
 | 3 | 0.5–1.5 | ¿Cuánta gente entró a Pantitlán en julio de 2026? (al centro de una lluvia de 16 preguntas con dato público) | — |
 | 4 | 1.5–2 | **La respuesta: 4,623,233** (desglose por línea y las 5 estaciones con más entradas) | — |
 | 5 | 2–2.5 | Sin herramientas, Claude estima. Con tu servidor MCP, responde con el dato. | — |
-| 6 | 2.5–3.5 | **Al terminar tendrás un servidor MCP tuyo, conectado** (qué te llevas) | — |
+| 6 | 2.5–3.5 | **Al terminar tendrás un servidor MCP conectado a CC** (qué te llevas) | — |
 | 7 | 3.5–4 | Quién soy: foto, rol y trayectoria | — |
-| 8 | 4–5 | En Spot2, cada capacidad nace con su API y su MCP | — (callback del diagrama M×N; API/MCP first) |
-| 9 | 5–6 | Un modelo convierte texto en texto: saber y actuar hay que dárselo | LLM |
-| 10 | 6–7.5 | Una tool es una función que el modelo pide y tu código ejecuta | Tool, function calling, agente |
-| 11 | 7.5–9 | MCP es el estándar para conectar la IA con tus sistemas | MCP (y el diagrama M×N contra M+N) |
-| 12 | 9–10.5 | La IA puede usar API, CLI o MCP: elige según la situación | — |
-| 13 | 10.5–12 | MCP te da control y alcance; lo pagas en contexto y riesgo | — |
-| 14 | 12–13 | En MCP participan tres actores: host, client y server | Host, client, server, transporte |
-| 15 | 13–14.5 | MCP tiene tres capas obligatorias; el resto es opcional | Componentes de la spec 2026-07-28 |
-| 16 | 14.5–15.5 | Tres piezas, una pregunta: ¿quién decide cuándo ocurre? | Tool, resource, prompt (y sus campos) |
-| 17 | — | Tres piezas en un diagrama: cliente, servidor y quién controla cada pieza (lo agregó Dante; va con la 16) | — |
-| 18 | 15.5–16.5 | **Un MCP da acceso; una skill le enseña a usarlo** | Skill (Agent Skill), plugin |
-| 19 | 16.5–17.5 | **Construimos un servidor MCP por HTTP con FastMCP** | Transportes (stdio, HTTP local, HTTP remoto), FastMCP, FastAPI |
-| 20 | 17.5–19.5 | Construyamos (instalación) | Datos abiertos, uv |
-| 21 | 19.5–23.5 | Paso 1 · Una función con docstring ya es una tool | FastMCP, docstring, schema |
-| 22 | 23.5–27.5 | Paso 2 · Diseña para quien lee el contrato: el modelo | Contexto |
-| 23 | 27.5–32 | Paso 3 · Si la tool escribe, los controles van en el código | Idempotente |
-| 24 | 32–35 | Paso 4 · Mide si Claude elige bien | Evaluación (eval) |
-| 25 | 35–36 | El mismo dato, ahora en un mapa para personas | — |
-| 26 | 36–37.5 | Claude extiende el mapa; tú lees lo que añade | — |
-| 27 | 37.5–39 | **Recap: tienes un servidor MCP y sabes cuándo usarlo** | — |
-| 28 | 39–39.5 | Ahora te toca | — |
-| 29 | 39.5–40 | **Esto ya lo puedes conectar hoy** (10 casos: Blender, impresoras 3D, Ableton, Figma, Home Assistant, ROS, Chrome DevTools, Context7, Parallel, Mercado Pago) y Gracias | — |
-| 30 | — | Apéndice: ¿Tu tool se entiende? Diseña, describe y mide (no se presenta) | Criterios TDQS, golden set |
-| 31 | — | Glosario del taller (apéndice, no se presenta) | 25 términos |
+| 8 | 4–5 | Un modelo convierte texto en texto: saber y actuar hay que dárselo | LLM |
+| 9 | 5–6 | En Spot2, cada capacidad nace con su API y su MCP | — (callback del diagrama M×N; API/MCP first) |
+| 10 | 6–6.5 | Clonemos repo para empezar (QR al repo; lo agregó Dante) | — |
+| 11 | 6.5–8 | Una tool es una función que el modelo pide y tu código ejecuta | Tool, function calling, agente |
+| 12 | 8–9.5 | MCP es el estándar para conectar la IA con tus sistemas | MCP (y el diagrama M×N contra M+N) |
+| 13 | 9.5–11 | La IA puede usar API, CLI o MCP: elige según la situación | — |
+| 14 | 11–12.5 | MCP te da control y alcance; lo pagas en contexto y riesgo | — |
+| 15 | 12.5–13.5 | En MCP participan tres actores: host, client y server | Host, client, server, transporte |
+| 16 | 13.5–15 | MCP tiene tres capas obligatorias; el resto es opcional | Componentes de la spec 2026-07-28 |
+| 17 | — | Tres piezas, una pregunta: ¿quién decide cuándo ocurre? · **oculta a propósito** (se presenta el diagrama de la 18) | Tool, resource, prompt (y sus campos) |
+| 18 | 15–16 | Tres piezas en un diagrama: cliente, servidor y quién controla cada pieza (lo agregó Dante) | — |
+| 19 | 16–17 | **Construimos un servidor MCP por HTTP con FastMCP** | Transportes (stdio, HTTP local, HTTP remoto), FastMCP, FastAPI |
+| 20 | 17–18.5 | Construyamos (instalación) | Datos abiertos, uv |
+| 21 | 18.5–22.5 | Paso 1 · Una función con docstring ya es una tool | FastMCP, docstring, schema |
+| 22 | 22.5–26.5 | Paso 2 · Diseña para quien lee el contrato: el modelo | Contexto |
+| 23 | 26.5–31 | Paso 3 · Si la tool escribe, los controles van en el código | Idempotente |
+| 24 | 31–32 | **Un MCP da acceso; una skill le enseña a usarlo** | Skill (Agent Skill), plugin |
+| 25 | 32–35 | Paso 4 · Mide si Claude elige bien | Evaluación (eval) |
+| 26 | 35–36 | El mismo dato, ahora en un mapa para personas | — |
+| 27 | 36–37.5 | Claude extiende el mapa; tú lees lo que añade | — |
+| 28 | 37.5–39 | **Recap: tienes un servidor MCP y sabes cuándo usarlo** | — |
+| 29 | 39–39.5 | Ahora te toca | — |
+| 30 | 39.5–40 | **Esto ya lo puedes conectar hoy** (10 casos: Blender, impresoras 3D, Ableton, Figma, Home Assistant, ROS, Chrome DevTools, Context7, Parallel, Mercado Pago) y Gracias | — |
+| 31 | — | Apéndice: ¿Tu tool se entiende? Diseña, describe y mide (no se presenta) | Criterios TDQS, golden set |
+| 32 | — | Glosario del taller (apéndice, no se presenta) | 25 términos |
+| 33 | — | Apéndice: Para aprender más (20 enlaces en 6 grupos; no se presenta) | — |
 
-Las notas del orador de cada lámina tienen el guion, el tiempo y las marcas [EN VIVO]. Las de la lámina 15 explican elicitation (qué es, ejemplo, modos, qué no es y por qué no la usamos hoy), por si sale en preguntas.
+Las notas del orador de cada lámina tienen el guion, el tiempo y las marcas [EN VIVO]. Las de la lámina 16 explican elicitation (qué es, ejemplo, modos, qué no es y por qué no la usamos hoy), por si sale en preguntas.
 
 ## Ediciones de Dante en Google Slides
 
@@ -83,13 +87,16 @@ Spot2 todos los sistemas deben de poder ser accesibles por agentes (first-class 
 tarjeta de definición en y=86 con alto 62; en el cierre, Dante quitó «Si el agente falla, arregla la descripción, no
 el modelo»: la lámina nueva ya no la lleva. Quinta tanda: Dante agregó un meme como lámina 2 (imagen y URL de la
 fuente); se pasó a `construir.py` con la URL en el estilo de las fuentes, y un ajuste de 4 pt en el paso 2. Sexta
-tanda: Dante duplicó «Tres piezas» y en la copia puso un diagrama (imagen); es la lámina 17, sin tiempo propio.
+tanda: Dante duplicó «Tres piezas» y en la copia puso un diagrama (imagen). Séptima tanda: reordenó (LLM antes de
+Spot2; skills entre el paso 3 y el 4), agregó «Clonemos repo para empezar» con QR (lámina 10), ocultó la versión con
+texto de «Tres piezas» (lámina 17; `lamina(..., oculta=True)`, sin tiempo; su minuto pasa al diagrama) y cambió los
+titulares de «Qué te llevas» y del paso 1. «Construyamos» cede medio minuto a la lámina 10.
 
 ## Lluvia de preguntas (lámina 3)
 
 Cada pregunta tiene detrás un conjunto de datos.cdmx.gob.mx, revisado el 19-oct-2026 con la API de CKAN
 (`package_search` y `package_show`). Sirve para responder «¿de dónde sale esa?» y como lista de ideas para
-la lámina 28.
+la lámina 29.
 
 | Pregunta | Conjunto (slug en datos.cdmx.gob.mx) |
 | --- | --- |
@@ -111,12 +118,12 @@ la lámina 28.
 | ¿Qué nombre se registra más en Coyoacán? | `nombres-registrados-en-actas-del-registro-civil` |
 | ¿Cuántas bodas hay cada 14 de febrero? | `matrimonios-registrados-en-la-ciudad-de-mexico` |
 
-## Qué te llevas (láminas 6 y 27)
+## Qué te llevas (láminas 6 y 28)
 
 Las dos láminas tienen la misma composición. Al inicio: cuatro entregables con círculos vacíos y cinco
-preguntas. En el recap (lámina 27): los mismos entregables con palomita y las respuestas.
+preguntas. En el recap (lámina 28): los mismos entregables con palomita y las respuestas.
 
-| Pregunta (lámina 6) | Respuesta (lámina 27) |
+| Pregunta (lámina 6) | Respuesta (lámina 28) |
 | --- | --- |
 | ¿Qué es una tool y qué agrega MCP? | El modelo solo pide; tu código ejecuta. MCP estandariza cómo se publican y descubren las tools. |
 | ¿Cuándo conviene MCP y cuándo una CLI o una API? | MCP si el modelo decide en runtime, para varios usuarios o sin tu terminal. Si no, CLI o API. |
@@ -143,10 +150,10 @@ Claude extiende.
 
 ## Pendiente
 
-- [x] URL real del repo en las láminas 20 y 28 (`REPO` en `construir.py`). La lámina 20 dice `cd claude-mcp-ibero-2026`.
+- [x] URL real del repo en las láminas 10, 20, 29 y 33 (`REPO` en `construir.py`). La lámina 20 dice `cd claude-mcp-ibero-2026`.
 - [x] `CLAUDE.md`: la lámina 20 promete «abre claude en el repo y pídele que te guíe».
 - [ ] Ensayar en voz alta con cronómetro; los minutos son una estimación.
-- [ ] Poner en la lámina 8 cuántas personas de Spot2 usan los MCP (`PERSONAS_MCP` en `construir.py`; hoy
+- [ ] Poner en la lámina 9 cuántas personas de Spot2 usan los MCP (`PERSONAS_MCP` en `construir.py`; hoy
   dice `‹N›`). El dato vive en la base de auditoría de Djinn (Postgres `wormhole`, `AUTH_DATABASE_URL`), que
   no está replicada en ClickHouse. También se ve en el panel de Djinn, en `/dashboard/tool-logs`:
 
