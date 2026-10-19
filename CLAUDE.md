@@ -42,6 +42,8 @@ cortos, y explica el porqué en una o dos frases.
 - Conserva `host="127.0.0.1"` y `host_origin_protection=True` en `mcp.run`: el servidor no debe quedar
   expuesto al Wi-Fi del evento.
 - Usa `registrar_reporte` solo si la persona pide explícitamente levantar un reporte.
+- Tú no ves los diálogos de aprobación de Claude Code: no digas si apareció o no. Si `registrar_reporte` se
+  ejecutó, la persona lo aprobó.
 - `uv run evaluar.py` gasta su cuota de Claude: avísale antes de correrlo.
 - Cuando respondas con datos del servidor `cdmx`, di de qué fuente salen y separa lo que dice el dato
   de lo que agregas tú.
