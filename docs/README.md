@@ -32,7 +32,7 @@ reconstruirlo de memoria. Cada documento distingue entre **medido** (lo corrimos
 | `evaluar.py` + `evals/casos.json` | 10 preguntas reales: ¿Claude elige la tool y los argumentos correctos? | Listo |
 | `.mcp.json` | Conecta Claude Code al servidor en `http://127.0.0.1:8765/mcp` | Listo |
 | `mapa/index.html` | Mapa de afluencia del Metro con slider de mes; los datos los genera `preparar.py` | Listo |
-| `presentacion/construir.py` | Genera la presentación (versión 12: 29 láminas presentadas en 40 min, una oculta y tres apéndices) y la sube a Google Slides con `gws` | Listo, en revisión de Dante |
+| `presentacion/construir.py` | Genera la presentación (versión 13: 30 láminas presentadas en 40 min, una oculta y tres apéndices) y la sube a Google Slides con `gws` | Listo, en revisión de Dante |
 | `README.md` (raíz) | Guía para participantes: requisitos, dos terminales, los cuatro pasos, evaluación, mapa, Claude Desktop y problemas comunes | Listo |
 | `CLAUDE.md` | Instrucciones para que Claude Code guíe paso a paso (la lámina 20 lo promete) | Listo, probado con `claude -p "guíame paso a paso"` |
 
@@ -59,7 +59,7 @@ El taller **no** requiere tmux: los participantes usan dos pestañas de terminal
 
 - [x] Agenda de 40 minutos y presentación en Google Slides (`presentacion.md`).
 - [x] `README.md` para participantes y `CLAUDE.md` para que Claude Code los guíe paso a paso.
-- [x] Subir el repo y poner su URL en las láminas 10, 20, 29 y 33.
+- [x] Subir el repo y poner su URL en las láminas 10, 20, 30 y 34.
 - [ ] Hacer público el repo antes del evento. Antes, revisar si `docs/` debe incluir las notas internas de Spot2 (`ponente.md`, D17).
 - [ ] Lámina 9 (Spot2): Dante quitó el número en Slides; la tarjeta dice «personas de Spot2 los usan…» sin cifra.
 - [ ] Ensayar la presentación con cronómetro.

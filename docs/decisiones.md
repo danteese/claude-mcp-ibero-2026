@@ -291,3 +291,13 @@ pide tmux porque no viene instalado en todas las máquinas.
 - **Orden de Dante:** se respeta lo que hizo en Slides: LLM antes de Spot2, «Clonemos repo para empezar» con QR
   como lámina 10 (para que clonen mientras escuchan los conceptos), skills entre el paso 3 y el paso 4, y la
   versión con texto de «Tres piezas» oculta (lámina 17). El generador ahora sabe ocultar láminas.
+
+## D27. El ciclo de cada paso, en pantalla
+
+- **Por qué:** Dante preguntó por qué `afluencia_metro` no está en `servidor.py`: el servidor empieza en el paso 1 y
+  las tools llegan al copiar el punto de control. «Sería bueno que estuviera en la presentación, si no se me van a
+  perder.»
+- **Qué:** lámina 21, antes del paso 1: el ciclo copia → reinicia → reconecta → comprueba, con flecha de regreso
+  al siguiente paso, y una tabla de qué tools tiene el servidor en cada paso (`afluencia_metro`, resaltada en el
+  paso 2). En las láminas de los pasos, arriba junto a los circulitos de avance, el comando del punto de control
+  («servidor.py ya es el paso 1» en el primero). «Construyamos» cede medio minuto.

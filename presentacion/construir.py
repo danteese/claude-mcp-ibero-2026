@@ -42,6 +42,7 @@ IDS = RAIZ / ".ids.json"
 TITULO = "Datos abiertos over MCP · Taller Claude CDMX"
 PPTX_MIME = "application/vnd.openxmlformats-officedocument.presentationml.presentation"
 REPO = "https://github.com/danteese/claude-mcp-ibero-2026"
+PUNTOS_DE_CONTROL = {2: "pasos/02_consulta.py", 3: "pasos/03_accion.py", 4: "pasos/04_final.py"}
 PERSONAS_MCP = "‹N›"  # pendiente: personas distintas en tool_invocations de Djinn (ver docs/presentacion.md)
 
 PAPEL, TINTA, GRIS, BORDE, BLANCO = "F7F7F3", "1F2A28", "5B6661", "D9DED7", "FFFFFF"
@@ -83,6 +84,8 @@ class Deck:
             self.texto(s, 40, 20, 420, 16, seccion.upper(), 9, GRIS, MONO)
         if paso:
             self.progreso(s, paso)
+            recordatorio = "servidor.py ya es el paso 1" if paso == 1 else f"cp {PUNTOS_DE_CONTROL[paso]} servidor.py"
+            self.texto(s, 250, 21, 340, 14, recordatorio, 8.5, GRIS, MONO, alinear="der")
         return s
 
     def texto(self, s, x, y, w, h, contenido, tam=15, tinta=TINTA, fuente=SANS, negrita=False,
@@ -875,7 +878,7 @@ def construir_deck() -> Deck:
     capas = [  # (y, alto, cajas, estado); cada caja: (x, ancho, contenido, relleno, borde)
         (98, 36, [(40, 520, "**Extensiones**: Tasks (trabajos largos) · MCP Apps (UI en la conversación) · auth empresarial", BLANCO, BORDE)], "opt-in"),
         (140, 40, [(40, 256, "**El servidor ofrece**: Tools ✓ · Resources ✓ · Prompts ✓", AZUL_FONDO, AZUL),
-                   (304, 256, "**El cliente ofrece**: Elicitation · sampling y roots, obsoletos", VERDE_FONDO, VERDE)], "opcional"),
+                   (304, 256, "**El cliente ofrece**: Elicitation", VERDE_FONDO, VERDE)], "opcional"),
         (186, 32, [(40, 520, "**Utilidades**: progreso · cancelación · logging · autocompletado · paginación", BLANCO, BORDE)], "opcional"),
         (224, 32, [(40, 520, "**Autorización**: OAuth 2.1, solo en HTTP; cada persona entra con su cuenta", BLANCO, BORDE)], "opcional"),
         (262, 54, [(40, 168, "**Mensajes**\nJSON-RPC 2.0, sin estado", BLANCO, TINTA),
@@ -1000,21 +1003,11 @@ def construir_deck() -> Deck:
         d.texto(s, 156, y + 1, 204, 50, texto, 10.5, TINTA, interlineado=1.2)
     d.texto(s, 40, 294, 320, 16, "Las tools no cambian; el transporte es un argumento:", 10.5, GRIS)
     d.codigo(s, 40, 314, 320, 46, 'mcp.run()                    # stdio\nmcp.run(transport="http")    # HTTP', 10)
-    d.texto(s, 384, 98, 296, 18, "FastMCP no es FastAPI", 13, TINTA, negrita=True)
+    d.texto(s, 384, 98, 296, 18, "FastMCP", 13, TINTA, negrita=True)
     d.definicion(
         s, 384, 122, 296, 70, "FastMCP",
         "framework de Python para servidores MCP: de tu función saca el schema y habla el protocolo por stdio o HTTP.",
         10.5,
-    )  # fmt: skip
-    d.definicion(
-        s, 384, 200, 296, 58, "FastAPI",
-        "framework de Python para APIs web (REST): endpoints HTTP que llama código.",
-        10.5,
-    )  # fmt: skip
-    d.texto(
-        s, 384, 268, 296, 34,
-        "**Se combinan**: los dos son apps ASGI; montas tu MCP en FastAPI o lo generas desde tu API.",
-        10.5, TINTA, interlineado=1.2,
     )  # fmt: skip
     d.codigo(s, 384, 314, 296, 46, 'app.mount("/mcp", mcp.http_app())\nFastMCP.from_fastapi(app)', 10)
     d.texto(
@@ -1030,7 +1023,7 @@ def construir_deck() -> Deck:
         "lámina 10; quien no, que lo haga ahora: uv instala Python y las dependencias, y preparar.py arma la base "
         "sin internet. Pide manos: ¿a quién le dio «Todo en orden» verificar.py? Camina por la sala. Son cuatro pasos y cada uno termina con una comprobación; si alguien "
         "se atora, copia el punto de control del paso (pasos/0N_*.py) o abre claude en el repo y le pide que lo guíe.",
-        1.5,
+        1,
     )
     d.texto(s, 48, 40, 600, 50, "Construyamos", 40, TINTA, SERIF)
     d.texto(s, 48, 92, 600, 22, "Cuatro pasos. Cada uno termina con una comprobación.", 15, GRIS)
@@ -1079,7 +1072,58 @@ def construir_deck() -> Deck:
         negrita=True,
     )
 
-    # 21 · Paso 1
+    # 21 · En cada paso: copia, reinicia, reconecta y comprueba
+    s = d.lamina(
+        "Antes del paso 1, el ciclo que van a repetir en cada paso, para que nadie se pierda. Su servidor.py empieza "
+        "en el paso 1; las tools nuevas llegan copiando el punto de control del paso: por eso afluencia_metro aparece "
+        "hasta el paso 2. Cuatro movimientos: 1) copiar el punto de control sobre servidor.py; 2) en la terminal 1, "
+        "Ctrl-C (no Cmd-C), flecha arriba y Enter para reiniciar el servidor; 3) en Claude Code, /mcp y reconectar "
+        "cdmx; 4) comprobar con uv run verificar.py y el número del paso, y hacer la pregunta del paso. Quien quiera "
+        "escribir el código puede ver qué cambia con git diff --no-index servidor.py pasos/02_consulta.py. En "
+        "Windows (cmd), copy en lugar de cp. Copien solo el comando, sin comentarios.",
+        0.5,
+        seccion="Construyamos",
+    )
+    d.titular(s, "En cada paso: copia, reinicia, reconecta y comprueba", h=36)
+    ciclo = [
+        ("1 · Copia", "cp pasos/0N_*.py\n   servidor.py", "el punto de control"),
+        ("2 · Reinicia", "Ctrl-C · ↑ · Enter", "en la terminal 1"),
+        ("3 · Reconecta", "/mcp → cdmx", "en Claude Code"),
+        ("4 · Comprueba", "uv run verificar.py N", "y haz la pregunta del paso"),
+    ]
+    for n, (titulo, comando, donde) in enumerate(ciclo):
+        x = 40 + n * 164
+        d.caja(s, x, 92, 148, 74, BLANCO, BORDE, radio=0.06)
+        d.texto(s, x + 10, 100, 128, 14, titulo, 11, VERDE, negrita=True)
+        d.texto(s, x + 10, 119, 132, 26, comando, 8.5, TINTA, MONO, interlineado=1.1)
+        d.texto(s, x + 10, 148, 132, 14, donde, 8.5, GRIS)
+        if n < 3:
+            d.linea(s, x + 150, 129, x + 162, 129, GRIS, 1.5, True)
+    # Después de comprobar se copia el punto de control del siguiente paso.
+    d.linea(s, 606, 166, 606, 178, VERDE, 1.25)
+    d.linea(s, 606, 178, 114, 178, VERDE, 1.25)
+    d.linea(s, 114, 178, 114, 168, VERDE, 1.25, True)
+    d.texto(s, 260, 181, 200, 12, "siguiente paso", 8.5, VERDE, alinear="centro")
+    d.texto(s, 40, 204, 640, 16, "Qué tiene tu servidor en cada paso", 11, TINTA, negrita=True)
+    filas = [
+        ("Paso 1", "servidor.py (ya lo trae)", "buscar_datasets_cdmx"),
+        ("Paso 2", "pasos/02_consulta.py", "+ buscar_estacion_metro · ==afluencia_metro== · ranking_estaciones_metro"),
+        ("Paso 3", "pasos/03_accion.py", "+ registrar_reporte · consultar_reportes"),
+        ("Paso 4", "pasos/04_final.py", "+ ecobici_cerca_de_metro · actualizar_mapa_ecobici"),
+    ]
+    for n, (paso, archivo, herramientas) in enumerate(filas):
+        y = 226 + n * 28
+        d.caja(s, 40, y, 56, 20, VERDE_FONDO, radio=0.5, contenido=paso, tam=9, tinta=VERDE, margen=2, negrita=True)
+        d.texto(s, 106, y + 4, 170, 14, archivo, 9, TINTA, MONO)
+        d.texto(s, 282, y + 4, 398, 14, herramientas, 8.5, GRIS, MONO)
+    d.texto(
+        s, 40, 344, 640, 30,
+        "Windows (cmd): copy pasos\\02_consulta.py servidor.py · copia solo el comando, sin comentarios · "
+        "¿Te perdiste? En Claude Code: «guíame paso a paso».",
+        9.5, GRIS, interlineado=1.2,
+    )  # fmt: skip
+
+    # 22 · Paso 1
     s = d.lamina(
         "[EN VIVO] Escribe esta tool en servidor.py desde cero, explicando cada línea. FastMCP es la librería que "
         "convierte la función en tool: el decorador @mcp.tool la registra, el docstring se vuelve la descripción y "
@@ -1124,7 +1168,7 @@ def construir_deck() -> Deck:
         d.texto(s, 494, y, 186, 14, etiqueta.upper(), 9, GRIS, MONO)
         d.texto(s, 494, y + 16, 186, 40, texto, 12, tinta, SANS if n == 3 else MONO, interlineado=1.15)
 
-    # 22 · Paso 2
+    # 23 · Paso 2
     s = d.lamina(
         "[EN VIVO] Tres reglas, una por columna. 1) Por intención: una tool genérica ejecutar_sql traslada el "
         "diseño al modelo; afluencia_metro con enums y formato AAAA-MM deja el dominio en el schema. 2) El error es "
@@ -1161,7 +1205,7 @@ def construir_deck() -> Deck:
     d.chip(s, 40, 330, "✓ uv run verificar.py 2", ancho=200)
     d.texto(s, 256, 334, 424, 20, "Reto: ¿qué parámetros le darías a comparar_estaciones(a, b)?", 12.5, OCRE)
 
-    # 23 · Paso 3
+    # 24 · Paso 3
     s = d.lamina(
         "[EN VIVO] registrar_reporte escribe. Los controles, de afuera hacia adentro: el host pide aprobación en "
         "cada llamada (anthropic/requiresUserInteraction; en modo dontAsk la niega), el schema limita tipo y "
@@ -1208,7 +1252,7 @@ def construir_deck() -> Deck:
     )  # fmt: skip
     d.chip(s, 40, 360, "✓ uv run verificar.py 3", ancho=200)
 
-    # 24 · Skills: cómo se empaqueta un MCP con su guía de uso
+    # 25 · Skills: cómo se empaqueta un MCP con su guía de uso
     s = d.lamina(
         "Un servidor MCP da acceso: tools, datos y acciones. Lo que no da es el método: en qué orden llamarlas, qué "
         "revisar, cómo presentar el resultado. Eso es una skill: una carpeta con un SKILL.md que lleva nombre, "
@@ -1273,7 +1317,7 @@ def construir_deck() -> Deck:
         9.5, GRIS, interlineado=1.2,
     )  # fmt: skip
 
-    # 25 · Paso 4
+    # 26 · Paso 4
     s = d.lamina(
         "[EN VIVO] ¿Claude elige bien? Una evaluación es un conjunto de casos con la respuesta esperada. Diez "
         "preguntas reales, cada una en una sesión de claude -p que solo ve nuestro servidor; se cuenta si llamó la "
@@ -1315,7 +1359,7 @@ def construir_deck() -> Deck:
     d.chip(s, 40, 334, "✓ uv run evaluar.py", ancho=200)
     d.texto(s, 256, 338, 424, 20, "Reto: escribe la pregunta que haga fallar a tu servidor.", 12.5, OCRE)
 
-    # 26 · El mapa
+    # 27 · El mapa
     s = d.lamina(
         "El mismo dato que consulta Claude, ahora para personas: preparar.py exporta la afluencia mensual y "
         "mapa/index.html la dibuja, sin servidor. Abre el mapa y mueve el slider en vivo: abril de 2020 (COVID: "
@@ -1359,7 +1403,7 @@ def construir_deck() -> Deck:
         MONO,
     )
 
-    # 27 · En vivo: Claude extiende el mapa
+    # 28 · En vivo: Claude extiende el mapa
     s = d.lamina(
         "[EN VIVO] Pide esto a Claude en la terminal. Usa afluencia_metro, edita mapa/index.html y en el ensayo "
         "tardó 42 segundos. Recarga el mapa y ve a junio de 2021. Luego lee el aviso con la sala: dice «cerrada tras "
@@ -1414,7 +1458,7 @@ def construir_deck() -> Deck:
         margen=18,
     )
 
-    # 28 · Recap (refleja la lámina «Qué te llevas»)
+    # 29 · Recap (refleja la lámina «Qué te llevas»)
     s = d.lamina(
         "Volvemos a la lámina del inicio. A la izquierda, lo que construyeron; pide manos: ¿quién llegó al paso 4? "
         "Quien no, tiene los puntos de control en pasos/. A la derecha, las respuestas a las cinco preguntas del "
@@ -1455,7 +1499,7 @@ def construir_deck() -> Deck:
         GRIS,
     )
 
-    # 29 · Ahora te toca
+    # 30 · Ahora te toca
     s = d.lamina(
         "El repo es suyo: cambien el dato, inventen la tool, rompan el mapa. Las ideas son solo puntos de partida. "
         "La última es la que más me importa: lo que hicimos con el Metro es lo mismo que hicimos en Spot2 con "
@@ -1479,7 +1523,7 @@ def construir_deck() -> Deck:
         s, 48, 340, 624, 20, f"Comparte lo que construyas · {REPO.removeprefix('https://')}", 13, VERDE, negrita=True
     )
 
-    # 30 · Cierre: lo que ya se puede conectar hoy (queda en pantalla durante las preguntas)
+    # 31 · Cierre: lo que ya se puede conectar hoy (queda en pantalla durante las preguntas)
     s = d.lamina(
         "Gracias. Abro preguntas. Mientras preguntan, esto ya existe y lo pueden conectar hoy. Blender: Claude arma "
         "escenas y modelos 3D (blender-mcp, más de 22 mil estrellas en GitHub). Y se encadena: otro servidor manda "
@@ -1532,7 +1576,7 @@ def construir_deck() -> Deck:
     d.texto(s, 108, 338, 300, 24, "Gracias", 20, VERDE, negrita=True)
     d.texto(s, 108, 366, 440, 20, "Dante Bazaldua · stdout.mx · linkedin.com/in/dantebh", 12.5, GRIS)
 
-    # 31 · Apéndice: buenas prácticas para que las tools se entiendan (no se presenta)
+    # 32 · Apéndice: buenas prácticas para que las tools se entiendan (no se presenta)
     s = d.lamina(
         "Apéndice para consulta; no se presenta. Cómo saber si un servidor MCP se entiende, en tres pasos. 1) "
         "Diseña para el agente (Phil Schmid, «MCP is not the problem, it's your server», ene-2026; Anthropic, "
@@ -1611,7 +1655,7 @@ def construir_deck() -> Deck:
         9.5, GRIS, interlineado=1.2,
     )  # fmt: skip
 
-    # 32 · Glosario (apéndice, no se presenta)
+    # 33 · Glosario (apéndice, no se presenta)
     s = d.lamina(
         "Apéndice para consulta: no se presenta. Está aquí para quien revise las láminas después.",
         0,
@@ -1650,7 +1694,7 @@ def construir_deck() -> Deck:
         d.texto(s, x, y, 104, 18, termino, 10.5, VERDE, negrita=True)
         d.texto(s, x + 104, y, 222, 18, texto, 10, TINTA)
 
-    # 33 · Para aprender más: referencias y enlaces (no se presenta)
+    # 34 · Para aprender más: referencias y enlaces (no se presenta)
     s = d.lamina(
         "Apéndice para consulta; no se presenta. Las referencias para seguir aprendiendo, agrupadas. Todos los "
         "enlaces se comprobaron el 19-oct-2026 y son clicables en Slides y en el PDF. Las demás fuentes del taller "
