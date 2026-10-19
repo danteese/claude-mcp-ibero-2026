@@ -613,9 +613,9 @@ def construir_deck() -> Deck:
         1.5,
         seccion="El concepto",
     )
-    d.titular(s, "MCP es el estándar para conectar la IA con tus sistemas")
+    d.titular(s, "MCP es el estándar para conectar la IA con tus sistemas", y=36, h=32)
     d.definicion(
-        s, 40, 100, 640, 60, "MCP (Model Context Protocol)",
+        s, 40, 78, 640, 60, "MCP (Model Context Protocol)",
         "un estándar abierto para conectar aplicaciones de IA con sistemas externos. «Como un puerto USB-C para aplicaciones de IA» (modelcontextprotocol.io).",
         11,
     )  # fmt: skip
@@ -631,13 +631,13 @@ def construir_deck() -> Deck:
         "**Herramientas de desarrollo**\nGit, GitHub, Sentry",
         "**Productividad**\nSlack, Google Maps",
     ]
-    centros = [195, 251, 307]
+    centros = [173, 229, 285]
     for cy, izquierda, derecha in zip(centros, aplicaciones, fuentes):
         d.caja(s, 40, cy - 23, 196, 46, BLANCO, TINTA, radio=0.1, contenido=izquierda, tam=10.5, margen=6)
         d.caja(s, 484, cy - 23, 196, 46, BLANCO, TINTA, radio=0.1, contenido=derecha, tam=10.5, margen=6)
-    d.caja(s, 300, 205, 120, 92, AZUL_FONDO, AZUL, radio=0.06, contenido="**MCP**\nprotocolo estándar", tam=12)
+    d.caja(s, 300, 183, 120, 92, AZUL_FONDO, AZUL, radio=0.06, contenido="**MCP**\nprotocolo estándar", tam=12)
     # Flujo de datos en los dos sentidos: flecha hacia la caja de cada lado y hacia el protocolo.
-    for cy, py in zip(centros, [223, 251, 279]):
+    for cy, py in zip(centros, [201, 229, 257]):
         d.linea(s, 268, cy, 236, cy, GRIS, 1.25, True)
         d.linea(s, 268, py, 300, py, GRIS, 1.25, True)
         d.linea(s, 452, cy, 484, cy, GRIS, 1.25, True)
@@ -645,17 +645,17 @@ def construir_deck() -> Deck:
         if cy != py:
             d.linea(s, 268, cy, 268, py, GRIS, 1.25)
             d.linea(s, 452, cy, 452, py, GRIS, 1.25)
-    d.texto(s, 300, 302, 120, 24, "datos en los dos sentidos", 8.5, GRIS, alinear="centro")
-    d.texto(s, 40, 336, 196, 14, "Aplicaciones de IA · cliente MCP", 9.5, GRIS, alinear="centro")
-    d.texto(s, 484, 336, 196, 14, "Datos y herramientas · servidor MCP", 9.5, GRIS, alinear="centro")
+    d.texto(s, 300, 280, 120, 24, "datos en los dos sentidos", 8.5, GRIS, alinear="centro")
+    d.texto(s, 40, 314, 196, 14, "Aplicaciones de IA · cliente MCP", 9.5, GRIS, alinear="centro")
+    d.texto(s, 484, 314, 196, 14, "Datos y herramientas · servidor MCP", 9.5, GRIS, alinear="centro")
     d.texto(
-        s, 40, 358, 640, 28,
+        s, 40, 336, 640, 28,
         "MCP es el idioma común, no un intermediario: cada app implementa el cliente una vez y cada sistema su "
         "servidor. Con 3 apps y 4 sistemas son 3 + 4 = **7 implementaciones**, no 3 × 4 = 12 integraciones.",
         10.5, GRIS, interlineado=1.2,
     )  # fmt: skip
     d.texto(
-        s, 40, 392, 640, 10, "Adaptado de modelcontextprotocol.io · «What is MCP?» (docs 2026-07-28)", 7.5, GRIS, MONO
+        s, 40, 370, 640, 10, "Adaptado de modelcontextprotocol.io · «What is MCP?» (docs 2026-07-28)", 7.5, GRIS, MONO
     )
 
     # 11 · ¿Cuál conviene? API, CLI o MCP
@@ -665,45 +665,58 @@ def construir_deck() -> Deck:
         "un servidor MCP. Los benchmarks dicen que, con tools bien diseñadas, CLI y MCP empatan en éxito, pero MCP "
         "gasta más contexto: en el de Scalekit, de 1.3 a 80 veces más tokens en cinco tareas de GitHub; Zechner lo "
         "resume como un empate en el que importa más el diseño de la tool que el protocolo. Así que la pregunta no es "
-        "cuál es mejor, sino cuál conviene. Recorre la tabla: si eres tú en tu máquina con una herramienta conocida, "
-        "CLI. Si no decide un modelo, API. Si el modelo decide en runtime, para varios usuarios, o la persona está en "
-        "un host sin tu terminal, MCP. Y si son muchos pasos sobre muchos datos, que el modelo escriba código que "
-        "llame tus tools (Anthropic, «code execution with MCP»).",
+        "cuál es mejor, sino cuál conviene. Los tres carriles hacen lo mismo, listar los issues de GitHub; cambia el "
+        "camino. Con la API, el modelo escribe código que arma la llamada con la credencial que le diste: conviene "
+        "si el flujo es fijo y no lo decide un modelo. Con la CLI, escribe gh issue list en tu terminal y corre con "
+        "todos tus permisos: conviene si eres tú, en tu máquina, con una herramienta que ya conoce. Con MCP, el host "
+        "pide la tool por nombre al servidor: ve cada llamada, puede pedir aprobación y registrarla, y cada persona "
+        "entra con su cuenta; conviene si el modelo elige en el momento, para varias personas, o si la persona está "
+        "en Claude.ai o ChatGPT, donde no hay terminal. Y si son muchos pasos sobre muchos datos, que el modelo "
+        "escriba código que llame tus tools (Anthropic, «code execution with MCP»).",
         1.5,
         seccion="¿Por qué MCP?",
     )
     d.titular(s, "La IA puede usar API, CLI o MCP: elige según la situación")
-    formas = [
-        ("API", "lee la documentación y arma la llamada HTTP con la credencial que le das"),
-        ("CLI", "escribe comandos en tu terminal; ya conoce git, gh o kubectl"),
-        ("MCP", "descubre las tools al conectarse; el host las llama por ella"),
-    ]
-    for n, (nombre, como) in enumerate(formas):
-        x = 40 + n * 220
-        d.texto(s, x, 96, 200, 18, nombre, 15, VERDE if nombre == "MCP" else TINTA, negrita=True)
-        d.texto(s, x, 116, 200, 32, como, 10.5, GRIS, interlineado=1.15)
-    d.texto(s, 40, 160, 480, 12, "SITUACIÓN", 8.5, GRIS, MONO)
-    d.texto(s, 552, 160, 128, 12, "CONVIENE", 8.5, GRIS, MONO)
-    situaciones = [
-        ("Trabajas en tu máquina con una herramienta que el modelo ya conoce", "CLI"),
-        ("Código que siempre hace lo mismo: no decide un modelo", "API"),
-        ("El modelo decide en runtime, para varios usuarios, con permisos y auditoría", "MCP"),
-        ("La persona está en Claude.ai, ChatGPT o un agente en la nube, sin tu terminal", "MCP remoto"),
-        ("Muchos pasos encadenados sobre muchos datos", "código + tools"),
-    ]
-    for n, (situacion, conviene) in enumerate(situaciones):
-        y = 176 + n * 32
-        es_mcp = conviene.startswith("MCP")
-        d.texto(s, 40, y + 5, 500, 18, situacion, 12, TINTA)
-        d.caja(
-            s, 552, y, 128, 26, VERDE_FONDO if es_mcp else BLANCO, None if es_mcp else BORDE, radio=0.5,
-            contenido=conviene, tam=10.5, tinta=VERDE if es_mcp else TINTA, margen=4, negrita=es_mcp,
-        )  # fmt: skip
+    # Mismo pedido en los tres carriles («lista los issues de GitHub»): sólo cambia el camino.
+    carriles = [
+        ("API", AZUL, BLANCO, BORDE,
+         [("Claude", TINTA, PAPEL), ("código: GET /issues + API key", BLANCO, TINTA), ("API REST", AZUL_FONDO, AZUL)],
+         "Cada servicio documenta distinto; la credencial se la das tú al agente.",
+         "el flujo es siempre el mismo y no lo decide un modelo: un script o un pipeline"),
+        ("CLI", OCRE, BLANCO, BORDE,
+         [("Claude", TINTA, PAPEL), ("tu terminal: gh issue list", BLANCO, TINTA), ("GitHub", AZUL_FONDO, AZUL)],
+         "Corre en tu máquina con todos tus permisos. Sin tu terminal, no hay CLI.",
+         "trabajas en tu máquina con una herramienta que el modelo ya conoce: git, gh, kubectl"),
+        ("MCP", VERDE, VERDE_FONDO, VERDE,
+         [("Claude", TINTA, PAPEL), ("host: list_issues", BLANCO, TINTA), ("servidor MCP", BLANCO, VERDE),
+          ("GitHub", AZUL_FONDO, AZUL)],
+         "El host ve cada tool: pide aprobación y registra cada llamada; OAuth por persona.",
+         "el modelo elige en el momento, para varias personas y con auditoría; también sin terminal (Claude.ai, ChatGPT)"),
+    ]  # fmt: skip
+    for n, (nombre, tinta, relleno, borde, pasos, control, conviene) in enumerate(carriles):
+        y = 96 + n * 82
+        d.caja(s, 40, y, 640, 74, relleno, borde, radio=0.06)
+        d.texto(s, 54, y + 12, 50, 22, nombre, 17, tinta, negrita=True)
+        x = 104.0
+        for k, (texto, fondo, letra) in enumerate(pasos):
+            ancho = len(texto) * 9 * 0.56 + 18
+            d.caja(
+                s, x, y + 11, ancho, 24, fondo, None if fondo != BLANCO else BORDE, radio=0.5,
+                contenido=texto, tam=9, tinta=letra, margen=3, negrita=k == 0,
+            )  # fmt: skip
+            x += ancho
+            if k < len(pasos) - 1:
+                d.linea(s, x + 2, y + 23, x + 12, y + 23, GRIS, 1.25, True)
+                x += 14
+        d.texto(s, 104, y + 44, 352, 24, control, 9.5, GRIS, interlineado=1.15)
+        d.caja(s, 470, y + 8, 200, 58, BLANCO, BORDE, radio=0.08)
+        d.texto(s, 480, y + 13, 184, 10, "CONVIENE SI", 7, tinta, MONO, negrita=True)
+        d.texto(s, 480, y + 25, 184, 40, conviene, 9, TINTA, interlineado=1.15)
     d.texto(
-        s, 40, 340, 640, 30,
-        "Con tools bien diseñadas, CLI y MCP empatan en éxito; MCP gasta más contexto: de 1.3× a 80× más tokens "
-        "en cinco tareas de GitHub.",
-        11, GRIS, interlineado=1.2,
+        s, 40, 344, 640, 30,
+        "Con tools bien diseñadas, CLI y MCP empatan en éxito; MCP gasta más contexto (de 1.3× a 80× más tokens en "
+        "cinco tareas de GitHub). ¿Muchos pasos sobre muchos datos? Que el modelo escriba código que llame las tools.",
+        10, GRIS, interlineado=1.2,
     )  # fmt: skip
     d.texto(
         s, 40, 384, 640, 12,

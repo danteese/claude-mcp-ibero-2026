@@ -97,6 +97,7 @@ promedio. Las dos corridas usaron el modelo por defecto de Claude Code.
 | Lámina 10 sin hub (D19) y segunda tanda de ediciones de Dante | Comparado el `.pptx` de Slides contra el último commit: 3 cambios (láminas 7, 8 y 9), pasados a `construir.py`; el texto nuevo coincide con Slides salvo la lámina 10 y «8 tools». Primera pasada: «Metro CDMX» partido en dos líneas; corregido |
 | Versión 9: lámina de skills | Slides sin ediciones nuevas antes de subir (0 cambios contra el último commit). SEP-2640 «Final» confirmado en modelcontextprotocol.io; `SkillsDirectoryProvider` en la documentación de FastMCP. 28 láminas, 40 min. Primera pasada: chip «Hooks, comandos» en dos líneas y «Skill» encimado en el glosario; corregido |
 | Lámina 10 con el diagrama oficial (D21) | Slides sin ediciones nuevas antes de subir (0 cambios). PDF de Google revisado: primera pasada con el pie derecho en dos líneas; corregido. 28 láminas, 40 min |
+| Lámina 11 en carriles (D22) y edición de Dante en la lámina 10 | Slides comparado contra el último commit: la lámina 10 subió 22 pt completa (texto, flechas y tarjeta); replicado, y la lámina 10 generada coincide con Slides. PDF de Google revisado; 28 láminas, 40 min |
 | `gws` con `--json` largo | El envoltorio de Node muere (exit 137 / -9) a partir de ~980 bytes; el binario nativo acepta 10 KB |
 
 ## Estilo

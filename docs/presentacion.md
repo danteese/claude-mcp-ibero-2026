@@ -71,7 +71,8 @@ El 19-oct-2026 se incorporaron así: «Álvaro Obregón» en la lluvia; «(Solo 
 Spot2, «Algunos servidores MCP», «Otros Agentes», «Toda la plataforma disponible para agentes» y sin el
 número; en LLM, «dado un token» y el titular a 21 pt en y=52. Segunda tanda: en Spot2, la tarjeta dice «En
 Spot2 todos los sistemas deben de poder ser accesibles por agentes (first-class citizens)»; en LLM se quitó
-«Claude es uno»; el titular de la tool, a 22 pt en y=54.
+«Claude es uno»; el titular de la tool, a 22 pt en y=54. Tercera tanda: la lámina 10 completa subió 22 pt
+(titular en y=36 con alto 32), incluidas flechas y tarjeta.
 
 ## Lluvia de preguntas (lámina 2)
 

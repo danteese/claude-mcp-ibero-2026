@@ -234,3 +234,12 @@ pide tmux porque no viene instalado en todas las máquinas.
   servidor MCP» y la nota «3 + 4 = 7 implementaciones, no 3 × 4 = 12 integraciones»).
 - **Lámina 7 (Spot2):** su «MCP» al centro ahora es coherente con este diagrama (el protocolo); se queda.
 - **Trabajo a futuro:** TDQS de Glama, en las notas del paso 4 y en el README («Para seguir»).
+
+## D22. API, CLI o MCP en carriles, con el mismo ejemplo
+
+- **Por qué:** Dante: «está muy pobre, no se entiende… es muy plana». La lámina 11 era una tabla de texto.
+- **Qué:** tres carriles con el mismo pedido («lista los issues de GitHub»), cada uno con su camino en chips y
+  flechas: API (Claude → código `GET /issues` + API key → API REST), CLI (Claude → tu terminal `gh issue
+  list` → GitHub) y MCP (Claude → host `list_issues` → servidor MCP → GitHub). Debajo de cada camino, quién
+  tiene el control; a la derecha, «Conviene si». El carril de MCP va en verde. Abajo, el benchmark y la
+  salida para muchos pasos (código que llama las tools).

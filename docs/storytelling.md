@@ -131,3 +131,8 @@ pobres. Aquí van los principios, sus fuentes y cómo se aplicaron en la versió
 
 - Cajas con borde a los lados, protocolo en azul al centro y flechas de ida y vuelta, como en
   modelcontextprotocol.io; los pies de columna dicen qué trae cada lado (cliente o servidor MCP).
+
+## Lámina 11 en carriles (pedido de Dante: «muy plana»)
+
+- Antes: dos tablas de texto. Ahora: el mismo pedido recorre tres caminos; la diferencia se ve en cuántos pasos
+  hay y quién está en medio (el host, en MCP), no en una lista de adjetivos.
