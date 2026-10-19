@@ -301,3 +301,14 @@ pide tmux porque no viene instalado en todas las máquinas.
   al siguiente paso, y una tabla de qué tools tiene el servidor en cada paso (`afluencia_metro`, resaltada en el
   paso 2). En las láminas de los pasos, arriba junto a los circulitos de avance, el comando del punto de control
   («servidor.py ya es el paso 1» en el primero). «Construyamos» cede medio minuto.
+
+## D28. Cada paso tiene su lámina «Hazlo ahora» y la sala avanza junta
+
+- **Por qué:** Dante: las láminas de los pasos mostraban `verificar.py 2` «pero no es claro qué hay que hacer o
+  cómo va avanzando el workshop», y «si el MCP va evolucionando, que entonces vayamos todos poco a poco».
+- **Qué:** después de cada lámina de concepto (pasos 1 a 4) va una «Hazlo ahora» con la misma estructura (función
+  `hazlo_ahora()`): «Tu servidor ahora» (las tools que ya tiene, las nuevas en verde: 1, 4, 6, 8), «Haz esto» (5
+  acciones con su comando), «Lo que debes ver» (salida de `verificar.py` y respuesta de Claude), «Si no funciona»,
+  «Avanzamos juntos cuando la mayoría vea…» (la señal para pasar de paso) y un reto para quien termine antes.
+- **Tiempo:** cada paso conserva su total; el concepto queda en 1.5 min (1 en el paso 4) y el resto es práctica.
+- **Notas del paso 1:** ya no dicen «escribe esta tool desde cero» (`servidor.py` ya la trae): se lee juntos.
