@@ -95,6 +95,7 @@ promedio. Las dos corridas usaron el modelo por defecto de Claude Code.
 | `actualizar_mapa_ecobici` (D18) | `fastmcp call` escribe `mapa/ecobici.js` y devuelve 7 campos; `verificar.py 4` la revisa con un archivo temporal (el real queda intacto); pasos 1 a 4 en orden. `claude -p`: «Actualiza el mapa de Ecobici…» → `actualizar_mapa_ecobici`; «¿Hay ecobicis ahorita…?» → `ecobici_cerca_de_metro`. `evaluar.py`: 8 tools, 10/10 |
 | Sección de Ecobici en `mapa/index.html` | agent-browser: frase de respuesta, 10 círculos y 10 filas, sin errores de JavaScript; el hover resalta el círculo de la fila |
 | Lámina 10 sin hub (D19) y segunda tanda de ediciones de Dante | Comparado el `.pptx` de Slides contra el último commit: 3 cambios (láminas 7, 8 y 9), pasados a `construir.py`; el texto nuevo coincide con Slides salvo la lámina 10 y «8 tools». Primera pasada: «Metro CDMX» partido en dos líneas; corregido |
+| Versión 9: lámina de skills | Slides sin ediciones nuevas antes de subir (0 cambios contra el último commit). SEP-2640 «Final» confirmado en modelcontextprotocol.io; `SkillsDirectoryProvider` en la documentación de FastMCP. 28 láminas, 40 min. Primera pasada: chip «Hooks, comandos» en dos líneas y «Skill» encimado en el glosario; corregido |
 | `gws` con `--json` largo | El envoltorio de Node muere (exit 137 / -9) a partir de ~980 bytes; el binario nativo acepta 10 KB |
 
 ## Estilo

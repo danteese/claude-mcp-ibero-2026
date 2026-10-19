@@ -131,3 +131,18 @@ Consultado el 17-oct-2026 con Context7 (documentación de FastMCP) y Parallel.
 | [FastMCP · FastAPI integration](https://gofastmcp.com/integrations/fastapi) | `FastMCP.from_fastapi(app)` convierte endpoints en tools; `app.mount("/mcp", mcp.http_app())` monta el servidor en FastAPI. Advertencia: «LLMs achieve significantly better performance with well-designed and curated MCP servers than with auto-converted OpenAPI servers»; recomiendan la conversión para prototipar |
 | [FastAPI](https://fastapi.tiangolo.com/) | «A modern, fast (high-performance), web framework for building APIs with Python based on standard Python type hints», sobre Starlette y Pydantic |
 | [MCP spec 2026-07-28 · Transports](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports) | Dos transportes estándar: stdio (subproceso que lanza el cliente) y Streamable HTTP (un endpoint, POST) |
+
+## Skills y MCP (lámina 16)
+
+Consultado el 19-oct-2026 con Parallel y Context7 (documentación de FastMCP).
+
+| Fuente | Qué aporta |
+| --- | --- |
+| [Agent Skills · especificación](https://agentskills.io/specification) | Una skill es una carpeta con `SKILL.md` (frontmatter `name` y `description`, obligatorios) y opcionalmente `scripts/`, `references/`, `assets/`. Carga progresiva: al iniciar sólo nombre y descripción (~50-100 tokens por skill); el cuerpo, cuando la tarea coincide |
+| [Anthropic · Equipping agents… with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills) (16-oct-2025) | Skills como conocimiento procedimental; el 18-dic-2025 se publicaron como estándar abierto |
+| [Claude · Skills explained](https://claude.com/blog/skills-explained) (5-mar-2026) | «MCP connects Claude to data; Skills teach Claude what to do with that data… Use both together» |
+| [Claude Code · Plugins](https://code.claude.com/docs/en/plugins/overview) | Un plugin junta `.claude-plugin/plugin.json`, `skills/`, `agents/`, `hooks/hooks.json` y `.mcp.json`; «Plugins are the packaging layer» |
+| [OpenAI · Plugins, Skills](https://developers.openai.com/plugins/concepts/skills) | «An MCP server provides live information and controlled actions. A skill provides the workflow around those tools: when to call them, in what order, how to handle incomplete results, and what the final output should contain» (ChatGPT y Codex) |
+| [Gemini CLI · extensiones](https://github.com/google-gemini/gemini-cli/blob/main/docs/extensions/writing-extensions.md) | `gemini-extension.json` con `mcpServers`, archivo de contexto y skills; p. ej., la extensión oficial de MongoDB es «MCP Server + Skills» |
+| [MCP · SEP-2640 Skills Extension](https://modelcontextprotocol.io/seps/2640-skills-extension) | Estado **Final**. Skills servidas como recursos (`skill://<skill>/<archivo>`), con `skills/list` y `skills/get`; escrita contra 2026-07-28 |
+| [FastMCP · Skills provider](https://gofastmcp.com/servers/providers/skills) | `SkillsDirectoryProvider` expone carpetas de skills como recursos `skill://` (desde FastMCP 3.0) |

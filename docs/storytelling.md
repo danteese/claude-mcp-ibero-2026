@@ -119,3 +119,10 @@ pobres. Aquí van los principios, sus fuentes y cómo se aplicaron en la versió
 - Cifras: salida de `afluencia_metro` y `ranking_estaciones_metro` del paso 4; el generador revisa que las
   cuatro líneas sumen el total.
 - Tiempo: la respuesta dura medio minuto y el contraste baja de 1 a 0.5, porque el número ya se reveló.
+
+## Versión 9: skills (pedido de Dante)
+
+- Lámina 16, «Un MCP da acceso; una skill le enseña a usarlo», entre «Tres piezas» y el transporte: cierra el
+  bloque conceptual con la pieza que guía al agente y conecta con el `CLAUDE.md` que usa el taller.
+- Mismo lenguaje visual: tarjeta de definición, chips azul (servidor) y verde (skill), código con lo que lee
+  el modelo en verde y una secuencia con flechas para la carga progresiva.

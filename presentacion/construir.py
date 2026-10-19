@@ -724,7 +724,7 @@ def construir_deck() -> Deck:
         "documenta confused deputy, token passthrough y SSRF; OWASP, tool poisoning y prompt injection en los "
         "resultados; y la spec pide tratar las anotaciones como no confiables) y operación. Conclusión: conviene "
         "cuando lo que te da pesa más. Aquí sí: queremos que cualquier host lo use y controlar la acción que escribe.",
-        2,
+        1.5,
         seccion="¿Por qué MCP?",
     )
     d.titular(s, "MCP te da control y alcance; lo pagas en contexto y riesgo")
@@ -814,7 +814,7 @@ def construir_deck() -> Deck:
         "antes de ejecutarla) ni la autorización OAuth al servidor. En 2026-07-28 viaja como multi round-trip; en la "
         "versión anterior el servidor la pedía por un canal abierto (ctx.elicit() en FastMCP). Hoy no la usamos: para "
         "la acción que escribe usamos la aprobación del host (paso 3).",
-        2,
+        1.5,
         seccion="El concepto",
     )
     d.titular(s, "MCP tiene tres capas obligatorias; el resto es opcional")
@@ -896,7 +896,70 @@ def construir_deck() -> Deck:
         d.texto(s, x, 304, 200, 16, campos, 10, TINTA, MONO)
     d.texto(s, 40, 344, 640, 20, "Nuestro servidor tiene las tres. La mayoría expone todo como tools.", 12.5, GRIS)
 
-    # 16 · Qué servidor construimos: transporte y FastMCP
+    # 16 · Skills: cómo se empaqueta un MCP con su guía de uso
+    s = d.lamina(
+        "Un servidor MCP da acceso: tools, datos y acciones. Lo que no da es el método: en qué orden llamarlas, qué "
+        "revisar, cómo presentar el resultado. Eso es una skill: una carpeta con un SKILL.md que lleva nombre, "
+        "descripción e instrucciones, y puede traer scripts y referencias. Es un estándar abierto (agentskills.io) "
+        "que leen Claude, Codex, Gemini CLI y Copilot. La clave es cómo se carga: al iniciar, el agente sólo ve el "
+        "nombre y la descripción, unos 50 a 100 tokens; si la tarea coincide, lee el cuerpo, y si hace falta, sus "
+        "scripts. Hoy hicimos algo parecido a mano con el CLAUDE.md del repo, pero ese archivo se carga siempre; una "
+        "skill sólo cuando sirve, y viaja con el servidor. Por eso se empaquetan juntos: un plugin de Claude Code "
+        "trae su .mcp.json y su carpeta skills/. OpenAI lo dice así en su documentación de plugins: el servidor da "
+        "información en vivo y acciones controladas; la skill da el flujo alrededor: cuándo llamarlas, en qué orden, "
+        "cómo manejar resultados incompletos y qué debe contener la respuesta. Desde septiembre, la extensión de "
+        "Skills de MCP (SEP-2640, ya Final) deja que el propio servidor las sirva como recursos skill://, y FastMCP "
+        "ya lo trae. En Spot2, Argos publica e instala skills por MCP. Anthropic lo resume: MCP conecta a Claude con "
+        "los datos; las skills le enseñan qué hacer con ellos.",
+        1,
+        seccion="El concepto",
+    )
+    d.titular(s, "Un MCP da acceso; una skill le enseña a usarlo")
+    d.definicion(
+        s, 40, 96, 640, 52, "Skill (Agent Skill)",
+        "una carpeta con un SKILL.md (nombre, descripción e instrucciones) que el agente carga sólo cuando la "
+        "tarea lo pide. Estándar abierto: agentskills.io.",
+        11,
+    )  # fmt: skip
+    d.caja(s, 40, 160, 300, 140, BLANCO, BORDE, radio=0.05)
+    d.texto(s, 54, 168, 276, 16, "Un plugin junta las dos cosas", 11.5, TINTA, negrita=True)
+    partes = [
+        ("Servidor MCP", AZUL_FONDO, None, AZUL, "qué puede hacer: tools, datos y acciones"),
+        ("Skill", VERDE_FONDO, None, VERDE, "cómo usarlo: cuándo, en qué orden y qué revisar"),
+        ("Opcional", BLANCO, BORDE, GRIS, "hooks, comandos y subagentes"),
+    ]
+    for n, (nombre, relleno, borde, tinta, texto) in enumerate(partes):
+        y = 192 + n * 34
+        d.caja(s, 54, y + 2, 98, 24, relleno, borde, radio=0.5, contenido=nombre, tam=10, tinta=tinta, margen=4)
+        d.texto(s, 162, y + 1, 170, 30, texto, 10.5, TINTA, interlineado=1.15)
+    d.codigo(
+        s, 356, 160, 324, 140,
+        "skills/metro-cdmx/SKILL.md\n---\nname: metro-cdmx\ndescription: Preguntas de afluencia del\n"
+        "  Metro y Ecobici con el servidor cdmx.\n---\n1. Confirma la estación con buscar_estacion_metro.\n"
+        "2. Afluencia = entradas, no ocupación.\n3. Cita la fuente; separa dato y opinión.\n"
+        "4. ¿Mapa? actualizar_mapa_ecobici.",
+        9.5,
+        resaltar=["name: metro-cdmx", "description: Preguntas de afluencia del", "  Metro y Ecobici con el servidor cdmx."],
+    )  # fmt: skip
+    carga = [
+        ("**Al iniciar**: sólo name y description (~100 tokens)", VERDE_FONDO, VERDE),
+        ("**Si la tarea coincide**: lee el SKILL.md completo", BLANCO, BORDE),
+        ("**Si hace falta**: abre sus scripts y referencias", BLANCO, BORDE),
+    ]
+    for n, (texto, relleno, borde) in enumerate(carga):
+        x = 40 + n * 220
+        d.caja(s, x, 312, 200, 34, relleno, borde, radio=0.12, contenido=texto, tam=9.5, alinear="izq", margen=8)
+        if n:
+            d.linea(s, x - 18, 329, x - 2, 329, GRIS, 1.5, True)
+    d.texto(
+        s, 40, 356, 640, 36,
+        "Se distribuyen juntos: plugins de Claude Code (.mcp.json + skills/), de ChatGPT y Codex, y extensiones de "
+        "Gemini CLI. Desde sept-2026, el servidor MCP también puede servirlas (SEP-2640; en FastMCP, "
+        "SkillsDirectoryProvider).",
+        9.5, GRIS, interlineado=1.2,
+    )  # fmt: skip
+
+    # 17 · Qué servidor construimos: transporte y FastMCP
     s = d.lamina(
         "Antes de escribir código: qué tipo de servidor vamos a hacer. Un servidor MCP se distingue por su transporte. "
         "Con stdio, Claude Code lanza tu servidor como un proceso y le habla por la entrada y salida estándar: no hay "
@@ -954,7 +1017,7 @@ def construir_deck() -> Deck:
         8, GRIS, MONO,
     )  # fmt: skip
 
-    # 17 · Construyamos
+    # 18 · Construyamos
     s = d.lamina(
         "Ahora construimos. Primero, de qué datos hablamos: la afluencia diaria del Metro que publica el gobierno "
         "de la CDMX como datos abiertos (licencia CC-BY-4.0: se pueden usar citando la fuente). Clonen el repo y "
@@ -1010,7 +1073,7 @@ def construir_deck() -> Deck:
         negrita=True,
     )
 
-    # 18 · Paso 1
+    # 19 · Paso 1
     s = d.lamina(
         "[EN VIVO] Escribe esta tool en servidor.py desde cero, explicando cada línea. FastMCP es la librería que "
         "convierte la función en tool: el decorador @mcp.tool la registra, el docstring se vuelve la descripción y "
@@ -1055,7 +1118,7 @@ def construir_deck() -> Deck:
         d.texto(s, 494, y, 186, 14, etiqueta.upper(), 9, GRIS, MONO)
         d.texto(s, 494, y + 16, 186, 40, texto, 12, tinta, SANS if n == 3 else MONO, interlineado=1.15)
 
-    # 19 · Paso 2
+    # 20 · Paso 2
     s = d.lamina(
         "[EN VIVO] Tres reglas, una por columna. 1) Por intención: una tool genérica ejecutar_sql traslada el "
         "diseño al modelo; afluencia_metro con enums y formato AAAA-MM deja el dominio en el schema. 2) El error es "
@@ -1092,7 +1155,7 @@ def construir_deck() -> Deck:
     d.chip(s, 40, 330, "✓ uv run verificar.py 2", ancho=200)
     d.texto(s, 256, 334, 424, 20, "Reto: ¿qué parámetros le darías a comparar_estaciones(a, b)?", 12.5, OCRE)
 
-    # 20 · Paso 3
+    # 21 · Paso 3
     s = d.lamina(
         "[EN VIVO] registrar_reporte escribe. Los controles, de afuera hacia adentro: el host pide aprobación en "
         "cada llamada (anthropic/requiresUserInteraction; en modo dontAsk la niega), el schema limita tipo y "
@@ -1139,7 +1202,7 @@ def construir_deck() -> Deck:
     )  # fmt: skip
     d.chip(s, 40, 360, "✓ uv run verificar.py 3", ancho=200)
 
-    # 21 · Paso 4
+    # 22 · Paso 4
     s = d.lamina(
         "[EN VIVO] ¿Claude elige bien? Una evaluación es un conjunto de casos con la respuesta esperada. Diez "
         "preguntas reales, cada una en una sesión de claude -p que solo ve nuestro servidor; se cuenta si llamó la "
@@ -1177,7 +1240,7 @@ def construir_deck() -> Deck:
     d.chip(s, 40, 334, "✓ uv run evaluar.py", ancho=200)
     d.texto(s, 256, 338, 424, 20, "Reto: escribe la pregunta que haga fallar a tu servidor.", 12.5, OCRE)
 
-    # 22 · El mapa
+    # 23 · El mapa
     s = d.lamina(
         "El mismo dato que consulta Claude, ahora para personas: preparar.py exporta la afluencia mensual y "
         "mapa/index.html la dibuja, sin servidor. Abre el mapa y mueve el slider en vivo: abril de 2020 (COVID: "
@@ -1221,7 +1284,7 @@ def construir_deck() -> Deck:
         MONO,
     )
 
-    # 23 · En vivo: Claude extiende el mapa
+    # 24 · En vivo: Claude extiende el mapa
     s = d.lamina(
         "[EN VIVO] Pide esto a Claude en la terminal. Usa afluencia_metro, edita mapa/index.html y en el ensayo "
         "tardó 42 segundos. Recarga el mapa y ve a junio de 2021. Luego lee el aviso con la sala: dice «cerrada tras "
@@ -1276,7 +1339,7 @@ def construir_deck() -> Deck:
         margen=18,
     )
 
-    # 24 · Recap (refleja la lámina «Qué te llevas»)
+    # 25 · Recap (refleja la lámina «Qué te llevas»)
     s = d.lamina(
         "Volvemos a la lámina del inicio. A la izquierda, lo que construyeron; pide manos: ¿quién llegó al paso 4? "
         "Quien no, tiene los puntos de control en pasos/. A la derecha, las respuestas a las cinco preguntas del "
@@ -1317,7 +1380,7 @@ def construir_deck() -> Deck:
         GRIS,
     )
 
-    # 25 · Ahora te toca
+    # 26 · Ahora te toca
     s = d.lamina(
         "El repo es suyo: cambien el dato, inventen la tool, rompan el mapa. Las ideas son solo puntos de partida. "
         "La última es la que más me importa: lo que hicimos con el Metro es lo mismo que hicimos en Spot2 con "
@@ -1341,7 +1404,7 @@ def construir_deck() -> Deck:
         s, 48, 340, 624, 20, f"Comparte lo que construyas · {REPO.removeprefix('https://')}", 13, VERDE, negrita=True
     )
 
-    # 26 · Cierre
+    # 27 · Cierre
     s = d.lamina(
         "Una sola idea para llevarse: el modelo solo ve nombre, descripción y schema. Cuando el agente falla, casi "
         "siempre el problema está ahí. Gracias. Abro preguntas. (La siguiente lámina es un glosario para consulta; "
@@ -1364,7 +1427,7 @@ def construir_deck() -> Deck:
     d.texto(s, 48, 322, 440, 20, "Dante Bazaldua · stdout.mx · linkedin.com/in/dantebh", 12.5, GRIS)
     d.imagen(s, foto, 556, 240, 116, 116)
 
-    # 27 · Glosario (apéndice, no se presenta)
+    # 28 · Glosario (apéndice, no se presenta)
     s = d.lamina(
         "Apéndice para consulta: no se presenta. Está aquí para quien revise las láminas después.",
         0,
@@ -1386,6 +1449,7 @@ def construir_deck() -> Deck:
         ("Elicitation", "el servidor pide un dato a la persona"),
         ("Resource", "dato de solo lectura con URI"),
         ("Prompt", "plantilla que tú ejecutas (comando /)"),
+        ("Skill", "guía SKILL.md; el agente la carga si aplica"),
         ("API", "interfaz para que un programa use a otro"),
         ("CLI", "programa de terminal: git, gh, kubectl"),
         ("FastMCP", "librería de Python para servidores MCP"),
@@ -1398,7 +1462,7 @@ def construir_deck() -> Deck:
         ("Prompt injection", "instrucciones ocultas en datos o tools"),
     ]
     for n, (termino, texto) in enumerate(terminos):
-        x, y = 40 + (n // 12) * 330, 100 + (n % 12) * 23
+        x, y = 40 + (n // 13) * 330, 100 + (n % 13) * 23
         d.texto(s, x, y, 104, 18, termino, 10.5, VERDE, negrita=True)
         d.texto(s, x + 104, y, 222, 18, texto, 10, TINTA)
 

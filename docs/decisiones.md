@@ -209,3 +209,16 @@ pide tmux porque no viene instalado en todas las máquinas.
   por sistema. Nota al pie: MCP no es un intermediario; un gateway existe, pero es opcional. Las notas
   agregan que la ventaja sólo aparece con más de una app.
 - **Pendiente:** la lámina 7 (Spot2) todavía dibuja un «MCP» al centro.
+
+## D20. Una lámina breve sobre skills y cómo se empaquetan con un MCP
+
+- **Por qué:** Dante: «falta una breve diapositiva de cómo regularmente se empaquetan MCPs con sus Skills para
+  que el agente pueda tener todavía mejor guía sobre cómo usar el servicio».
+- **Qué:** lámina 16, después de «Tres piezas». Titular «Un MCP da acceso; una skill le enseña a usarlo»;
+  definición de Skill; qué junta un plugin (servidor MCP, skill, opcionales); un `SKILL.md` de ejemplo para el
+  servidor del Metro (en verde, lo que el agente ve al iniciar); la carga progresiva en tres pasos; y cómo se
+  distribuye hoy (plugins de Claude Code, ChatGPT y Codex; extensiones de Gemini CLI; SEP-2640). Fuentes en
+  `fuentes-mcp-api-cli.md`.
+- **No se agregó** una skill real al repo: en `.claude/skills/` Claude Code la cargaría y cambiaría lo que
+  mide `evaluar.py`. Queda como extensión opcional (y FastMCP podría servirla con `SkillsDirectoryProvider`).
+- **Tiempo:** 1 min; «MCP te da / te cuesta» y «capas de la spec» bajan de 2 a 1.5. Glosario: 25 términos.
