@@ -181,3 +181,12 @@ Consultado con Parallel (búsqueda y lectura) y DeepWiki (`modelcontextprotocol/
 | [OpenAI · Optimize metadata](https://developers.openai.com/apps-sdk/guides/optimize-metadata) | Golden prompt set (directos, indirectos, negativos) con el comportamiento esperado; descripción que empiece con «Use this when…» y diga los casos excluidos; documentar parámetros con ejemplos |
 | [MCP spec 2026-07-28 · Tools](https://modelcontextprotocol.io/specification/2026-07-28/server/tools) | Nombres de 1 a 128 caracteres, `A-Z a-z 0-9 _ - .`, únicos en el servidor (la página de SEP-986 conserva la propuesta original de 64); anotaciones no confiables; errores de ejecución con `isError` para que el modelo se corrija |
 | [Glama · TDQS](https://github.com/glama-ai/tool-definition-quality-score) | Seis criterios con peso; nota de 1 a 5 y nivel A-F (ver «Diagrama oficial y TDQS») |
+
+## Context7, Parallel y qué es estándar (19-oct-2026)
+
+| Fuente | Qué aporta |
+| --- | --- |
+| [Context7 · instalación](https://context7.com/docs/installation); [upstash/context7](https://github.com/upstash/context7) | Servidor remoto `https://mcp.context7.com/mcp` (o local con `npx @upstash/context7-mcp`); documentación actual y por versión de librerías |
+| [Parallel · Search MCP](https://docs.parallel.ai/integrations/mcp/search-mcp); [Quickstart](https://docs.parallel.ai/integrations/mcp/quickstart) | Search MCP remoto `https://search.parallel.ai/mcp` (OAuth en `/mcp-oauth`); Task MCP `https://task-mcp.parallel.ai/mcp` para investigación profunda |
+| [MCP blog · Adopting the MCP Bundle format](https://blog.modelcontextprotocol.io/posts/2025-11-20-adopting-mcpb/) | MCPB pasa a ser parte del proyecto MCP (nov-2025): ZIP con un servidor local y un `manifest.json`, instalable con un clic en Claude Desktop, Claude Code y MCP for Windows |
+| [Claude Code · Plugins](https://code.claude.com/docs/en/plugins/overview) | Los plugins son la capa de empaquetado de Claude Code (skills, hooks, subagentes, servidores MCP); formato del host, no de la spec |

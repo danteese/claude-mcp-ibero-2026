@@ -269,3 +269,15 @@ pide tmux porque no viene instalado en todas las máquinas.
 - **Es apéndice** porque el paso 2 y el paso 4 ya presentan la versión corta; si se quiere presentar, hay que
   quitarle un minuto a otra lámina.
 - **Meme (lámina 2):** Dante lo agregó en Slides; se incorporó al generador sin tiempo asignado.
+
+## D25. Context7 y Parallel en la galería; los plugins no son parte del estándar
+
+- **Galería (lámina 29):** pasa a 10 casos en 5 × 2 con Context7 (documentación actual por versión;
+  remoto, `mcp.context7.com/mcp`) y Parallel (búsqueda web para agentes; remoto, `search.parallel.ai/mcp`, más
+  un Task MCP para investigación profunda). Son los que Dante más usa y los que se usaron para preparar el taller.
+- **Plugins:** no son parte del estándar MCP. Los plugins de Claude Code, de ChatGPT y Codex y las extensiones
+  de Gemini CLI son formatos de cada host que empaquetan configuración de servidores MCP, skills, hooks y más.
+  Sí son del proyecto MCP: la spec (núcleo y extensiones oficiales como Skills, SEP-2640), el formato MCPB
+  (MCP Bundles, `.mcpb`) para empaquetar servidores locales, adoptado por el proyecto en noviembre de 2025, y
+  el Registry oficial. La lámina 18 ahora lo dice.
+- **Lámina 17:** el diagrama que Dante agregó en Slides se incorporó al generador, sin tiempo propio.

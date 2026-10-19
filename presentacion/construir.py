@@ -227,7 +227,7 @@ def tablero(d: Deck, s, entregables: list[str], ideas: list[str], hecho: bool) -
 def construir_deck() -> Deck:
     faltan = [
         n
-        for n in ("foto-dante.png", "mapa-portada.png", "mapa-oct-2022.png", "meme-mcp.png")
+        for n in ("foto-dante.png", "mapa-portada.png", "mapa-oct-2022.png", "meme-mcp.png", "piezas-mcp.png")
         if not (RECURSOS / n).exists()
     ]
     if faltan:
@@ -930,7 +930,18 @@ def construir_deck() -> Deck:
         d.texto(s, x, 304, 200, 16, campos, 10, TINTA, MONO)
     d.texto(s, 40, 344, 640, 20, "Nuestro servidor tiene las tres. La mayoría expone todo como tools.", 12.5, GRIS)
 
-    # 17 · Skills: cómo se empaqueta un MCP con su guía de uso
+    # 17 · Las tres piezas en un diagrama (lo agregó Dante en Google Slides; va con la lámina anterior)
+    s = d.lamina(
+        "La misma idea de la lámina anterior, en un diagrama: el cliente invoca tools, consulta resources e "
+        "interpola prompts; el servidor los expone. Abajo, quién controla cada una: las tools, el modelo; los "
+        "resources, la aplicación; los prompts, la persona. Sin tiempo propio: se presenta junto con la anterior.",
+        0,
+        seccion="El concepto",
+    )
+    d.titular(s, "Tres piezas, una pregunta: ¿quién decide cuándo ocurre?")
+    d.imagen(s, RECURSOS / "piezas-mcp.png", 69, 99, 583, 261)
+
+    # 18 · Skills: cómo se empaqueta un MCP con su guía de uso
     s = d.lamina(
         "Un servidor MCP da acceso: tools, datos y acciones. Lo que no da es el método: en qué orden llamarlas, qué "
         "revisar, cómo presentar el resultado. Eso es una skill: una carpeta con un SKILL.md que lleva nombre, "
@@ -989,13 +1000,13 @@ def construir_deck() -> Deck:
             d.linea(s, x - 18, 329, x - 2, 329, GRIS, 1.5, True)
     d.texto(
         s, 40, 356, 640, 36,
-        "Se distribuyen juntos: plugins de Claude Code (.mcp.json + skills/), de ChatGPT y Codex, y extensiones de "
-        "Gemini CLI. Desde sept-2026, el servidor MCP también puede servirlas (SEP-2640; en FastMCP, "
-        "SkillsDirectoryProvider).",
+        "Se distribuyen juntos en el formato de cada host, no del estándar MCP: plugins de Claude Code (.mcp.json + "
+        "skills/), de ChatGPT y Codex, y extensiones de Gemini CLI. Lo estándar: el servidor MCP puede servir sus "
+        "skills (extensión SEP-2640; en FastMCP, SkillsDirectoryProvider).",
         9.5, GRIS, interlineado=1.2,
     )  # fmt: skip
 
-    # 18 · Qué servidor construimos: transporte y FastMCP
+    # 19 · Qué servidor construimos: transporte y FastMCP
     s = d.lamina(
         "Antes de escribir código: qué tipo de servidor vamos a hacer. Un servidor MCP se distingue por su transporte. "
         "Con stdio, Claude Code lanza tu servidor como un proceso y le habla por la entrada y salida estándar: no hay "
@@ -1053,7 +1064,7 @@ def construir_deck() -> Deck:
         8, GRIS, MONO,
     )  # fmt: skip
 
-    # 19 · Construyamos
+    # 20 · Construyamos
     s = d.lamina(
         "Ahora construimos. Primero, de qué datos hablamos: la afluencia diaria del Metro que publica el gobierno "
         "de la CDMX como datos abiertos (licencia CC-BY-4.0: se pueden usar citando la fuente). Clonen el repo y "
@@ -1109,7 +1120,7 @@ def construir_deck() -> Deck:
         negrita=True,
     )
 
-    # 20 · Paso 1
+    # 21 · Paso 1
     s = d.lamina(
         "[EN VIVO] Escribe esta tool en servidor.py desde cero, explicando cada línea. FastMCP es la librería que "
         "convierte la función en tool: el decorador @mcp.tool la registra, el docstring se vuelve la descripción y "
@@ -1154,7 +1165,7 @@ def construir_deck() -> Deck:
         d.texto(s, 494, y, 186, 14, etiqueta.upper(), 9, GRIS, MONO)
         d.texto(s, 494, y + 16, 186, 40, texto, 12, tinta, SANS if n == 3 else MONO, interlineado=1.15)
 
-    # 21 · Paso 2
+    # 22 · Paso 2
     s = d.lamina(
         "[EN VIVO] Tres reglas, una por columna. 1) Por intención: una tool genérica ejecutar_sql traslada el "
         "diseño al modelo; afluencia_metro con enums y formato AAAA-MM deja el dominio en el schema. 2) El error es "
@@ -1191,7 +1202,7 @@ def construir_deck() -> Deck:
     d.chip(s, 40, 330, "✓ uv run verificar.py 2", ancho=200)
     d.texto(s, 256, 334, 424, 20, "Reto: ¿qué parámetros le darías a comparar_estaciones(a, b)?", 12.5, OCRE)
 
-    # 22 · Paso 3
+    # 23 · Paso 3
     s = d.lamina(
         "[EN VIVO] registrar_reporte escribe. Los controles, de afuera hacia adentro: el host pide aprobación en "
         "cada llamada (anthropic/requiresUserInteraction; en modo dontAsk la niega), el schema limita tipo y "
@@ -1238,7 +1249,7 @@ def construir_deck() -> Deck:
     )  # fmt: skip
     d.chip(s, 40, 360, "✓ uv run verificar.py 3", ancho=200)
 
-    # 23 · Paso 4
+    # 24 · Paso 4
     s = d.lamina(
         "[EN VIVO] ¿Claude elige bien? Una evaluación es un conjunto de casos con la respuesta esperada. Diez "
         "preguntas reales, cada una en una sesión de claude -p que solo ve nuestro servidor; se cuenta si llamó la "
@@ -1280,7 +1291,7 @@ def construir_deck() -> Deck:
     d.chip(s, 40, 334, "✓ uv run evaluar.py", ancho=200)
     d.texto(s, 256, 338, 424, 20, "Reto: escribe la pregunta que haga fallar a tu servidor.", 12.5, OCRE)
 
-    # 24 · El mapa
+    # 25 · El mapa
     s = d.lamina(
         "El mismo dato que consulta Claude, ahora para personas: preparar.py exporta la afluencia mensual y "
         "mapa/index.html la dibuja, sin servidor. Abre el mapa y mueve el slider en vivo: abril de 2020 (COVID: "
@@ -1324,7 +1335,7 @@ def construir_deck() -> Deck:
         MONO,
     )
 
-    # 25 · En vivo: Claude extiende el mapa
+    # 26 · En vivo: Claude extiende el mapa
     s = d.lamina(
         "[EN VIVO] Pide esto a Claude en la terminal. Usa afluencia_metro, edita mapa/index.html y en el ensayo "
         "tardó 42 segundos. Recarga el mapa y ve a junio de 2021. Luego lee el aviso con la sala: dice «cerrada tras "
@@ -1379,7 +1390,7 @@ def construir_deck() -> Deck:
         margen=18,
     )
 
-    # 26 · Recap (refleja la lámina «Qué te llevas»)
+    # 27 · Recap (refleja la lámina «Qué te llevas»)
     s = d.lamina(
         "Volvemos a la lámina del inicio. A la izquierda, lo que construyeron; pide manos: ¿quién llegó al paso 4? "
         "Quien no, tiene los puntos de control en pasos/. A la derecha, las respuestas a las cinco preguntas del "
@@ -1420,7 +1431,7 @@ def construir_deck() -> Deck:
         GRIS,
     )
 
-    # 27 · Ahora te toca
+    # 28 · Ahora te toca
     s = d.lamina(
         "El repo es suyo: cambien el dato, inventen la tool, rompan el mapa. Las ideas son solo puntos de partida. "
         "La última es la que más me importa: lo que hicimos con el Metro es lo mismo que hicimos en Spot2 con "
@@ -1444,7 +1455,7 @@ def construir_deck() -> Deck:
         s, 48, 340, 624, 20, f"Comparte lo que construyas · {REPO.removeprefix('https://')}", 13, VERDE, negrita=True
     )
 
-    # 28 · Cierre: lo que ya se puede conectar hoy (queda en pantalla durante las preguntas)
+    # 29 · Cierre: lo que ya se puede conectar hoy (queda en pantalla durante las preguntas)
     s = d.lamina(
         "Gracias. Abro preguntas. Mientras preguntan, esto ya existe y lo pueden conectar hoy. Blender: Claude arma "
         "escenas y modelos 3D (blender-mcp, más de 22 mil estrellas en GitHub). Y se encadena: otro servidor manda "
@@ -1453,6 +1464,9 @@ def construir_deck() -> Deck:
         "oficial lee el diseño para generar código y también escribe en el lienzo. Home Assistant: la integración "
         "oficial deja que Claude o ChatGPT vean y controlen los dispositivos de tu casa. ROS: conecta un modelo con "
         "un robot. Chrome DevTools, de Google: el agente graba un trace y te dice por qué tu página carga lento. Y "
+        "dos que uso a diario: Context7, de Upstash, le da al agente la documentación actual y por versión de cada "
+        "librería, para que no programe con APIs viejas; Parallel hace búsqueda web para agentes con fuentes, y tiene "
+        "otro servidor para investigación profunda. Los dos sirvieron para preparar este taller. Y "
         "cerca de casa: Mercado Pago tiene un servidor oficial para desarrolladores (busca en su documentación, "
         "genera el código del checkout, crea usuarios de prueba y califica tu integración); Mercado Libre también "
         "tiene uno. Los que dicen «remoto» se conectan pegando una URL en Claude o ChatGPT; los locales se instalan "
@@ -1474,25 +1488,27 @@ def construir_deck() -> Deck:
         ("TU CASA", "Home Assistant", "«Apaga todas las luces de la casa»", "URL de tu Home Assistant"),
         ("ROBÓTICA", "Robots con ROS", "«Mueve el brazo a la posición inicial»", "local · lo instalas"),
         ("WEB", "Chrome DevTools", "«¿Por qué carga lento mi página?»", "local · lo instalas"),
+        ("DOCS AL DÍA", "Context7", "«¿Cómo monto FastMCP en FastAPI? Usa la doc actual»", "remoto · pegas la URL"),
+        ("BÚSQUEDA WEB", "Parallel", "«Investiga quién soporta Agent Skills y cita fuentes»", "remoto · pegas la URL"),
         ("MÉXICO Y LATAM", "Mercado Pago", "«Genera el código de Checkout Pro y crea usuarios de prueba»",
          "remoto · pegas la URL"),
     ]  # fmt: skip
     for n, (categoria, nombre, pedido, conexion) in enumerate(casos):
-        x, y = 40 + (n % 4) * 162, 92 + (n // 4) * 120
+        x, y = 40 + (n % 5) * 130, 92 + (n // 5) * 120
         remoto = not conexion.startswith("local")
-        d.caja(s, x, y, 152, 112, BLANCO, BORDE, radio=0.06)
-        d.texto(s, x + 10, y + 9, 132, 10, categoria, 7, VERDE, MONO, negrita=True)
-        d.texto(s, x + 10, y + 21, 132, 18, nombre, 12.5, TINTA, negrita=True)
-        d.texto(s, x + 10, y + 42, 134, 42, pedido, 9.5, OCRE, interlineado=1.15)
+        d.caja(s, x, y, 120, 112, BLANCO, BORDE, radio=0.06)
+        d.texto(s, x + 8, y + 9, 104, 10, categoria, 6.5, VERDE, MONO, negrita=True)
+        d.texto(s, x + 8, y + 20, 106, 18, nombre, 11.5, TINTA, negrita=True)
+        d.texto(s, x + 8, y + 40, 106, 46, pedido, 8.5, OCRE, interlineado=1.15)
         d.caja(
-            s, x + 10, y + 86, 132, 18, VERDE_FONDO if remoto else BLANCO, None if remoto else BORDE, radio=0.5,
-            contenido=conexion, tam=8, tinta=VERDE if remoto else GRIS, margen=2,
+            s, x + 8, y + 88, 104, 16, VERDE_FONDO if remoto else BLANCO, None if remoto else BORDE, radio=0.5,
+            contenido=conexion, tam=7, tinta=VERDE if remoto else GRIS, margen=2,
         )  # fmt: skip
     d.imagen(s, foto, 40, 334, 56, 56)
     d.texto(s, 108, 338, 300, 24, "Gracias", 20, VERDE, negrita=True)
     d.texto(s, 108, 366, 440, 20, "Dante Bazaldua · stdout.mx · linkedin.com/in/dantebh", 12.5, GRIS)
 
-    # 29 · Apéndice: buenas prácticas para que las tools se entiendan (no se presenta)
+    # 30 · Apéndice: buenas prácticas para que las tools se entiendan (no se presenta)
     s = d.lamina(
         "Apéndice para consulta; no se presenta. Cómo saber si un servidor MCP se entiende, en tres pasos. 1) "
         "Diseña para el agente (Phil Schmid, «MCP is not the problem, it's your server», ene-2026; Anthropic, "
@@ -1571,7 +1587,7 @@ def construir_deck() -> Deck:
         9.5, GRIS, interlineado=1.2,
     )  # fmt: skip
 
-    # 30 · Glosario (apéndice, no se presenta)
+    # 31 · Glosario (apéndice, no se presenta)
     s = d.lamina(
         "Apéndice para consulta: no se presenta. Está aquí para quien revise las láminas después.",
         0,
