@@ -71,3 +71,10 @@ El taller **no** requiere tmux: los participantes usan dos pestañas de terminal
 - [ ] Revisar la licencia del feed GBFS de Ecobici antes de presentarlo como dato abierto.
 - [ ] Confirmar con Ricardo y Andrés qué cubren los demás speakers (pendiente del temario v6).
 - [ ] La semana previa: revisar el estado del spec MCP, FastMCP y Claude Code.
+
+## Trabajo a futuro
+
+- [ ] Calificar las 8 tools con TDQS de Glama (github.com/glama-ai/tool-definition-quality-score) y comparar con
+  `evaluar.py`: TDQS mide la definición; la evaluación, si Claude elige bien.
+- [ ] Skill del servidor del Metro servida por MCP con `SkillsDirectoryProvider` (D20), como extensión opcional
+  fuera de `.claude/skills/` para no alterar `evaluar.py`.

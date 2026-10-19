@@ -126,3 +126,8 @@ pobres. Aquí van los principios, sus fuentes y cómo se aplicaron en la versió
   bloque conceptual con la pieza que guía al agente y conecta con el `CLAUDE.md` que usa el taller.
 - Mismo lenguaje visual: tarjeta de definición, chips azul (servidor) y verde (skill), código con lo que lee
   el modelo en verde y una secuencia con flechas para la carga progresiva.
+
+## Lámina 10 con el diagrama oficial (pedido de Dante)
+
+- Cajas con borde a los lados, protocolo en azul al centro y flechas de ida y vuelta, como en
+  modelcontextprotocol.io; los pies de columna dicen qué trae cada lado (cliente o servidor MCP).

@@ -146,3 +146,10 @@ Consultado el 19-oct-2026 con Parallel y Context7 (documentación de FastMCP).
 | [Gemini CLI · extensiones](https://github.com/google-gemini/gemini-cli/blob/main/docs/extensions/writing-extensions.md) | `gemini-extension.json` con `mcpServers`, archivo de contexto y skills; p. ej., la extensión oficial de MongoDB es «MCP Server + Skills» |
 | [MCP · SEP-2640 Skills Extension](https://modelcontextprotocol.io/seps/2640-skills-extension) | Estado **Final**. Skills servidas como recursos (`skill://<skill>/<archivo>`), con `skills/list` y `skills/get`; escrita contra 2026-07-28 |
 | [FastMCP · Skills provider](https://gofastmcp.com/servers/providers/skills) | `SkillsDirectoryProvider` expone carpetas de skills como recursos `skill://` (desde FastMCP 3.0) |
+
+## Diagrama oficial y TDQS (19-oct-2026)
+
+| Fuente | Qué aporta |
+| --- | --- |
+| [MCP · What is MCP? (docs 2026-07-28)](https://modelcontextprotocol.io/docs/2026-07-28/getting-started/intro) | «MCP is an open-source standard for connecting AI applications to external systems»; la analogía del USB-C; el diagrama aplicaciones de IA ↔ protocolo estándar ↔ fuentes de datos y herramientas, con flujo bidireccional |
+| [Glama · Tool Definition Quality Score](https://github.com/glama-ai/tool-definition-quality-score) | Marco abierto para calificar qué tan bien comunica una tool MCP al agente. Seis dimensiones de 1 a 5: propósito (25 %), cuándo usarla (20 %), transparencia del comportamiento (20 %), semántica de parámetros (15 %), concisión (10 %), completitud (10 %). Nota 1.0-5.0 y nivel A-F; sólo la rúbrica usa un LLM, el resto es determinista. Glama lo aplica a todo su registro |

@@ -222,3 +222,15 @@ pide tmux porque no viene instalado en todas las máquinas.
 - **No se agregó** una skill real al repo: en `.claude/skills/` Claude Code la cargaría y cambiaría lo que
   mide `evaluar.py`. Queda como extensión opcional (y FastMCP podría servirla con `SkillsDirectoryProvider`).
 - **Tiempo:** 1 min; «MCP te da / te cuesta» y «capas de la spec» bajan de 2 a 1.5. Glosario: 25 términos.
+
+## D21. La lámina 10 usa el diagrama oficial de MCP
+
+- **Por qué:** Dante prefirió el diagrama de modelcontextprotocol.io («What is MCP?», docs 2026-07-28).
+- **Qué:** a la izquierda, aplicaciones de IA (chat, IDEs y editores, otras apps); a la derecha, datos y
+  herramientas (datos y archivos, desarrollo, productividad); en medio, «MCP · protocolo estándar», con
+  flechas de ida y vuelta. Los ejemplos se adaptaron a lo conocido por la sala (Claude, ChatGPT, Cursor;
+  SQLite, que usa el taller). Reemplaza el doble diagrama de D19, pero conserva su punto: el cuadro de en
+  medio es un idioma, no un intermediario («Aplicaciones de IA · cliente MCP», «Datos y herramientas ·
+  servidor MCP» y la nota «3 + 4 = 7 implementaciones, no 3 × 4 = 12 integraciones»).
+- **Lámina 7 (Spot2):** su «MCP» al centro ahora es coherente con este diagrama (el protocolo); se queda.
+- **Trabajo a futuro:** TDQS de Glama, en las notas del paso 4 y en el README («Para seguir»).

@@ -126,6 +126,17 @@ Si Claude Desktop dice que no encuentra `uv`, abre su configuración (Settings �
 y cambia `"command": "uv"` por la ruta completa que te da `which uv` (por ejemplo,
 `/opt/homebrew/bin/uv`). Las apps de macOS no siempre ven el mismo PATH que tu terminal.
 
+## Para seguir
+
+- **Califica tus definiciones con TDQS.** `evaluar.py` mide si Claude elige la tool correcta; el
+  [Tool Definition Quality Score](https://github.com/glama-ai/tool-definition-quality-score) de Glama
+  califica cada definición por separado en seis dimensiones (claridad del propósito, cuándo usarla y
+  cuándo no, comportamiento, significado de los parámetros, concisión y completitud), con una nota de
+  1 a 5 y un nivel de A a F. Su rúbrica sirve como lista de revisión aunque no lo corras.
+- **Empaqueta una skill con tu servidor.** Un `SKILL.md` le dice al agente en qué orden usar tus tools
+  y qué revisar. FastMCP puede servirla desde el propio servidor (`SkillsDirectoryProvider`, extensión de
+  Skills de MCP, SEP-2640).
+
 ## ¿Atorado?
 
 Abre `claude` en la carpeta del repo y pídele: **«guíame paso a paso»**. `CLAUDE.md` le dice cómo

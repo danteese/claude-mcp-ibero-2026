@@ -600,16 +600,16 @@ def construir_deck() -> Deck:
     # 10 · Qué es MCP
     s = d.lamina(
         "Si una tool es una función, ¿quién la define? Antes, cada aplicación definía sus tools en su propio "
-        "código. MCP es el estándar que permite que las tools vivan en un servidor aparte y que cualquier "
-        "aplicación compatible las descubra al conectarse. La analogía oficial: un puerto USB-C. Ojo con el "
-        "diagrama: las conexiones son las mismas de los dos lados, 3 × 4 = 12; cualquier app puede hablar con "
-        "cualquier sistema. Lo que cambia es quién escribe código. Sin estándar, cada línea roja es una "
-        "integración a la medida: el plugin de ChatGPT para tu CRM, la extensión de Cursor para GitHub. Con MCP, "
-        "cada app implementa el cliente una vez (lo hacen Anthropic, OpenAI, Cursor) y cada sistema implementa su "
-        "servidor una vez (lo escribe su dueño): 3 + 4 = 7. Las 12 conexiones salen solas porque todos hablan el "
-        "mismo protocolo. No hay nada en medio: cada servidor es independiente; un gateway que los agrupe existe, "
-        "pero es opcional. Y la ventaja sólo aparece si hay más de una app: con una sola, MCP cuesta casi lo mismo "
-        "que una integración directa. Eso lo vemos en la siguiente lámina.",
+        "código. MCP es el estándar abierto que permite que las tools vivan en un servidor aparte y que cualquier "
+        "aplicación compatible las descubra al conectarse. La analogía oficial: un puerto USB-C para aplicaciones de "
+        "IA. Este es el diagrama de la documentación oficial, adaptado: a la izquierda, las aplicaciones de IA "
+        "(chat, editores de código, otros agentes); a la derecha, los datos y las herramientas; en medio, el "
+        "protocolo, con datos que van y vienen. Ojo: el cuadro de en medio es un idioma, no un servidor "
+        "intermediario. Cada app implementa el cliente una vez (lo hacen Anthropic, OpenAI, Cursor) y cada sistema "
+        "expone su propio servidor (lo escribe su dueño): con 3 apps y 4 sistemas son 7 implementaciones, no 12 "
+        "integraciones a la medida. Un gateway que agrupe servidores existe, pero es opcional. Y la ventaja sólo "
+        "aparece con más de una app: con una sola, MCP cuesta casi lo mismo que una integración directa. Eso lo "
+        "vemos en la siguiente lámina.",
         1.5,
         seccion="El concepto",
     )
@@ -619,42 +619,44 @@ def construir_deck() -> Deck:
         "un estándar abierto para conectar aplicaciones de IA con sistemas externos. «Como un puerto USB-C para aplicaciones de IA» (modelcontextprotocol.io).",
         11,
     )  # fmt: skip
-    apps, sistemas = ["Claude", "ChatGPT", "Cursor"], ["Metro CDMX", "Tu CRM", "Drive", "GitHub"]
-    ya = [208 + n * 44 for n in range(3)]
-    ys = [200 + n * 36 for n in range(4)]
-    # Las dos mitades tienen las mismas 12 conexiones; lo que cambia es dónde está el código.
-    d.texto(s, 40, 176, 296, 18, "Sin estándar", 13, ROJO, negrita=True)
-    for y1 in ya:
-        for y2 in ys:
-            d.linea(s, 118, y1 + 12, 248, y2 + 12, "D9A79A", 1.25)
-    for y, nombre in zip(ya, apps):
-        d.chip(s, 40, y, nombre, VERDE_FONDO, VERDE, 10.5, ancho=78)
-    for y, nombre in zip(ys, sistemas):
-        d.chip(s, 248, y, nombre, AZUL_FONDO, AZUL, 10.5, ancho=88)
+    # Diagrama de modelcontextprotocol.io («What is MCP?», docs 2026-07-28), adaptado. En medio va el
+    # protocolo, no un servidor: cada app trae su cliente y cada sistema expone su servidor.
+    aplicaciones = [
+        "**Interfaces de chat**\nClaude, ChatGPT",
+        "**IDEs y editores de código**\nClaude Code, Cursor",
+        "**Otras apps de IA**\nagentes propios, Goose",
+    ]
+    fuentes = [
+        "**Datos y archivos**\nSQLite, PostgreSQL, Drive",
+        "**Herramientas de desarrollo**\nGit, GitHub, Sentry",
+        "**Productividad**\nSlack, Google Maps",
+    ]
+    centros = [195, 251, 307]
+    for cy, izquierda, derecha in zip(centros, aplicaciones, fuentes):
+        d.caja(s, 40, cy - 23, 196, 46, BLANCO, TINTA, radio=0.1, contenido=izquierda, tam=10.5, margen=6)
+        d.caja(s, 484, cy - 23, 196, 46, BLANCO, TINTA, radio=0.1, contenido=derecha, tam=10.5, margen=6)
+    d.caja(s, 300, 205, 120, 92, AZUL_FONDO, AZUL, radio=0.06, contenido="**MCP**\nprotocolo estándar", tam=12)
+    # Flujo de datos en los dos sentidos: flecha hacia la caja de cada lado y hacia el protocolo.
+    for cy, py in zip(centros, [223, 251, 279]):
+        d.linea(s, 268, cy, 236, cy, GRIS, 1.25, True)
+        d.linea(s, 268, py, 300, py, GRIS, 1.25, True)
+        d.linea(s, 452, cy, 484, cy, GRIS, 1.25, True)
+        d.linea(s, 452, py, 420, py, GRIS, 1.25, True)
+        if cy != py:
+            d.linea(s, 268, cy, 268, py, GRIS, 1.25)
+            d.linea(s, 452, cy, 452, py, GRIS, 1.25)
+    d.texto(s, 300, 302, 120, 24, "datos en los dos sentidos", 8.5, GRIS, alinear="centro")
+    d.texto(s, 40, 336, 196, 14, "Aplicaciones de IA · cliente MCP", 9.5, GRIS, alinear="centro")
+    d.texto(s, 484, 336, 196, 14, "Datos y herramientas · servidor MCP", 9.5, GRIS, alinear="centro")
     d.texto(
-        s, 40, 344, 296, 34, "**12** integraciones a la medida: cada app programa cada sistema", 11.5, GRIS,
-        interlineado=1.2,
-    )  # fmt: skip
-    d.texto(s, 384, 176, 296, 18, "Con MCP", 13, VERDE, negrita=True)
-    for y1 in ya:
-        for y2 in ys:
-            d.linea(s, 494, y1 + 12, 560, y2 + 12, "C9CFCB", 1)
-    for y, nombre in zip(ya, apps):
-        d.chip(s, 384, y, nombre, VERDE_FONDO, VERDE, 10.5, ancho=78)
-        d.caja(s, 464, y + 4, 30, 16, TINTA, radio=0.5, contenido="MCP", tam=7, tinta=PAPEL, margen=0, negrita=True)
-    for y, nombre in zip(ys, sistemas):
-        d.caja(s, 560, y + 4, 30, 16, TINTA, radio=0.5, contenido="MCP", tam=7, tinta=PAPEL, margen=0, negrita=True)
-        d.chip(s, 592, y, nombre, AZUL_FONDO, AZUL, 10.5, ancho=88)
-    d.texto(
-        s, 384, 344, 296, 34,
-        "**7** implementaciones: un cliente por app y un servidor por sistema. Las 12 conexiones ya no se programan.",
-        11.5, GRIS, interlineado=1.2,
+        s, 40, 358, 640, 28,
+        "MCP es el idioma común, no un intermediario: cada app implementa el cliente una vez y cada sistema su "
+        "servidor. Con 3 apps y 4 sistemas son 3 + 4 = **7 implementaciones**, no 3 × 4 = 12 integraciones.",
+        10.5, GRIS, interlineado=1.2,
     )  # fmt: skip
     d.texto(
-        s, 40, 382, 640, 14,
-        "MCP no es un intermediario: cada sistema expone su propio servidor. Un gateway que los agrupe existe, pero es opcional.",
-        9.5, GRIS,
-    )  # fmt: skip
+        s, 40, 392, 640, 10, "Adaptado de modelcontextprotocol.io · «What is MCP?» (docs 2026-07-28)", 7.5, GRIS, MONO
+    )
 
     # 11 · ¿Cuál conviene? API, CLI o MCP
     s = d.lamina(
@@ -1209,7 +1211,11 @@ def construir_deck() -> Deck:
         "tool correcta con los argumentos correctos. La primera corrida dio 9 de 10, y el error era de la métrica: "
         "Claude confirmó la estación antes de levantar el reporte, que es lo que pide la descripción. Incluye un "
         "caso que no debe usar tools («¿capital de Francia?»). El paso 4 también agrega Ecobici en vivo, en dos tools: ecobici_cerca_de_metro responde en el chat y actualizar_mapa_ecobici escribe mapa/ecobici.js para el mapa y sólo devuelve un resumen, así el detalle no gasta contexto. Reto: "
-        "escriban la pregunta que haga fallar a su servidor y arreglen la descripción, no el prompt.",
+        "escriban la pregunta que haga fallar a su servidor y arreglen la descripción, no el prompt. Trabajo a "
+        "futuro: la evaluación mide si Claude elige bien; TDQS de Glama "
+        "(github.com/glama-ai/tool-definition-quality-score) califica cada definición por separado en seis "
+        "dimensiones (propósito, cuándo usarla, comportamiento, parámetros, concisión y completitud) y da una "
+        "nota de 1 a 5.",
         3,
         seccion="Paso 4 · Medir",
         paso=4,
